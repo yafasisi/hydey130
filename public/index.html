@@ -715,6 +715,492 @@
         }
 
         /* ============================================
+           SVETA BEFORE & AFTER
+           ============================================ */
+
+        .sveta-ba-section {
+            padding: 120px 60px;
+            background: linear-gradient(135deg, #FFF8E1 0%, #F1F8E9 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sveta-ba-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 70px;
+            align-items: center;
+        }
+
+        .sveta-ba-dual {
+            display: flex;
+            gap: 16px;
+        }
+
+        .sveta-ba-side {
+            flex: 1;
+            position: relative;
+        }
+
+        .sveta-ba-label-top {
+            text-align: center;
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 12px 0;
+            background: var(--text-dark);
+            color: var(--white);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .sveta-ba-label-top.after {
+            background: var(--green-main);
+        }
+
+        .sveta-ba-slideshow {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        .sveta-do-slide,
+        .sveta-after-slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+        }
+
+        .sveta-do-slide.active,
+        .sveta-after-slide.active {
+            opacity: 1;
+        }
+
+        .sveta-do-slide img,
+        .sveta-after-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sveta-ba-tag {
+            display: inline-block;
+            background: var(--green-main);
+            color: var(--white);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+        }
+
+        .sveta-ba-content h2 {
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 30px;
+            color: var(--text-dark);
+        }
+
+        .sveta-ba-content h2 span {
+            color: var(--green-main);
+        }
+
+        .sveta-ba-stats-row {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 30px;
+            padding: 20px 28px;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+        }
+
+        .sveta-ba-stat { text-align: center; }
+
+        .sveta-ba-stat-num { font-size: 30px; font-weight: 800; color: var(--text-dark); }
+        .sveta-ba-stat.highlight .sveta-ba-stat-num { color: var(--green-main); }
+        .sveta-ba-stat-label { font-size: 13px; color: var(--text-gray); font-weight: 500; margin-top: 4px; }
+        .sveta-ba-arrow { font-size: 28px; color: var(--yellow-main); font-weight: 800; }
+
+        /* ============================================
+           JOURNEY CHAIN / TIMELINE
+           ============================================ */
+
+        .journey-section {
+            padding: 120px 60px;
+            background: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .journey-section h2 {
+            text-align: center;
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .journey-section h2 span {
+            color: var(--green-main);
+        }
+
+        .journey-subtitle {
+            text-align: center;
+            font-size: 18px;
+            color: var(--text-gray);
+            margin-bottom: 70px;
+            max-width: 550px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .journey-chain {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 0;
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .journey-chain::before {
+            content: '';
+            position: absolute;
+            top: 45px;
+            left: 15%;
+            right: 15%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--text-dark), var(--yellow-main), var(--green-main));
+            border-radius: 2px;
+            z-index: 0;
+        }
+
+        .journey-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            padding: 0 15px;
+        }
+
+        .journey-dot {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+            transition: transform 0.4s ease;
+        }
+
+        .journey-dot:hover {
+            transform: scale(1.1);
+        }
+
+        .journey-step:nth-child(1) .journey-dot {
+            background: var(--text-dark);
+        }
+
+        .journey-step:nth-child(2) .journey-dot {
+            background: var(--yellow-main);
+        }
+
+        .journey-step:nth-child(3) .journey-dot {
+            background: var(--green-main);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .journey-dot-num {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--white);
+            line-height: 1;
+        }
+
+        .journey-step:nth-child(2) .journey-dot-num {
+            color: var(--text-dark);
+        }
+
+        .journey-dot-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .journey-step:nth-child(2) .journey-dot-label {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .journey-weights {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            margin-bottom: 15px;
+        }
+
+        .journey-from {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--text-dark);
+        }
+
+        .journey-arrow-down {
+            font-size: 20px;
+            color: var(--yellow-main);
+            margin: 5px 0;
+            font-weight: 800;
+        }
+
+        .journey-to {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--green-main);
+        }
+
+        .journey-result {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .journey-step:nth-child(1) .journey-result {
+            background: var(--yellow-light);
+            color: var(--text-dark);
+        }
+
+        .journey-step:nth-child(2) .journey-result {
+            background: var(--yellow-soft);
+            color: var(--text-dark);
+        }
+
+        .journey-step:nth-child(3) .journey-result {
+            background: var(--green-light);
+            color: var(--green-main);
+        }
+
+        .journey-desc {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin-top: 12px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .journey-section { padding: 80px 20px; }
+            .journey-section h2 { font-size: 32px; }
+            .journey-chain { flex-direction: column; align-items: center; gap: 30px; }
+            .journey-chain::before {
+                top: 0; bottom: 0;
+                left: 50%; right: auto;
+                width: 4px; height: 100%;
+                transform: translateX(-50%);
+            }
+            .journey-dot { width: 70px; height: 70px; }
+            .journey-from, .journey-to { font-size: 26px; }
+        }
+
+        /* ============================================
+           ASK QUESTION FORM
+           ============================================ */
+
+        .ask-section {
+            padding: 50px 60px 70px;
+            background: linear-gradient(135deg, var(--green-light) 0%, var(--yellow-light) 100%);
+            position: relative;
+        }
+
+        .ask-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            padding: 80px 80px;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 70px;
+            align-items: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+        }
+
+        .ask-left h2 {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--text-dark);
+            margin-bottom: 22px;
+            line-height: 1.15;
+        }
+
+        .ask-left h2 span {
+            color: var(--green-main);
+        }
+
+        .ask-left p {
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--text-gray);
+        }
+
+        .ask-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ask-input {
+            padding: 20px 24px;
+            border-radius: 16px;
+            border: 2px solid rgba(0, 0, 0, 0.06);
+            background: rgba(255, 255, 255, 0.7);
+            color: var(--text-dark);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .ask-input::placeholder {
+            color: var(--text-gray);
+            opacity: 0.5;
+        }
+
+        .ask-input:focus {
+            border-color: var(--green-main);
+            background: var(--white);
+            box-shadow: 0 4px 20px rgba(124, 179, 66, 0.15);
+        }
+
+        .ask-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .ask-btn {
+            padding: 22px;
+            background: var(--green-main);
+            color: var(--white);
+            border: none;
+            border-radius: 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ask-btn:hover {
+            background: #6fa336;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(124, 179, 66, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .ask-section { padding: 80px 20px; }
+            .ask-container { grid-template-columns: 1fr; gap: 30px; padding: 40px 30px; }
+            .ask-left h2 { font-size: 30px; }
+        }
+
+        .sveta-ba-content p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--text-gray);
+            margin-bottom: 15px;
+        }
+
+        .sveta-ba-content p strong {
+            color: var(--text-dark);
+        }
+
+        .sveta-ba-wow-badge {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 90px;
+            height: 90px;
+            background: var(--yellow-main);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 10;
+            box-shadow: 0 8px 30px rgba(247, 217, 76, 0.5);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .sveta-ba-wow-badge .wow-num {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--text-dark);
+            line-height: 1;
+        }
+
+        .sveta-ba-wow-badge .wow-text {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sveta-ba-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .sveta-ba-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--green-soft);
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .sveta-ba-dot.active {
+            background: var(--green-main);
+            width: 30px;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 968px) {
+            .sveta-ba-section { padding: 80px 30px; }
+            .sveta-ba-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .sveta-ba-content h2 { font-size: 32px; }
+        }
+
+        @media (max-width: 480px) {
+            .sveta-ba-content h2 { font-size: 26px; }
+            .sveta-timeline-from, .sveta-timeline-to { font-size: 17px; }
+        }
+
+        /* ============================================
            BENEFITS
            ============================================ */
         
@@ -1712,6 +2198,14 @@
             font-size: 18px;
         }
 
+        .program-select-card .old-price {
+            color: #bbb;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: line-through;
+            margin-bottom: -4px;
+        }
+
         .program-select-card .sale-badge {
             position: absolute;
             top: -8px;
@@ -1926,6 +2420,7 @@
             border-radius: 50%;
             display: flex;
             align-items: center;
+            color: var(--white);
             justify-content: center;
             color: var(--white);
             text-decoration: none;
@@ -2044,6 +2539,39 @@
             .faq-icon { width: 32px; height: 32px; font-size: 20px; }
             .faq-answer p { padding: 0 20px 18px; font-size: 14px; }
         }
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: var(--green-main);
+            color: var(--white);
+            border: none;
+            font-size: 22px;
+            font-weight: 800;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+            z-index: 999;
+            box-shadow: 0 8px 25px rgba(124, 179, 66, 0.4);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            background: #6fa336;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(124, 179, 66, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -2059,7 +2587,7 @@
             <a href="#order">Оплата</a>
         </nav>
         <div class="header-right">
-            <a href="tel:+380950000000" class="header-phone">+38 095 000 00 00</a>
+            <a href="tel:+79299594913" class="header-phone">+79299594913</a>
             <a href="#order" class="header-btn">Записаться</a>
         </div>
         <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -2077,6 +2605,7 @@
         <a href="#programs" onclick="closeMobileMenu()">Программы</a>
         <a href="#testimonials" onclick="closeMobileMenu()">Отзывы</a>
         <a href="#order" onclick="closeMobileMenu()">Оплата</a>
+        <a href="tel:+79299594913" style="color: var(--green-main); font-weight: 700;">+7 929 959 49 13</a>
     </div>
 
     <!-- Hero -->
@@ -2114,7 +2643,7 @@
             </p>
             <div class="hero-buttons reveal stagger-6">
                 <a href="#programs" class="btn-primary">Выбрать программу</a>
-                <a href="https://t.me/hellosveta" class="btn-telegram" target="_blank">
+                <a href="https://t.me/hydey130" class="btn-telegram" target="_blank">
                     📱 Больше о моем похудении в Telegram
                 </a>
             </div>
@@ -2126,7 +2655,7 @@
                 <div class="decor-shape decor-shape-2"></div>
                 <div class="decor-shape decor-shape-3"></div>
                 <div class="decor-shape decor-shape-4"></div>
-                <img src="hellosveta.png" alt="Света -" class="hero-photo">
+                <img src="svetaphotoes/after/10.PNG" alt="Света -" class="hero-photo">
             </div>
         </div>
     </section>
@@ -2136,23 +2665,55 @@
         <div class="marquee-bg"></div>
         <div class="marquee-wrapper">
             <div class="marquee-text">
-                <span>Sveta</span>
+                <span>Похудение</span>
                 <span class="marquee-dot"></span>
-                <span>Nutritionist</span>
+                <span>Питание</span>
                 <span class="marquee-dot"></span>
-                <span>Sveta</span>
+                <span>Марафоны</span>
                 <span class="marquee-dot"></span>
-                <span>Nutritionist</span>
+                <span>Сушка</span>
+                <span class="marquee-dot"></span>
+                <span>Результат</span>
+                <span class="marquee-dot"></span>
+                <span>Поддержка</span>
+                <span class="marquee-dot"></span>
+                <span>Без голодовок</span>
+                <span class="marquee-dot"></span>
+                <span>Индивидуальный план</span>
+                <span class="marquee-dot"></span>
+                <span>Мотивация</span>
+                <span class="marquee-dot"></span>
+                <span>Здоровье</span>
+                <span class="marquee-dot"></span>
+                <span>Тренировки</span>
+                <span class="marquee-dot"></span>
+                <span>Образ жизни</span>
                 <span class="marquee-dot"></span>
             </div>
             <div class="marquee-text">
-                <span>Sveta</span>
+                <span>Похудение</span>
                 <span class="marquee-dot"></span>
-                <span>Nutritionist</span>
+                <span>Питание</span>
                 <span class="marquee-dot"></span>
-                <span>Sveta</span>
+                <span>Марафоны</span>
                 <span class="marquee-dot"></span>
-                <span>Nutritionist</span>
+                <span>Сушка</span>
+                <span class="marquee-dot"></span>
+                <span>Результат</span>
+                <span class="marquee-dot"></span>
+                <span>Поддержка</span>
+                <span class="marquee-dot"></span>
+                <span>Без голодовок</span>
+                <span class="marquee-dot"></span>
+                <span>Индивидуальный план</span>
+                <span class="marquee-dot"></span>
+                <span>Мотивация</span>
+                <span class="marquee-dot"></span>
+                <span>Здоровье</span>
+                <span class="marquee-dot"></span>
+                <span>Тренировки</span>
+                <span class="marquee-dot"></span>
+                <span>Образ жизни</span>
                 <span class="marquee-dot"></span>
             </div>
         </div>
@@ -2164,8 +2725,7 @@
         <div class="about-grid">
             <div class="about-image reveal-left">
                 <div class="about-image-wrapper">
-                    <div class="about-image-placeholder">👩‍🦰</div>
-                    <!-- <img src="sveta-about.jpg" alt="Света"> -->
+                    <img src="svetaphotoes/after/1.JPG" alt="Света">
                 </div>
                 <div class="about-badge float">-35 кг 💪</div>
             </div>
@@ -2180,7 +2740,7 @@
                     Я не буду тебя ругать за срывы, а помогу понять, почему они происходят.
                 </p>
                 <p class="reveal stagger-3">
-                    Больше о моей истории — в <a href="https://t.me/hellosveta" style="color: var(--green-main); font-weight: 700;">Telegram канале</a> 💚
+                    Больше о моей истории — в <a href="https://t.me/hydey130" style="color: var(--green-main); font-weight: 700;">Telegram канале</a> 💚
                 </p>
                 <div class="about-stats reveal stagger-4">
                     <div class="about-stat">
@@ -2196,6 +2756,118 @@
                         <div class="about-stat-text">кг лично</div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Before & After -->
+    <section class="sveta-ba-section" id="beforeafter">
+        <div class="sveta-ba-container">
+            <div class="reveal-left">
+                <div class="sveta-ba-dual" style="position: relative;">
+                    <div class="sveta-ba-wow-badge">
+                        <span class="wow-num">-73</span>
+                        <span class="wow-text">кг</span>
+                    </div>
+                    <div class="sveta-ba-side">
+                        <div class="sveta-ba-label-top">ДО</div>
+                        <div class="sveta-ba-slideshow">
+                            <div class="sveta-do-slide active"><img src="svetaphotoes/do/1.JPG" alt="До"></div>
+                            <div class="sveta-do-slide"><img src="svetaphotoes/do/2.JPG" alt="До"></div>
+                            <div class="sveta-do-slide"><img src="svetaphotoes/do/3.JPG" alt="До"></div>
+                            <div class="sveta-do-slide"><img src="svetaphotoes/do/4.JPG" alt="До"></div>
+                            <div class="sveta-do-slide"><img src="svetaphotoes/do/5.JPG" alt="До"></div>
+                            <div class="sveta-do-slide"><img src="svetaphotoes/do/6.JPG" alt="До"></div>
+                        </div>
+                    </div>
+                    <div class="sveta-ba-side">
+                        <div class="sveta-ba-label-top after">ПОСЛЕ</div>
+                        <div class="sveta-ba-slideshow">
+                            <div class="sveta-after-slide active"><img src="svetaphotoes/after/1.JPG" alt="После"></div>
+                            <div class="sveta-after-slide"><img src="svetaphotoes/after/2.jpg" alt="После"></div>
+                            <div class="sveta-after-slide"><img src="svetaphotoes/after/3.jpg" alt="После"></div>
+                            <div class="sveta-after-slide"><img src="svetaphotoes/after/4.jpg" alt="После"></div>
+                            <div class="sveta-after-slide"><img src="svetaphotoes/after/5.PNG" alt="После"></div>
+                            <div class="sveta-after-slide"><img src="svetaphotoes/after/6.PNG" alt="После"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sveta-ba-dots" id="svetaBaDots">
+                    <div class="sveta-ba-dot active"></div>
+                    <div class="sveta-ba-dot"></div>
+                    <div class="sveta-ba-dot"></div>
+                    <div class="sveta-ba-dot"></div>
+                    <div class="sveta-ba-dot"></div>
+                    <div class="sveta-ba-dot"></div>
+                </div>
+            </div>
+            <div class="sveta-ba-content reveal-right">
+                <div class="sveta-ba-tag">Мой путь</div>
+                <h2>Я сама прошла <span>этот путь</span></h2>
+                <div class="sveta-ba-stats-row">
+                    <div class="sveta-ba-stat">
+                        <div class="sveta-ba-stat-num">140 кг</div>
+                        <div class="sveta-ba-stat-label">было</div>
+                    </div>
+                    <div class="sveta-ba-arrow">→</div>
+                    <div class="sveta-ba-stat highlight">
+                        <div class="sveta-ba-stat-num">67 кг</div>
+                        <div class="sveta-ba-stat-label">стало</div>
+                    </div>
+                </div>
+                <p>Я знаю, каково это — смотреть в зеркало и не узнавать себя. Пробовать сотню диет и каждый раз срываться.</p>
+                <p>Я прошла через всё это сама. Без операций. Без таблеток. Без голодовок. Только правильное питание, поддержка и система, которая реально работает.</p>
+                <p><strong>Теперь я помогаю другим девочкам пройти этот же путь — быстрее и без моих ошибок.</strong></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Journey Chain -->
+    <section class="journey-section">
+        <h2 class="reveal">Мой <span>путь</span></h2>
+        <p class="journey-subtitle reveal">3 этапа похудения. Каждый раз я возвращалась — и каждый раз побеждала</p>
+
+        <div class="journey-chain reveal">
+            <div class="journey-step">
+                <div class="journey-dot">
+                    <span class="journey-dot-num">1</span>
+                    <span class="journey-dot-label">этап</span>
+                </div>
+                <div class="journey-weights">
+                    <div class="journey-from">147 кг</div>
+                    <div class="journey-arrow-down">↓</div>
+                    <div class="journey-to">60 кг</div>
+                </div>
+                <span class="journey-result">-87 кг</span>
+                <p class="journey-desc">Первый раз. Самый сложный старт — но и самый большой результат</p>
+            </div>
+
+            <div class="journey-step">
+                <div class="journey-dot">
+                    <span class="journey-dot-num">2</span>
+                    <span class="journey-dot-label">этап</span>
+                </div>
+                <div class="journey-weights">
+                    <div class="journey-from">110 кг</div>
+                    <div class="journey-arrow-down">↓</div>
+                    <div class="journey-to">65 кг</div>
+                </div>
+                <span class="journey-result">-45 кг</span>
+                <p class="journey-desc">Вернулся вес — но уже знала как действовать</p>
+            </div>
+
+            <div class="journey-step">
+                <div class="journey-dot">
+                    <span class="journey-dot-num">3</span>
+                    <span class="journey-dot-label">этап</span>
+                </div>
+                <div class="journey-weights">
+                    <div class="journey-from">95 кг</div>
+                    <div class="journey-arrow-down">↓</div>
+                    <div class="journey-to">62 кг</div>
+                </div>
+                <span class="journey-result">-33 кг</span>
+                <p class="journey-desc">Финальная трансформация. Теперь навсегда</p>
             </div>
         </div>
     </section>
@@ -2617,77 +3289,6 @@
         </div>
     </div>
 
-    <!-- FAQ Section -->
-    <section class="faq-section" id="faq">
-        <div class="faq-decoration">🌿</div>
-        <h2 class="section-title-center reveal">FAQ</h2>
-        <div class="faq-container">
-            <div class="faq-item reveal">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Как записаться на программу?</span>
-                    <span class="faq-icon">+</span>
-                </div>
-                <div class="faq-answer">
-                    <p>Выбери программу на сайте, заполни форму и оплати. После оплаты я свяжусь с тобой в Telegram в течение 24 часов для старта!</p>
-                </div>
-            </div>
-            <div class="faq-item reveal">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Нужно ли заниматься спортом?</span>
-                    <span class="faq-icon">+</span>
-                </div>
-                <div class="faq-answer">
-                    <p>Нет, спорт не обязателен! Мои программы основаны на питании. Но если хочешь — дам рекомендации по тренировкам дома или в зале.</p>
-                </div>
-            </div>
-            <div class="faq-item reveal">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Что если я сорвусь?</span>
-                    <span class="faq-icon">+</span>
-                </div>
-                <div class="faq-answer">
-                    <p>Срывы — это нормально! Я не буду тебя ругать. Разберёмся вместе, почему это произошло. В программе есть специальный гайд по срывам.</p>
-                </div>
-            </div>
-            <div class="faq-item reveal">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Подойдёт ли мне, если я вегетарианец?</span>
-                    <span class="faq-icon">+</span>
-                </div>
-                <div class="faq-answer">
-                    <p>Да! Я составляю индивидуальный план под твои предпочтения. Вегетарианцам, веганам, людям с аллергиями — всем найдём подходящий рацион.</p>
-                </div>
-            </div>
-            <div class="faq-item reveal">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Сколько килограмм можно сбросить?</span>
-                    <span class="faq-icon">+</span>
-                </div>
-                <div class="faq-answer">
-                    <p>Зависит от стартового веса и программы. В среднем: Сушка — 5-8 кг, Марафон — 8-12 кг, VIP — до 18 кг за 2 месяца.</p>
-                </div>
-            </div>
-            <div class="faq-item reveal">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Можно ли оплатить частями?</span>
-                    <span class="faq-icon">+</span>
-                </div>
-                <div class="faq-answer">
-                    <p>Да, для программы VIP Ведение доступна оплата в 2 этапа. Напиши мне в Telegram для деталей.</p>
-                </div>
-            </div>
-            <div class="faq-item reveal">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Что входит в поддержку 24/7?</span>
-                    <span class="faq-icon">+</span>
-                </div>
-                <div class="faq-answer">
-                    <p>Личный чат со мной в Telegram. Можешь писать в любое время — вопросы по питанию, фото еды на проверку, поддержка в сложные моменты.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Order Form -->
     <section class="order-section" id="order">
         <div class="order-container reveal-scale">
@@ -2764,6 +3365,93 @@
         </div>
     </section>
 
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+        <div class="faq-decoration">🌿</div>
+        <h2 class="section-title-center reveal">FAQ</h2>
+        <div class="faq-container">
+            <div class="faq-item reveal">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Как записаться на программу?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Выбери программу на сайте, заполни форму и оплати. После оплаты я свяжусь с тобой в Telegram в течение 24 часов для старта!</p>
+                </div>
+            </div>
+            <div class="faq-item reveal">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Нужно ли заниматься спортом?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Нет, спорт не обязателен! Мои программы основаны на питании. Но если хочешь — дам рекомендации по тренировкам дома или в зале.</p>
+                </div>
+            </div>
+            <div class="faq-item reveal">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Что если я сорвусь?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Срывы — это нормально! Я не буду тебя ругать. Разберёмся вместе, почему это произошло. В программе есть специальный гайд по срывам.</p>
+                </div>
+            </div>
+            <div class="faq-item reveal">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Подойдёт ли мне, если я вегетарианец?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Да! Я составляю индивидуальный план под твои предпочтения. Вегетарианцам, веганам, людям с аллергиями — всем найдём подходящий рацион.</p>
+                </div>
+            </div>
+            <div class="faq-item reveal">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Сколько килограмм можно сбросить?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Зависит от стартового веса и программы. В среднем: Сушка — 5-8 кг, Марафон — 8-12 кг, VIP — до 18 кг за 2 месяца.</p>
+                </div>
+            </div>
+            <div class="faq-item reveal">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Можно ли оплатить частями?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Да, для программы VIP Ведение доступна оплата в 2 этапа. Напиши мне в Telegram для деталей.</p>
+                </div>
+            </div>
+            <div class="faq-item reveal">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Что входит в поддержку 24/7?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Личный чат со мной в Telegram. Можешь писать в любое время — вопросы по питанию, фото еды на проверку, поддержка в сложные моменты.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ask Question -->
+    <section class="ask-section" id="ask">
+        <div class="ask-container reveal">
+            <div class="ask-left">
+                <h2>Остались <span>вопросы?</span></h2>
+                <p>Напиши мне — отвечу лично! Без ботов, без менеджеров. Просто я и ты.</p>
+            </div>
+            <form class="ask-form" id="askForm">
+                <input type="text" class="ask-input" id="askName" placeholder="Твое имя" required>
+                <input type="text" class="ask-input" id="askContact" placeholder="Telegram или Instagram (@username)" required>
+                <textarea class="ask-input ask-textarea" id="askMessage" placeholder="Твой вопрос..." required></textarea>
+                <button type="submit" class="ask-btn">Отправить вопрос</button>
+            </form>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer>
         <div class="footer-content">
@@ -2775,8 +3463,18 @@
                 <a href="#order">Оплата</a>
             </div>
             <div class="footer-social">
-                <a href="https://instagram.com" target="_blank">📸</a>
-                <a href="https://t.me/hellosveta" target="_blank">📱</a>
+                <a href="https://www.instagram.com/hydey_130/" target="_blank" title="Instagram">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
+                <a href="https://t.me/hydey130" target="_blank" title="Telegram">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                </a>
+                <a href="https://vk.ru/hydey_130club" target="_blank" title="VK">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.391 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.862-.525-2.049-1.714-1.033-1.01-1.49-1.135-1.744-1.135-.356 0-.458.102-.458.593v1.575c0 .424-.135.678-1.253.678-1.846 0-3.896-1.12-5.335-3.202C4.624 10.857 4.03 8.57 4.03 8.096c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.677.863 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.203.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.813-.542 1.254-1.406 2.151-3.574 2.151-3.574.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.049.17.49-.085.744-.576.744z"/></svg>
+                </a>
+                <a href="https://max.ru/join/zULCmz4nkHdyBACFYsSgDG7qEgLHSZ8SSIV2SvfNxJ4" target="_blank" title="MAX">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M2 4c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4zm4 3v10h2V7H6zm4 0v10h2l3-5v5h2V7h-2l-3 5V7h-2z"/></svg>
+                </a>
             </div>
         </div>
     </footer>
@@ -2879,6 +3577,63 @@
 
         // Auto-slide
         setInterval(nextSlide, 6000);
+
+        // ============================================
+        // SVETA BEFORE & AFTER SLIDESHOW
+        // ============================================
+
+        const svetaDoSlides = document.querySelectorAll('.sveta-do-slide');
+        const svetaAfterSlides = document.querySelectorAll('.sveta-after-slide');
+        const svetaDots = document.querySelectorAll('.sveta-ba-dot');
+        let svetaCurrent = 0;
+        const svetaTotal = svetaDoSlides.length;
+
+        function goToSvetaPair(index) {
+            svetaDoSlides[svetaCurrent].classList.remove('active');
+            svetaAfterSlides[svetaCurrent].classList.remove('active');
+            svetaDots[svetaCurrent].classList.remove('active');
+            svetaCurrent = index;
+            svetaDoSlides[svetaCurrent].classList.add('active');
+            svetaAfterSlides[svetaCurrent].classList.add('active');
+            svetaDots[svetaCurrent].classList.add('active');
+        }
+
+        function nextSvetaPair() {
+            goToSvetaPair((svetaCurrent + 1) % svetaTotal);
+        }
+
+        svetaDots.forEach((dot, i) => {
+            dot.addEventListener('click', () => goToSvetaPair(i));
+        });
+
+        setInterval(nextSvetaPair, 4000);
+
+        // ============================================
+        // ASK QUESTION FORM
+        // ============================================
+
+        document.getElementById('askForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('askName').value;
+            const contact = document.getElementById('askContact').value;
+            const message = document.getElementById('askMessage').value;
+
+            const text = `Новый вопрос!\n\nИмя: ${name}\nКонтакт: ${contact}\nВопрос: ${message}`;
+
+            fetch('/api/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, contact, message })
+            })
+            .then(res => res.json())
+            .then(data => {
+                this.innerHTML = '<div style="text-align:center;color:var(--yellow-main);font-size:20px;font-weight:700;padding:40px 0;">Спасибо! Я отвечу тебе в ближайшее время ✨</div>';
+            })
+            .catch(() => {
+                window.open('https://t.me/hydey130?text=' + encodeURIComponent(text), '_blank');
+                this.innerHTML = '<div style="text-align:center;color:var(--yellow-main);font-size:20px;font-weight:700;padding:40px 0;">Напиши мне в Telegram — я отвечу! ✨</div>';
+            });
+        });
 
         // ============================================
         // FLOATING BENEFITS - Simple scroll animation
@@ -3021,10 +3776,14 @@
                         card.dataset.program = prog.id;
                         card.dataset.price = prog.price;
                         card.onclick = function() { selectProgramCard(this); };
+                        const oldPriceHtml = prog.oldPrice && prog.oldPrice > prog.price
+                            ? `<div class="old-price">${prog.oldPrice.toLocaleString('ru-RU')} \u20BD</div>`
+                            : '';
                         card.innerHTML = `
                             ${saleBadge}
                             <div class="icon">${icon}</div>
                             <div class="name">${prog.name}</div>
+                            ${oldPriceHtml}
                             <div class="price">${prog.price.toLocaleString('ru-RU')} \u20BD</div>
                         `;
                         container.appendChild(card);
@@ -3257,6 +4016,77 @@
                 el.style.transform = `translateY(${scrolled * speed}px)`;
             });
         });
+        // ============================================
+        // ANIMATED COUNTERS
+        // ============================================
+
+        function animateCounter(el) {
+            const text = el.textContent.trim();
+            const hasPlus = text.includes('+');
+            const hasPercent = text.includes('%');
+            const hasKg = text.includes('кг');
+            const hasMinus = text.startsWith('-');
+
+            const num = parseInt(text.replace(/[^0-9]/g, ''));
+            if (isNaN(num) || num === 0) return;
+
+            const duration = 2000;
+            const start = performance.now();
+
+            function update(now) {
+                const progress = Math.min((now - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const current = Math.round(num * eased);
+
+                let display = '';
+                if (hasMinus) display += '-';
+                display += current;
+                if (hasKg) display += 'кг';
+                if (hasPlus) display += '+';
+                if (hasPercent) display += '%';
+
+                el.textContent = display;
+
+                if (progress < 1) requestAnimationFrame(update);
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.dataset.counted) {
+                    entry.target.dataset.counted = 'true';
+                    animateCounter(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.stat-number, .about-stat-number').forEach(el => {
+            counterObserver.observe(el);
+        });
+
+        // ============================================
+        // BACK TO TOP BUTTON
+        // ============================================
+
+        const backToTop = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 600) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
     </script>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" aria-label="Наверх">↑</button>
 </body>
 </html>

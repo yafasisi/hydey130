@@ -510,6 +510,7 @@
                     <div class="sale-row">
                         <label class="sale-toggle"><input type="checkbox" id="ps-${id}" ${hasSale ? 'checked' : ''} onchange="toggleSale('${id}')"> Значок СКИДКА</label>
                         <div class="field" style="flex:1;margin-bottom:0"><input type="text" id="pt-${id}" value="${esc(p.saleText || 'СКИДКА')}" placeholder="Текст значка" style="padding:10px 14px;font-size:13px;"></div>
+                        <div class="field" style="margin-bottom:0"><label>Старая цена</label><input type="number" id="po-${id}" value="${p.oldPrice || ''}" placeholder="0 = не показывать" min="0" style="padding:10px 14px;font-size:13px;width:140px;"></div>
                         <button class="delete-btn" onclick="deleteProgram('${id}')">Удалить</button>
                     </div>
                 </div>`;
@@ -532,11 +533,12 @@
             const price = parseInt(document.getElementById(`pp-${id}`).value);
             const sale = document.getElementById(`ps-${id}`).checked;
             const saleText = document.getElementById(`pt-${id}`).value.trim();
+            const oldPrice = parseInt(document.getElementById(`po-${id}`).value) || 0;
             if (!name || isNaN(price) || price < 0) { showStatus('programs', 'Заполните название и цену', 'error'); return; }
             showLoading(true);
-            const data = await apiCall('data', 'PUT', { action: 'updateProgram', id, name, price, sale, saleText: sale ? saleText : '', icon: currentPrograms[id]?.icon || '' });
+            const data = await apiCall('data', 'PUT', { action: 'updateProgram', id, name, price, sale, saleText: sale ? saleText : '', icon: currentPrograms[id]?.icon || '', oldPrice });
             showLoading(false);
-            if (data?.success) { showStatus('programs', 'Сохранено!', 'success'); currentPrograms[id] = { name, price, sale, saleText: sale ? saleText : '', icon: currentPrograms[id]?.icon || '' }; renderPrograms(); }
+            if (data?.success) { showStatus('programs', 'Сохранено!', 'success'); currentPrograms[id] = { name, price, sale, saleText: sale ? saleText : '', icon: currentPrograms[id]?.icon || '', oldPrice }; renderPrograms(); }
             else showStatus('programs', data?.error || 'Ошибка', 'error');
         }
 
