@@ -310,12 +310,12 @@
             <button class="dash-logout" onclick="doLogout()">Выйти</button>
         </div>
         <div class="tabs">
-            <button class="tab active" onclick="switchTab('clients', this)">Клиенты</button>
-            <button class="tab" onclick="switchTab('programs', this)">Программы</button>
+            <!-- <button class="tab" onclick="switchTab('clients', this)">Клиенты</button> -->
+            <button class="tab active" onclick="switchTab('programs', this)">Программы</button>
             <button class="tab" onclick="switchTab('promos', this)">Промокоды</button>
         </div>
 
-        <div class="tab-content active" id="tab-clients" style="max-width: 95%; width: 100%;">
+        <div class="tab-content" id="tab-clients" style="max-width: 95%; width: 100%; display: none;">
             <div class="crm-stats" id="crmStats"></div>
             <div class="crm-subtabs" id="crmSubtabs"></div>
             <div class="crm-toolbar">
@@ -336,7 +336,7 @@
         </div>
         <div class="crm-toast" id="crmToast"></div>
 
-        <div class="tab-content" id="tab-programs">
+        <div class="tab-content active" id="tab-programs">
             <div class="section-hint">
                 Здесь можно изменить программы, цены и включить значок "СКИДКА". Также можно добавить новую программу.
             </div>
