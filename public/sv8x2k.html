@@ -243,6 +243,11 @@
         .excel-table .excel-actions { text-align: center; white-space: nowrap; }
         .excel-table .excel-actions button { background: var(--light-gray); border: none; padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 12px; margin: 0 2px; transition: all 0.2s; }
         .excel-table .excel-actions button:hover { background: var(--green-light); color: var(--green); transform: scale(1.1); }
+        .excel-table td[contenteditable] { cursor: text; position: relative; }
+        .excel-table td[contenteditable]:hover { background: #f0f7ff; }
+        .excel-table td[contenteditable]:focus { outline: 2px solid var(--green); outline-offset: -2px; border-radius: 4px; background: white; }
+        .excel-table td.excel-saved { animation: cellSaved 0.6s ease; }
+        @keyframes cellSaved { 0%,50% { background: #e8f5e9; } 100% { background: transparent; } }
 
         @media (max-width: 500px) {
             .login-card { padding: 35px 25px; }
@@ -769,6 +774,20 @@
             pag.innerHTML = pagHtml;
         }
 
+        async function saveCell(el) {
+            const orderId = el.dataset.order;
+            const field = el.dataset.field;
+            const value = el.textContent.trim();
+            const order = currentOrders.find(o => o.orderId === orderId);
+            if (!order || order[field] === value) return;
+            order[field] = value;
+            const data = await apiCall('data', 'PUT', { action: 'updateOrder', orderId, field, value });
+            if (data?.success) {
+                el.classList.add('excel-saved');
+                setTimeout(() => el.classList.remove('excel-saved'), 600);
+            }
+        }
+
         function setView(view) {
             crmView = view;
             document.getElementById('viewCards').classList.toggle('active', view === 'cards');
@@ -811,19 +830,18 @@
                         : '<span class="excel-status-pending">Ожидает</span>';
                     return `<tr>
                         <td class="excel-num">${i + 1}</td>
-                        <td class="excel-name">${esc(o.name)}</td>
-                        <td>${esc(o.phone)}</td>
-                        <td class="excel-muted">${esc(o.email)}</td>
-                        <td class="excel-muted">${esc(o.telegram || '—')}</td>
+                        <td class="excel-name" contenteditable="true" data-order="${o.orderId}" data-field="name" onblur="saveCell(this)">${esc(o.name)}</td>
+                        <td contenteditable="true" data-order="${o.orderId}" data-field="phone" onblur="saveCell(this)">${esc(o.phone)}</td>
+                        <td class="excel-muted" contenteditable="true" data-order="${o.orderId}" data-field="email" onblur="saveCell(this)">${esc(o.email)}</td>
+                        <td class="excel-muted" contenteditable="true" data-order="${o.orderId}" data-field="telegram" onblur="saveCell(this)">${esc(o.telegram || '')}</td>
                         ${showProgCol ? `<td><span class="crm-prog-badge" style="background:${progColor}15;color:${progColor}">${esc(progName)}</span></td>` : ''}
                         <td class="excel-price">${o.finalPrice?.toLocaleString('ru-RU')} &#8381;</td>
                         <td class="excel-muted">${esc(o.promoCode || '—')}</td>
                         <td>${statusHtml}</td>
                         <td class="excel-muted">${dateStr}</td>
-                        <td class="excel-muted">${esc(o.note || '')}</td>
+                        <td class="excel-muted" contenteditable="true" data-order="${o.orderId}" data-field="note" onblur="saveCell(this)">${esc(o.note || '')}</td>
                         <td class="excel-actions">
                             ${o.status === 'pending' ? `<button onclick="markPaid('${o.orderId}')" title="Оплачено">✓</button>` : ''}
-                            <button onclick="addOrderNote('${o.orderId}')" title="Заметка">📝</button>
                             <button onclick="deleteOrder('${o.orderId}')" title="Удалить">✕</button>
                         </td>
                     </tr>`;

@@ -151,6 +151,20 @@ module.exports = async function handler(req, res) {
             return res.status(200).json({ success: true });
         }
 
+        if (action === 'updateOrder') {
+            const { orderId, field, value } = req.body;
+            const allowed = ['name','phone','email','telegram','note','status'];
+            if (!orderId || !field || !allowed.includes(field)) return res.status(400).json({ success: false, error: 'Invalid field' });
+            const orders = await getOrders();
+            const order = orders.find(o => o.orderId === orderId);
+            if (!order) return res.status(404).json({ success: false, error: 'Order not found' });
+            order[field] = value || '';
+            if (field === 'status' && value === 'paid' && !order.paidAt) order.paidAt = new Date().toISOString();
+            const saved = await saveOrders(orders);
+            if (!saved) return res.status(500).json({ success: false, error: 'Redis not configured' });
+            return res.status(200).json({ success: true });
+        }
+
         if (action === 'addNote') {
             const { orderId, note } = req.body;
             if (!orderId) return res.status(400).json({ success: false, error: 'orderId required' });
