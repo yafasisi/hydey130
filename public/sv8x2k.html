@@ -166,11 +166,19 @@
         .empty-state { text-align: center; padding: 40px 20px; color: var(--gray); font-size: 14px; }
 
         /* CRM */
+        .crm-subtabs { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0; }
+        .crm-subtab { padding: 8px 18px; font-weight: 700; font-size: 12px; cursor: pointer; color: var(--gray); border: 2px solid #eee; border-radius: 10px; background: var(--white); font-family: inherit; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+        .crm-subtab:hover { border-color: #ccc; color: var(--dark); }
+        .crm-subtab.active { color: var(--white); background: var(--green); border-color: var(--green); }
+        .crm-subtab-count { background: rgba(0,0,0,0.1); padding: 2px 8px; border-radius: 10px; font-size: 11px; }
+        .crm-subtab.active .crm-subtab-count { background: rgba(255,255,255,0.25); }
         .crm-toolbar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
         .crm-search { flex: 1; min-width: 200px; padding: 12px 18px; border: 2px solid #eee; border-radius: 12px; font-size: 14px; font-family: inherit; transition: border-color 0.3s; }
         .crm-search:focus { outline: none; border-color: var(--green); }
         .crm-filter { padding: 12px 18px; border: 2px solid #eee; border-radius: 12px; font-size: 14px; font-family: inherit; background: var(--white); cursor: pointer; transition: border-color 0.3s; }
         .crm-filter:focus { outline: none; border-color: var(--green); }
+        .crm-export-btn { padding: 12px 20px; border: 2px solid var(--green); border-radius: 12px; font-size: 13px; font-weight: 700; font-family: inherit; background: var(--green-light); color: #558B2F; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+        .crm-export-btn:hover { background: var(--green); color: white; }
         .crm-stats { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
         .crm-stat { flex: 1; min-width: 120px; background: var(--white); border-radius: 14px; padding: 18px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f0f0f0; }
         .crm-stat-num { font-size: 28px; font-weight: 800; color: var(--green); }
@@ -188,6 +196,7 @@
         .crm-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; }
         .crm-badge.paid { background: var(--green-light); color: #558B2F; }
         .crm-badge.pending { background: #FEF3C7; color: #92400E; }
+        .crm-prog-badge { display: inline-block; padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; }
         .crm-client-name { font-weight: 700; color: var(--dark); }
         .crm-client-contact { font-size: 12px; color: var(--gray); margin-top: 2px; }
         .crm-program-name { font-weight: 600; }
@@ -200,14 +209,14 @@
         .crm-btn.danger:hover { border-color: var(--red); color: var(--red); background: #fff5f5; }
         .crm-btn.paid-btn { border-color: var(--green); color: var(--green); background: var(--green-light); }
         .crm-note { margin-top: 6px; font-size: 11px; color: #F59E0B; font-style: italic; }
-        .crm-note-input { width: 100%; padding: 8px 12px; border: 2px solid #eee; border-radius: 8px; font-size: 12px; font-family: inherit; margin-top: 6px; resize: none; }
-        .crm-note-input:focus { outline: none; border-color: var(--green); }
         .crm-empty { text-align: center; padding: 60px 20px; color: var(--gray); }
         .crm-empty-icon { font-size: 48px; margin-bottom: 16px; }
         .crm-empty-text { font-size: 15px; font-weight: 600; }
         .crm-pagination { display: flex; justify-content: center; gap: 6px; margin-top: 20px; }
         .crm-page-btn { padding: 8px 14px; border: 1.5px solid #eee; border-radius: 8px; background: var(--white); font-weight: 600; font-size: 13px; cursor: pointer; font-family: inherit; transition: all 0.2s; }
         .crm-page-btn:hover, .crm-page-btn.active { border-color: var(--green); color: var(--green); background: var(--green-light); }
+        .crm-toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--dark); color: white; padding: 14px 28px; border-radius: 12px; font-weight: 700; font-size: 14px; z-index: 2000; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+        .crm-toast.show { opacity: 1; }
 
         @media (max-width: 500px) {
             .login-card { padding: 35px 25px; }
@@ -277,20 +286,20 @@
 
         <div class="tab-content active" id="tab-clients" style="max-width: 1100px;">
             <div class="crm-stats" id="crmStats"></div>
+            <div class="crm-subtabs" id="crmSubtabs"></div>
             <div class="crm-toolbar">
                 <input type="text" class="crm-search" id="crmSearch" placeholder="Поиск по имени, телефону, email..." oninput="renderClients()">
-                <select class="crm-filter" id="crmFilterProgram" onchange="renderClients()">
-                    <option value="">Все программы</option>
-                </select>
                 <select class="crm-filter" id="crmFilterStatus" onchange="renderClients()">
                     <option value="">Все статусы</option>
                     <option value="paid">Оплачено</option>
                     <option value="pending">Ожидает</option>
                 </select>
+                <button class="crm-export-btn" onclick="exportClients()">Экспорт</button>
             </div>
             <div id="crmTableWrap"></div>
             <div class="crm-pagination" id="crmPagination"></div>
         </div>
+        <div class="crm-toast" id="crmToast"></div>
 
         <div class="tab-content" id="tab-programs">
             <div class="section-hint">
@@ -604,23 +613,46 @@
         document.getElementById('confirmModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
 
         // CRM FUNCTIONS
-        function populateCrmFilters() {
-            const s = document.getElementById('crmFilterProgram');
-            s.innerHTML = '<option value="">Все программы</option>';
-            const programIds = new Set(currentOrders.map(o => o.program));
-            programIds.forEach(id => {
-                const name = currentPrograms[id]?.name || id;
-                s.innerHTML += `<option value="${id}">${esc(name)}</option>`;
+        let crmActiveProgram = ''; // '' = all programs
+        const PROG_COLORS = ['#7CB342','#F59E0B','#3B82F6','#EF4444','#8B5CF6','#EC4899','#14B8A6','#F97316'];
+
+        function getProgColor(programId) {
+            const ids = Object.keys(currentPrograms);
+            const idx = ids.indexOf(programId);
+            return PROG_COLORS[idx >= 0 ? idx % PROG_COLORS.length : 0];
+        }
+
+        function populateCrmFilters() { renderCrmSubtabs(); }
+
+        function renderCrmSubtabs() {
+            const container = document.getElementById('crmSubtabs');
+            const allCount = currentOrders.length;
+            let html = `<button class="crm-subtab ${crmActiveProgram === '' ? 'active' : ''}" onclick="setCrmProgram('')">Все <span class="crm-subtab-count">${allCount}</span></button>`;
+            Object.entries(currentPrograms).forEach(([id, p]) => {
+                const count = currentOrders.filter(o => o.program === id).length;
+                const color = getProgColor(id);
+                const activeStyle = crmActiveProgram === id ? `background:${color};border-color:${color};color:white` : `border-color:${color}33;color:${color}`;
+                html += `<button class="crm-subtab ${crmActiveProgram === id ? 'active' : ''}" style="${activeStyle}" onclick="setCrmProgram('${id}')">${p.icon || ''} ${esc(p.name)} <span class="crm-subtab-count">${count}</span></button>`;
             });
+            container.innerHTML = html;
+        }
+
+        function setCrmProgram(programId) {
+            crmActiveProgram = programId;
+            crmPage = 1;
+            renderCrmSubtabs();
+            renderCrmStats();
+            renderClients();
         }
 
         function renderCrmStats() {
-            const total = currentOrders.length;
-            const paid = currentOrders.filter(o => o.status === 'paid').length;
-            const pending = currentOrders.filter(o => o.status === 'pending').length;
-            const revenue = currentOrders.filter(o => o.status === 'paid').reduce((sum, o) => sum + (o.finalPrice || 0), 0);
+            const orders = crmActiveProgram ? currentOrders.filter(o => o.program === crmActiveProgram) : currentOrders;
+            const total = orders.length;
+            const paid = orders.filter(o => o.status === 'paid').length;
+            const pending = orders.filter(o => o.status === 'pending').length;
+            const revenue = orders.filter(o => o.status === 'paid').reduce((sum, o) => sum + (o.finalPrice || 0), 0);
             document.getElementById('crmStats').innerHTML = `
-                <div class="crm-stat total"><div class="crm-stat-num">${total}</div><div class="crm-stat-label">Всего заказов</div></div>
+                <div class="crm-stat total"><div class="crm-stat-num">${total}</div><div class="crm-stat-label">Всего</div></div>
                 <div class="crm-stat paid"><div class="crm-stat-num">${paid}</div><div class="crm-stat-label">Оплачено</div></div>
                 <div class="crm-stat pending"><div class="crm-stat-num">${pending}</div><div class="crm-stat-label">Ожидает</div></div>
                 <div class="crm-stat paid"><div class="crm-stat-num">${revenue.toLocaleString('ru-RU')} &#8381;</div><div class="crm-stat-label">Выручка</div></div>
@@ -629,10 +661,9 @@
 
         function getFilteredOrders() {
             const search = document.getElementById('crmSearch').value.toLowerCase().trim();
-            const filterProgram = document.getElementById('crmFilterProgram').value;
             const filterStatus = document.getElementById('crmFilterStatus').value;
             return currentOrders.filter(o => {
-                if (filterProgram && o.program !== filterProgram) return false;
+                if (crmActiveProgram && o.program !== crmActiveProgram) return false;
                 if (filterStatus && o.status !== filterStatus) return false;
                 if (search) {
                     const haystack = `${o.name} ${o.phone} ${o.email} ${o.telegram} ${o.orderId} ${o.note || ''}`.toLowerCase();
@@ -649,6 +680,7 @@
             const start = (crmPage - 1) * CRM_PER_PAGE;
             const pageOrders = filtered.slice(start, start + CRM_PER_PAGE);
             const wrap = document.getElementById('crmTableWrap');
+            const showProgCol = !crmActiveProgram;
 
             if (!filtered.length) {
                 wrap.innerHTML = `<div class="crm-empty"><div class="crm-empty-icon">📋</div><div class="crm-empty-text">${currentOrders.length ? 'Ничего не найдено' : 'Заказов пока нет'}</div></div>`;
@@ -659,7 +691,7 @@
             wrap.innerHTML = `<div class="crm-table-wrap"><table class="crm-table">
                 <thead><tr>
                     <th>Клиент</th>
-                    <th>Программа</th>
+                    ${showProgCol ? '<th>Программа</th>' : ''}
                     <th>Сумма</th>
                     <th>Статус</th>
                     <th>Дата</th>
@@ -670,6 +702,7 @@
                     const dateStr = date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit' });
                     const timeStr = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
                     const progName = o.programName || currentPrograms[o.program]?.name || o.program;
+                    const progColor = getProgColor(o.program);
                     const hasDiscount = o.discount > 0;
                     const noteHtml = o.note ? `<div class="crm-note">📝 ${esc(o.note)}</div>` : '';
                     return `<tr>
@@ -680,7 +713,7 @@
                             ${o.telegram ? `<div class="crm-client-contact">💬 ${esc(o.telegram)}</div>` : ''}
                             ${noteHtml}
                         </td>
-                        <td><div class="crm-program-name">${esc(progName)}</div>${o.promoCode ? `<div class="crm-client-contact">🏷️ ${esc(o.promoCode)}</div>` : ''}</td>
+                        ${showProgCol ? `<td><span class="crm-prog-badge" style="background:${progColor}15;color:${progColor}">${esc(progName)}</span>${o.promoCode ? `<div class="crm-client-contact">🏷️ ${esc(o.promoCode)}</div>` : ''}</td>` : ''}
                         <td><div class="crm-price">${o.finalPrice?.toLocaleString('ru-RU')} &#8381;</div>${hasDiscount ? `<span class="crm-price-orig">${o.originalPrice?.toLocaleString('ru-RU')} &#8381;</span>` : ''}</td>
                         <td><span class="crm-badge ${o.status}">${o.status === 'paid' ? 'Оплачено' : 'Ожидает'}</span></td>
                         <td><div class="crm-date">${dateStr}</div><div class="crm-date">${timeStr}</div></td>
@@ -693,7 +726,6 @@
                 }).join('')}</tbody>
             </table></div>`;
 
-            // Pagination
             const pag = document.getElementById('crmPagination');
             if (totalPages <= 1) { pag.innerHTML = ''; return; }
             let pagHtml = '';
@@ -703,6 +735,27 @@
             pag.innerHTML = pagHtml;
         }
 
+        function exportClients() {
+            const filtered = getFilteredOrders();
+            if (!filtered.length) { showToast('Нечего экспортировать'); return; }
+            const header = 'Имя\tТелефон\tEmail\tTelegram\tПрограмма\tСумма\tСтатус\tДата\tЗаметка';
+            const rows = filtered.map(o => {
+                const progName = o.programName || currentPrograms[o.program]?.name || o.program;
+                const date = new Date(o.createdAt).toLocaleDateString('ru-RU');
+                const status = o.status === 'paid' ? 'Оплачено' : 'Ожидает';
+                return `${o.name}\t${o.phone}\t${o.email}\t${o.telegram || ''}\t${progName}\t${o.finalPrice}\t${status}\t${date}\t${o.note || ''}`;
+            });
+            navigator.clipboard.writeText(header + '\n' + rows.join('\n'));
+            showToast(`Скопировано ${filtered.length} записей — вставь в Excel`);
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('crmToast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
         async function markPaid(orderId) {
             showLoading(true);
             const data = await apiCall('data', 'PUT', { action: 'updateOrderStatus', orderId, status: 'paid' });
@@ -710,7 +763,7 @@
             if (data?.success) {
                 const order = currentOrders.find(o => o.orderId === orderId);
                 if (order) { order.status = 'paid'; order.paidAt = new Date().toISOString(); }
-                renderCrmStats(); renderClients();
+                renderCrmSubtabs(); renderCrmStats(); renderClients();
             }
         }
 
@@ -722,7 +775,7 @@
             showLoading(false);
             if (data?.success) {
                 currentOrders = currentOrders.filter(o => o.orderId !== orderId);
-                renderCrmStats(); renderClients(); populateCrmFilters();
+                renderCrmSubtabs(); renderCrmStats(); renderClients();
             }
         }
 
