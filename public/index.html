@@ -2226,6 +2226,60 @@
             overflow: visible;
         }
 
+        .program-select-card.disabled {
+            opacity: 0.5;
+            filter: grayscale(100%);
+            pointer-events: none;
+            position: relative;
+        }
+
+        .program-select-card .disabled-badge {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-8deg);
+            background: rgba(0, 0, 0, 0.75);
+            color: white;
+            font-size: 12px;
+            font-weight: 800;
+            padding: 8px 18px;
+            border-radius: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            z-index: 5;
+        }
+
+        .program-card.disabled-prog {
+            opacity: 0.45;
+            filter: grayscale(100%);
+            pointer-events: none;
+            position: relative;
+        }
+
+        .program-card .disabled-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+        }
+
+        .program-card .disabled-overlay span {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 14px;
+            font-weight: 800;
+            padding: 10px 25px;
+            border-radius: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transform: rotate(-5deg);
+        }
+
         /* Form fields - 2 columns */
         .form-fields-grid {
             display: grid;
@@ -3774,15 +3828,19 @@
                             ? `<div class="sale-badge">${prog.saleText}</div>`
                             : '';
                         const card = document.createElement('div');
-                        card.className = 'program-select-card';
+                        card.className = 'program-select-card' + (prog.disabled ? ' disabled' : '');
                         card.dataset.program = prog.id;
                         card.dataset.price = prog.price;
-                        card.onclick = function() { selectProgramCard(this); };
+                        if (!prog.disabled) card.onclick = function() { selectProgramCard(this); };
                         const oldPriceHtml = prog.oldPrice && prog.oldPrice > prog.price
                             ? `<div class="old-price">${prog.oldPrice.toLocaleString('ru-RU')} \u20BD</div>`
                             : '';
+                        const disabledBadge = prog.disabled
+                            ? `<div class="disabled-badge">${prog.disabledText || 'Нет в наличии'}</div>`
+                            : '';
                         card.innerHTML = `
                             ${saleBadge}
+                            ${disabledBadge}
                             <div class="icon">${icon}</div>
                             <div class="name">${prog.name}</div>
                             ${oldPriceHtml}
@@ -3803,6 +3861,21 @@
                             if (oldEl) { oldEl.textContent = prog.oldPrice.toLocaleString('ru-RU'); oldEl.style.display = ''; }
                             else { const s = document.createElement('span'); s.className = 'old'; s.textContent = prog.oldPrice.toLocaleString('ru-RU'); card.querySelector('.program-price').appendChild(s); }
                         } else if (oldEl) { oldEl.style.display = 'none'; }
+                        // Disabled state
+                        if (prog.disabled) {
+                            card.classList.add('disabled-prog');
+                            if (!card.querySelector('.disabled-overlay')) {
+                                const overlay = document.createElement('div');
+                                overlay.className = 'disabled-overlay';
+                                overlay.innerHTML = `<span>${prog.disabledText || 'Нет в наличии'}</span>`;
+                                card.style.position = 'relative';
+                                card.appendChild(overlay);
+                            }
+                        } else {
+                            card.classList.remove('disabled-prog');
+                            const overlay = card.querySelector('.disabled-overlay');
+                            if (overlay) overlay.remove();
+                        }
                     });
                 }
             } catch (e) {
