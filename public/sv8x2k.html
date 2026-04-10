@@ -218,6 +218,26 @@
         .crm-toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--dark); color: white; padding: 14px 28px; border-radius: 12px; font-weight: 700; font-size: 14px; z-index: 2000; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
         .crm-toast.show { opacity: 1; }
 
+        /* VIEW TOGGLE */
+        .crm-view-toggle { display: flex; gap: 4px; background: var(--light-gray); border-radius: 10px; padding: 3px; }
+        .crm-view-btn { padding: 8px 14px; border: none; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; font-family: inherit; background: none; color: var(--gray); transition: all 0.2s; }
+        .crm-view-btn.active { background: var(--white); color: var(--dark); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+        /* EXCEL TABLE */
+        .excel-wrap { overflow-x: auto; border: 2px solid #ddd; border-radius: 4px; }
+        .excel-table { width: 100%; border-collapse: collapse; font-size: 12px; font-family: 'Montserrat', sans-serif; min-width: 900px; }
+        .excel-table th { background: #f0f0f0; padding: 8px 10px; text-align: left; font-weight: 700; font-size: 11px; color: var(--dark); border: 1px solid #ddd; white-space: nowrap; position: sticky; top: 0; }
+        .excel-table td { padding: 6px 10px; border: 1px solid #e8e8e8; vertical-align: middle; white-space: nowrap; }
+        .excel-table tr:nth-child(even) td { background: #fafafa; }
+        .excel-table tr:hover td { background: #e8f5e9; }
+        .excel-table .excel-num { text-align: center; color: #999; font-size: 10px; background: #f5f5f5; width: 30px; }
+        .excel-table .excel-status-paid { color: #558B2F; font-weight: 700; }
+        .excel-table .excel-status-pending { color: #92400E; font-weight: 700; }
+        .excel-table .excel-price { font-weight: 700; text-align: right; }
+        .excel-table .excel-actions { text-align: center; }
+        .excel-table .excel-actions button { background: none; border: 1px solid #ddd; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; margin: 0 2px; transition: all 0.15s; }
+        .excel-table .excel-actions button:hover { background: var(--green-light); border-color: var(--green); }
+
         @media (max-width: 500px) {
             .login-card { padding: 35px 25px; }
             .pin-inputs input { width: 42px; height: 50px; font-size: 20px; }
@@ -294,6 +314,10 @@
                     <option value="paid">Оплачено</option>
                     <option value="pending">Ожидает</option>
                 </select>
+                <div class="crm-view-toggle">
+                    <button class="crm-view-btn active" id="viewCards" onclick="setView('cards')">Карточки</button>
+                    <button class="crm-view-btn" id="viewExcel" onclick="setView('excel')">Таблица</button>
+                </div>
                 <button class="crm-export-btn" onclick="exportClients()">Экспорт</button>
             </div>
             <div id="crmTableWrap"></div>
@@ -614,6 +638,7 @@
 
         // CRM FUNCTIONS
         let crmActiveProgram = ''; // '' = all programs
+        let crmView = 'cards'; // 'cards' or 'excel'
         const PROG_COLORS = ['#7CB342','#F59E0B','#3B82F6','#EF4444','#8B5CF6','#EC4899','#14B8A6','#F97316'];
 
         function getProgColor(programId) {
@@ -675,6 +700,9 @@
 
         function renderClients() {
             const filtered = getFilteredOrders();
+
+            if (crmView === 'excel') { renderExcel(filtered); return; }
+
             const totalPages = Math.max(1, Math.ceil(filtered.length / CRM_PER_PAGE));
             if (crmPage > totalPages) crmPage = totalPages;
             const start = (crmPage - 1) * CRM_PER_PAGE;
@@ -733,6 +761,68 @@
                 pagHtml += `<button class="crm-page-btn ${i === crmPage ? 'active' : ''}" onclick="crmPage=${i};renderClients()">${i}</button>`;
             }
             pag.innerHTML = pagHtml;
+        }
+
+        function setView(view) {
+            crmView = view;
+            document.getElementById('viewCards').classList.toggle('active', view === 'cards');
+            document.getElementById('viewExcel').classList.toggle('active', view === 'excel');
+            renderClients();
+        }
+
+        function renderExcel(filtered) {
+            const wrap = document.getElementById('crmTableWrap');
+            const showProgCol = !crmActiveProgram;
+
+            if (!filtered.length) {
+                wrap.innerHTML = `<div class="crm-empty"><div class="crm-empty-icon">📋</div><div class="crm-empty-text">${currentOrders.length ? 'Ничего не найдено' : 'Заказов пока нет'}</div></div>`;
+                document.getElementById('crmPagination').innerHTML = '';
+                return;
+            }
+
+            wrap.innerHTML = `<div class="excel-wrap"><table class="excel-table">
+                <thead><tr>
+                    <th>№</th>
+                    <th>Имя</th>
+                    <th>Телефон</th>
+                    <th>Email</th>
+                    <th>Telegram</th>
+                    ${showProgCol ? '<th>Программа</th>' : ''}
+                    <th>Сумма</th>
+                    <th>Промокод</th>
+                    <th>Статус</th>
+                    <th>Дата</th>
+                    <th>Заметка</th>
+                    <th>Действия</th>
+                </tr></thead>
+                <tbody>${filtered.map((o, i) => {
+                    const date = new Date(o.createdAt);
+                    const dateStr = date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit' });
+                    const progName = o.programName || currentPrograms[o.program]?.name || o.program;
+                    const statusClass = o.status === 'paid' ? 'excel-status-paid' : 'excel-status-pending';
+                    const statusText = o.status === 'paid' ? 'Оплачено' : 'Ожидает';
+                    return `<tr>
+                        <td class="excel-num">${i + 1}</td>
+                        <td>${esc(o.name)}</td>
+                        <td>${esc(o.phone)}</td>
+                        <td>${esc(o.email)}</td>
+                        <td>${esc(o.telegram || '—')}</td>
+                        ${showProgCol ? `<td>${esc(progName)}</td>` : ''}
+                        <td class="excel-price">${o.finalPrice?.toLocaleString('ru-RU')} &#8381;</td>
+                        <td>${esc(o.promoCode || '—')}</td>
+                        <td class="${statusClass}">${statusText}</td>
+                        <td>${dateStr}</td>
+                        <td>${esc(o.note || '')}</td>
+                        <td class="excel-actions">
+                            ${o.status === 'pending' ? `<button onclick="markPaid('${o.orderId}')" title="Оплачено">✓</button>` : ''}
+                            <button onclick="addOrderNote('${o.orderId}')" title="Заметка">📝</button>
+                            <button onclick="deleteOrder('${o.orderId}')" title="Удалить">✕</button>
+                        </td>
+                    </tr>`;
+                }).join('')}</tbody>
+            </table></div>`;
+
+            document.getElementById('crmPagination').innerHTML = '';
         }
 
         function exportClients() {
