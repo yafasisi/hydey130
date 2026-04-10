@@ -4069,18 +4069,20 @@
             requestAnimationFrame(update);
         }
 
-        const counterObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !entry.target.dataset.counted) {
-                    entry.target.dataset.counted = 'true';
-                    animateCounter(entry.target);
-                }
-            });
-        }, { threshold: 0.5 });
+        if (window.innerWidth > 768) {
+            const counterObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !entry.target.dataset.counted) {
+                        entry.target.dataset.counted = 'true';
+                        animateCounter(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
 
-        document.querySelectorAll('.stat-number, .about-stat-number').forEach(el => {
-            counterObserver.observe(el);
-        });
+            document.querySelectorAll('.stat-number, .about-stat-number').forEach(el => {
+                counterObserver.observe(el);
+            });
+        }
 
         // ============================================
         // BACK TO TOP BUTTON
