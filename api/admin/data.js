@@ -69,11 +69,11 @@ module.exports = async function handler(req, res) {
         const data = await getData();
 
         if (action === 'updateProgram') {
-            const { id, name, price, sale, saleText, icon, oldPrice } = req.body;
+            const { id, name, price, sale, saleText, icon, oldPrice, disabled, disabledText, comingSoon } = req.body;
             if (!id || !name || typeof price !== 'number') {
                 return res.status(400).json({ success: false, error: 'Invalid data' });
             }
-            data.programs[id] = { name, price, sale: !!sale, saleText: saleText || '', icon: icon || data.programs[id]?.icon || '', oldPrice: oldPrice || 0 };
+            data.programs[id] = { name, price, sale: !!sale, saleText: saleText || '', icon: icon || data.programs[id]?.icon || '', oldPrice: oldPrice || 0, disabled: !!disabled, disabledText: disabledText || '', comingSoon: !!comingSoon };
             const saved = await saveData('site:programs', data.programs);
             if (!saved) return res.status(500).json({ success: false, error: 'Redis not configured' });
             return res.status(200).json({ success: true });

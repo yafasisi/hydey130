@@ -3878,12 +3878,13 @@
                         const oldPriceHtml = prog.oldPrice && prog.oldPrice > prog.price
                             ? `<div class="old-price">${prog.oldPrice.toLocaleString('ru-RU')} \u20BD</div>`
                             : '';
-                        const isComingSoon = prog.disabled && (prog.disabledText || '').toLowerCase().includes('скоро');
+                        const comingBadge = prog.comingSoon ? '<div class="coming-badge">СКОРО</div>' : '';
                         const disabledBadge = prog.disabled
-                            ? `<div class="disabled-badge">${prog.disabledText || 'Нет в наличии'}</div>${isComingSoon ? '<div class="coming-badge">СКОРО</div>' : ''}`
+                            ? `<div class="disabled-badge">${prog.disabledText || 'Нет в наличии'}</div>`
                             : '';
                         card.innerHTML = `
                             ${saleBadge}
+                            ${comingBadge}
                             ${disabledBadge}
                             <div class="icon">${icon}</div>
                             <div class="name">${prog.name}</div>
@@ -3909,10 +3910,9 @@
                         if (prog.disabled) {
                             card.classList.add('disabled-prog');
                             if (!card.querySelector('.disabled-overlay')) {
-                                const isComingSoon = (prog.disabledText || '').toLowerCase().includes('скоро');
                                 const overlay = document.createElement('div');
                                 overlay.className = 'disabled-overlay';
-                                overlay.innerHTML = `<span>${prog.disabledText || 'Нет в наличии'}</span>${isComingSoon ? '<div class="coming-label">СКОРО</div>' : ''}`;
+                                overlay.innerHTML = `<span>${prog.disabledText || 'Нет в наличии'}</span>${prog.comingSoon ? '<div class="coming-label">СКОРО</div>' : ''}`;
                                 card.style.position = 'relative';
                                 card.appendChild(overlay);
                             }

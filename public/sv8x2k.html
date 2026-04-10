@@ -128,6 +128,8 @@
         .disabled-row { display: flex; gap: 12px; align-items: flex-end; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0f0f0; }
         .disabled-toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; white-space: nowrap; font-size: 13px; font-weight: 600; color: #999; padding-bottom: 4px; }
         .disabled-toggle input[type="checkbox"] { width: 20px; height: 20px; accent-color: #999; cursor: pointer; }
+        .coming-toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; white-space: nowrap; font-size: 13px; font-weight: 600; color: #d4a017; padding-bottom: 4px; }
+        .coming-toggle input[type="checkbox"] { width: 20px; height: 20px; accent-color: #d4a017; cursor: pointer; }
         .sale-toggle input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--red); cursor: pointer; }
 
         .promo-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
@@ -518,7 +520,8 @@
                     </div>
                     <div class="disabled-row">
                         <label class="disabled-toggle"><input type="checkbox" id="pd-${id}" ${p.disabled ? 'checked' : ''}> Недоступно</label>
-                        <div class="field" style="flex:1;margin-bottom:0"><input type="text" id="pdt-${id}" value="${esc(p.disabledText || 'Нет в наличии')}" placeholder="Текст (напр. Продано, Скоро...)" style="padding:10px 14px;font-size:13px;"></div>
+                        <div class="field" style="flex:1;margin-bottom:0"><input type="text" id="pdt-${id}" value="${esc(p.disabledText || 'Нет в наличии')}" placeholder="Текст (напр. Продано)" style="padding:10px 14px;font-size:13px;"></div>
+                        <label class="coming-toggle"><input type="checkbox" id="pcs-${id}" ${p.comingSoon ? 'checked' : ''}> Скоро</label>
                     </div>
                 </div>`;
             }).join('');
@@ -543,11 +546,12 @@
             const oldPrice = parseInt(document.getElementById(`po-${id}`).value) || 0;
             const disabled = document.getElementById(`pd-${id}`).checked;
             const disabledText = document.getElementById(`pdt-${id}`).value.trim() || 'Нет в наличии';
+            const comingSoon = document.getElementById(`pcs-${id}`).checked;
             if (!name || isNaN(price) || price < 0) { showStatus('programs', 'Заполните название и цену', 'error'); return; }
             showLoading(true);
-            const data = await apiCall('data', 'PUT', { action: 'updateProgram', id, name, price, sale, saleText: sale ? saleText : '', icon: currentPrograms[id]?.icon || '', oldPrice, disabled, disabledText });
+            const data = await apiCall('data', 'PUT', { action: 'updateProgram', id, name, price, sale, saleText: sale ? saleText : '', icon: currentPrograms[id]?.icon || '', oldPrice, disabled, disabledText, comingSoon });
             showLoading(false);
-            if (data?.success) { showStatus('programs', 'Сохранено!', 'success'); currentPrograms[id] = { name, price, sale, saleText: sale ? saleText : '', icon: currentPrograms[id]?.icon || '', oldPrice, disabled, disabledText }; renderPrograms(); }
+            if (data?.success) { showStatus('programs', 'Сохранено!', 'success'); currentPrograms[id] = { name, price, sale, saleText: sale ? saleText : '', icon: currentPrograms[id]?.icon || '', oldPrice, disabled, disabledText, comingSoon }; renderPrograms(); }
             else showStatus('programs', data?.error || 'Ошибка', 'error');
         }
 
