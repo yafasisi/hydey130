@@ -3053,7 +3053,7 @@
         </div>
 
         <div class="programs-grid">
-            <div class="program-card green-bg reveal stagger-1">
+            <div class="program-card green-bg reveal stagger-1" data-prog-id="sushka">
                 <span class="program-badge">🔥 Хит</span>
                 <div class="program-icon">🏋️</div>
                 <h3 class="program-name">Сушка</h3>
@@ -3077,7 +3077,7 @@
                 </div>
             </div>
 
-            <div class="program-card soft-bg reveal stagger-2">
+            <div class="program-card soft-bg reveal stagger-2" data-prog-id="marafon">
                 <span class="program-badge">⭐ Популярный</span>
                 <div class="program-icon">🎯</div>
                 <h3 class="program-name">Марафон</h3>
@@ -3102,7 +3102,7 @@
                 </div>
             </div>
 
-            <div class="program-card mint-bg reveal stagger-3">
+            <div class="program-card mint-bg reveal stagger-3" data-prog-id="consult">
                 <div class="program-icon">💬</div>
                 <h3 class="program-name">Консультация</h3>
                 <p class="program-duration">60 минут онлайн</p>
@@ -3124,7 +3124,7 @@
                 </div>
             </div>
 
-            <div class="program-card yellow-bg reveal stagger-4">
+            <div class="program-card yellow-bg reveal stagger-4" data-prog-id="vip">
                 <span class="program-badge">👑 VIP</span>
                 <div class="program-icon">🌟</div>
                 <h3 class="program-name">Ведение 2 мес</h3>
@@ -3787,6 +3787,21 @@
                             <div class="price">${prog.price.toLocaleString('ru-RU')} \u20BD</div>
                         `;
                         container.appendChild(card);
+                    });
+                }
+                    // Update big program cards too
+                    data.programs.forEach(prog => {
+                        const card = document.querySelector(`.program-card[data-prog-id="${prog.id}"]`);
+                        if (!card) return;
+                        const amountEl = card.querySelector('.program-price .amount');
+                        const oldEl = card.querySelector('.program-price .old');
+                        const btnEl = card.querySelector('.program-btn');
+                        if (amountEl) amountEl.textContent = prog.price.toLocaleString('ru-RU');
+                        if (btnEl) btnEl.setAttribute('onclick', `selectProgram('${prog.id}', ${prog.price})`);
+                        if (prog.oldPrice && prog.oldPrice > prog.price) {
+                            if (oldEl) { oldEl.textContent = prog.oldPrice.toLocaleString('ru-RU'); oldEl.style.display = ''; }
+                            else { const s = document.createElement('span'); s.className = 'old'; s.textContent = prog.oldPrice.toLocaleString('ru-RU'); card.querySelector('.program-price').appendChild(s); }
+                        } else if (oldEl) { oldEl.style.display = 'none'; }
                     });
                 }
             } catch (e) {
