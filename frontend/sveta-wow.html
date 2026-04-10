@@ -715,6 +715,284 @@
         }
 
         /* ============================================
+           SVETA BEFORE & AFTER
+           ============================================ */
+
+        .sveta-ba-section {
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+            background: var(--text-dark);
+        }
+
+        .sveta-ba-section::before {
+            content: 'ТРАНСФОРМАЦИЯ';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 140px;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.03);
+            white-space: nowrap;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .sveta-ba-header {
+            text-align: center;
+            padding: 100px 60px 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sveta-ba-header h2 {
+            font-size: 52px;
+            font-weight: 900;
+            color: var(--white);
+            margin-bottom: 15px;
+        }
+
+        .sveta-ba-header h2 span {
+            background: linear-gradient(135deg, var(--yellow-main), var(--green-main));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sveta-ba-header p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .sveta-ba-photos-wrapper {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px 20px;
+        }
+
+        .sveta-ba-gallery {
+            display: flex;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sveta-ba-card {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sveta-ba-card.do-card {
+            border-radius: 30px 0 0 30px;
+        }
+
+        .sveta-ba-card.after-card {
+            border-radius: 0 30px 30px 0;
+        }
+
+        .sveta-ba-slideshow {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+        }
+
+        .sveta-do-slide,
+        .sveta-after-slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .sveta-do-slide.active,
+        .sveta-after-slide.active {
+            opacity: 1;
+        }
+
+        .sveta-do-slide img,
+        .sveta-after-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sveta-ba-card-label {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .do-card .sveta-ba-card-label {
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--white);
+            backdrop-filter: blur(10px);
+        }
+
+        .after-card .sveta-ba-card-label {
+            background: var(--green-main);
+            color: var(--white);
+            box-shadow: 0 8px 30px rgba(124, 179, 66, 0.5);
+        }
+
+        .sveta-ba-divider {
+            position: absolute;
+            top: 0; bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            background: var(--yellow-main);
+            z-index: 5;
+        }
+
+        .sveta-ba-divider-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 6;
+            width: 60px; height: 60px;
+            background: var(--yellow-main);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--text-dark);
+            box-shadow: 0 8px 30px rgba(247, 217, 76, 0.5);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .sveta-ba-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 25px 0;
+        }
+
+        .sveta-ba-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .sveta-ba-dot.active {
+            background: var(--yellow-main);
+            width: 35px;
+            border-radius: 10px;
+        }
+
+        .sveta-ba-bottom {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 50px 60px 100px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sveta-ba-info-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 35px 40px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            flex: 1;
+            max-width: 280px;
+        }
+
+        .sveta-ba-info-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .sveta-ba-info-num {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .sveta-ba-info-card:nth-child(1) .sveta-ba-info-num {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .sveta-ba-info-card:nth-child(2) .sveta-ba-info-num {
+            color: var(--green-main);
+        }
+
+        .sveta-ba-info-card:nth-child(3) .sveta-ba-info-num {
+            background: linear-gradient(135deg, var(--yellow-main), var(--green-main));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sveta-ba-info-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .sveta-ba-quote {
+            text-align: center;
+            padding: 0 60px 100px;
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .sveta-ba-quote p {
+            font-size: 20px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.7);
+            font-style: italic;
+        }
+
+        .sveta-ba-quote p strong {
+            color: var(--white);
+            font-style: normal;
+        }
+
+        @media (max-width: 968px) {
+            .sveta-ba-header { padding: 80px 30px 40px; }
+            .sveta-ba-header h2 { font-size: 36px; }
+            .sveta-ba-photos-wrapper { padding: 0 20px 20px; }
+            .sveta-ba-bottom { flex-direction: column; align-items: center; padding: 40px 30px 60px; gap: 20px; }
+            .sveta-ba-info-card { max-width: 100%; width: 100%; }
+            .sveta-ba-quote { padding: 0 30px 60px; }
+            .sveta-ba-section::before { font-size: 60px; }
+        }
+
+        @media (max-width: 480px) {
+            .sveta-ba-header h2 { font-size: 28px; }
+            .sveta-ba-divider-icon { width: 45px; height: 45px; font-size: 18px; }
+            .sveta-ba-info-num { font-size: 36px; }
+            .sveta-ba-quote p { font-size: 16px; }
+        }
+
+        /* ============================================
            BENEFITS
            ============================================ */
         
@@ -2200,6 +2478,73 @@
         </div>
     </section>
 
+    <!-- Before & After -->
+    <section class="sveta-ba-section" id="beforeafter">
+        <div class="sveta-ba-header reveal">
+            <h2>До & <span>После</span></h2>
+            <p>Реальные результаты моих девочек</p>
+        </div>
+
+        <div class="sveta-ba-photos-wrapper">
+            <div class="sveta-ba-gallery reveal-scale">
+                <div class="sveta-ba-card do-card">
+                    <span class="sveta-ba-card-label">ДО</span>
+                    <div class="sveta-ba-slideshow">
+                        <div class="sveta-do-slide active"><img src="../svetaphotoes/do/1.JPG" alt="До"></div>
+                        <div class="sveta-do-slide"><img src="../svetaphotoes/do/2.JPG" alt="До"></div>
+                        <div class="sveta-do-slide"><img src="../svetaphotoes/do/3.JPG" alt="До"></div>
+                        <div class="sveta-do-slide"><img src="../svetaphotoes/do/4.JPG" alt="До"></div>
+                        <div class="sveta-do-slide"><img src="../svetaphotoes/do/5.JPG" alt="До"></div>
+                        <div class="sveta-do-slide"><img src="../svetaphotoes/do/6.JPG" alt="До"></div>
+                    </div>
+                </div>
+
+                <div class="sveta-ba-divider"></div>
+                <div class="sveta-ba-divider-icon">VS</div>
+
+                <div class="sveta-ba-card after-card">
+                    <span class="sveta-ba-card-label">ПОСЛЕ</span>
+                    <div class="sveta-ba-slideshow">
+                        <div class="sveta-after-slide active"><img src="../svetaphotoes/after/1.JPG" alt="После"></div>
+                        <div class="sveta-after-slide"><img src="../svetaphotoes/after/2.jpg" alt="После"></div>
+                        <div class="sveta-after-slide"><img src="../svetaphotoes/after/3.jpg" alt="После"></div>
+                        <div class="sveta-after-slide"><img src="../svetaphotoes/after/4.jpg" alt="После"></div>
+                        <div class="sveta-after-slide"><img src="../svetaphotoes/after/5.PNG" alt="После"></div>
+                        <div class="sveta-after-slide"><img src="../svetaphotoes/after/6.PNG" alt="После"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sveta-ba-dots" id="svetaBaDots">
+                <div class="sveta-ba-dot active"></div>
+                <div class="sveta-ba-dot"></div>
+                <div class="sveta-ba-dot"></div>
+                <div class="sveta-ba-dot"></div>
+                <div class="sveta-ba-dot"></div>
+                <div class="sveta-ba-dot"></div>
+            </div>
+        </div>
+
+        <div class="sveta-ba-bottom reveal">
+            <div class="sveta-ba-info-card">
+                <div class="sveta-ba-info-num">89 кг</div>
+                <div class="sveta-ba-info-label">было</div>
+            </div>
+            <div class="sveta-ba-info-card">
+                <div class="sveta-ba-info-num">54 кг</div>
+                <div class="sveta-ba-info-label">стало</div>
+            </div>
+            <div class="sveta-ba-info-card">
+                <div class="sveta-ba-info-num">-35 кг</div>
+                <div class="sveta-ba-info-label">результат</div>
+            </div>
+        </div>
+
+        <div class="sveta-ba-quote reveal">
+            <p>Я знаю, каково это — смотреть в зеркало и не узнавать себя. Пробовать сотню диет и каждый раз срываться. <strong>Я прошла через всё это сама. Без операций. Без таблеток. Без голодовок.</strong></p>
+        </div>
+    </section>
+
     <!-- Benefits -->
     <section class="benefits-section" id="benefits">
         <h2 class="section-title-center reveal">
@@ -2879,6 +3224,36 @@
 
         // Auto-slide
         setInterval(nextSlide, 6000);
+
+        // ============================================
+        // SVETA BEFORE & AFTER SLIDESHOW
+        // ============================================
+
+        const svetaDoSlides = document.querySelectorAll('.sveta-do-slide');
+        const svetaAfterSlides = document.querySelectorAll('.sveta-after-slide');
+        const svetaDots = document.querySelectorAll('.sveta-ba-dot');
+        let svetaCurrent = 0;
+        const svetaTotal = svetaDoSlides.length;
+
+        function goToSvetaPair(index) {
+            svetaDoSlides[svetaCurrent].classList.remove('active');
+            svetaAfterSlides[svetaCurrent].classList.remove('active');
+            svetaDots[svetaCurrent].classList.remove('active');
+            svetaCurrent = index;
+            svetaDoSlides[svetaCurrent].classList.add('active');
+            svetaAfterSlides[svetaCurrent].classList.add('active');
+            svetaDots[svetaCurrent].classList.add('active');
+        }
+
+        function nextSvetaPair() {
+            goToSvetaPair((svetaCurrent + 1) % svetaTotal);
+        }
+
+        svetaDots.forEach((dot, i) => {
+            dot.addEventListener('click', () => goToSvetaPair(i));
+        });
+
+        setInterval(nextSvetaPair, 4000);
 
         // ============================================
         // FLOATING BENEFITS - Simple scroll animation
