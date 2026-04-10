@@ -2229,30 +2229,22 @@
         .program-select-card.disabled {
             pointer-events: none;
             position: relative;
-        }
-
-        .program-select-card.disabled::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.55);
-            border-radius: inherit;
-            z-index: 2;
+            opacity: 0.6;
+            filter: grayscale(40%);
         }
 
         .program-select-card .disabled-badge {
             position: absolute;
-            top: 50%;
+            top: -10px;
             left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.85);
+            transform: translateX(-50%);
+            background: #555;
             color: white;
-            font-size: 12px;
-            font-weight: 800;
-            padding: 8px 18px;
-            border-radius: 10px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 5px 14px;
+            border-radius: 8px;
+            letter-spacing: 0.5px;
             white-space: nowrap;
             z-index: 5;
         }
@@ -2277,38 +2269,28 @@
         .program-card.disabled-prog {
             position: relative;
             pointer-events: none;
-        }
-
-        .program-card.disabled-prog::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: inherit;
-            z-index: 3;
+            opacity: 0.55;
+            filter: grayscale(40%);
         }
 
         .program-card .disabled-overlay {
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: inherit;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 5;
+            display: flex;
+            gap: 10px;
+            align-items: center;
         }
 
         .program-card .disabled-overlay span {
-            background: rgba(0, 0, 0, 0.85);
+            background: #555;
             color: white;
-            font-size: 14px;
-            font-weight: 800;
-            padding: 10px 25px;
-            border-radius: 12px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 8px 20px;
+            border-radius: 10px;
         }
 
         .program-card .disabled-overlay .coming-label {
@@ -2318,8 +2300,6 @@
             font-weight: 800;
             padding: 6px 16px;
             border-radius: 10px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
             animation: pulse 2s ease-in-out infinite;
         }
 
