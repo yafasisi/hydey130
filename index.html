@@ -1,0 +1,3518 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Света | — Мастер спорта по похудению</title>
+    <link rel="stylesheet" href="main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --yellow-main: #F7D94C;
+            --yellow-bright: #FFD700;
+            --yellow-light: #FFFDE7;
+            --yellow-soft: #FFF8C4;
+            --green-main: #7CB342;
+            --green-light: #F1F8E9;
+            --green-soft: #DCEDC8;
+            --pink-decor: #FFDDE5;
+            --text-dark: #1A1A1A;
+            --text-gray: #636E72;
+            --white: #FFFFFF;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--white);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+        /* ============================================
+           ADVANCED SCROLL ANIMATIONS
+           ============================================ */
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(80px);
+            transition: all 1s cubic-bezier(0.17, 0.55, 0.55, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: all 1s cubic-bezier(0.17, 0.55, 0.55, 1);
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 1s cubic-bezier(0.17, 0.55, 0.55, 1);
+        }
+
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 1s cubic-bezier(0.17, 0.55, 0.55, 1);
+        }
+
+        .reveal-scale.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .reveal-rotate {
+            opacity: 0;
+            transform: rotate(-10deg) scale(0.9);
+            transition: all 1.2s cubic-bezier(0.17, 0.55, 0.55, 1);
+        }
+
+        .reveal-rotate.active {
+            opacity: 1;
+            transform: rotate(0) scale(1);
+        }
+
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+        .stagger-5 { transition-delay: 0.5s; }
+        .stagger-6 { transition-delay: 0.6s; }
+
+        /* Parallax effect */
+        .parallax {
+            will-change: transform;
+        }
+
+        /* Floating animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes floatRotate {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .float { animation: float 6s ease-in-out infinite; }
+        .float-delay { animation: float 6s ease-in-out infinite 2s; }
+        .float-rotate { animation: floatRotate 8s ease-in-out infinite; }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+        }
+
+        header.scrolled {
+            padding: 12px 50px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--green-main);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo span {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        nav {
+            display: flex;
+            gap: 35px;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 14px;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--yellow-main);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        nav a:hover {
+            color: var(--green-main);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-phone {
+            font-weight: 600;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .header-btn {
+            padding: 12px 24px;
+            background: var(--white);
+            border: 2px solid var(--text-dark);
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .header-btn:hover {
+            background: var(--yellow-main);
+            border-color: var(--yellow-main);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(247, 217, 76, 0.4);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1001;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 2.5px;
+            background: var(--text-dark);
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--white);
+            z-index: 999;
+            padding: 100px 30px 30px;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-decoration: none;
+            padding: 15px 0;
+            border-bottom: 2px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--green-main);
+            padding-left: 15px;
+        }
+
+        /* ============================================
+           HERO SECTION - ProCamp Style
+           ============================================ */
+        
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+            overflow: hidden;
+            background: var(--white);
+        }
+
+        .hero-content {
+            padding: 160px 60px 60px 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-wave-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 150%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--yellow-soft);
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 30px;
+            width: fit-content;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .hero-title {
+            font-size: 58px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 25px;
+        }
+
+        .hero-title-line {
+            display: block;
+            overflow: hidden;
+        }
+
+        .hero-title-accent {
+            color: var(--green-main);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hero-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--yellow-main);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            animation: floatRotate 4s ease-in-out infinite;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--green-main);
+            margin-bottom: 20px;
+        }
+
+        .hero-description {
+            font-size: 17px;
+            line-height: 1.8;
+            color: var(--text-gray);
+            max-width: 450px;
+            margin-bottom: 40px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 18px 40px;
+            background: var(--green-main);
+            color: var(--white);
+            font-weight: 700;
+            font-size: 15px;
+            text-decoration: none;
+            border-radius: 35px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(124, 179, 66, 0.4);
+        }
+
+        .btn-telegram {
+            padding: 18px 40px;
+            background: #0088cc;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 15px;
+            text-decoration: none;
+            border-radius: 35px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-telegram:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 136, 204, 0.4);
+            background: #006699;
+        }
+
+        /* Hero Image - ВЕЛИКЕ В ПРАВОМУ КУТІ */
+        .hero-image {
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-end;
+            background: transparent;
+            overflow: visible;
+        }
+
+        .hero-photo-wrapper {
+            position: relative;
+            width: 1050px;
+            height: 1050px;
+            margin-right: -250px;
+            margin-top: -20px;
+        }
+
+        .hero-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            border-radius: 50%;
+            position: relative;
+            z-index: 2;
+            box-shadow: -20px 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Yellow decorative shapes */
+        .decor-shape {
+            position: absolute;
+            background: var(--yellow-main);
+            z-index: 1;
+            border-radius: 50%;
+        }
+
+        .decor-shape-1 {
+            width: 350px;
+            height: 350px;
+            right: -180px;
+            bottom: -120px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .decor-shape-2 {
+            width: 200px;
+            height: 200px;
+            right: -250px;
+            top: 250px;
+            animation: float 5s ease-in-out infinite 1s;
+        }
+
+        .decor-shape-3 {
+            width: 140px;
+            height: 140px;
+            left: -80px;
+            bottom: 180px;
+            animation: float 4s ease-in-out infinite 0.5s;
+        }
+        
+        .decor-shape-4 {
+            width: 90px;
+            height: 90px;
+            left: 80px;
+            top: 30px;
+            animation: float 5s ease-in-out infinite 0.3s;
+        }
+
+        /* ============================================
+           MARQUEE
+           ============================================ */
+        
+        .marquee-section {
+            padding: 50px 0;
+            overflow: hidden;
+            background: var(--white);
+            position: relative;
+        }
+
+        .marquee-bg {
+            position: absolute;
+            top: 50%;
+            left: -50px;
+            right: -50px;
+            height: 100px;
+            background: var(--yellow-soft);
+            border-radius: 60px;
+            transform: translateY(-50%) rotate(-1deg);
+            z-index: 0;
+        }
+
+        .marquee-wrapper {
+            display: flex;
+            width: max-content;
+            animation: marquee 25s linear infinite;
+            position: relative;
+            z-index: 1;
+        }
+
+        .marquee-wrapper:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .marquee-text {
+            font-size: 90px;
+            font-weight: 800;
+            color: var(--text-dark);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+        }
+
+        .marquee-text span {
+            margin: 0 25px;
+            transition: color 0.3s ease;
+        }
+
+        .marquee-text span:hover {
+            color: var(--green-main);
+        }
+
+        .marquee-dot {
+            width: 18px;
+            height: 18px;
+            background: var(--yellow-main);
+            border-radius: 50%;
+            margin: 0 40px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* ============================================
+           ABOUT SECTION
+           ============================================ */
+        
+        .about-section {
+            padding: 140px 60px;
+            background: var(--yellow-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-bg-shape {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: var(--yellow-soft);
+            border-radius: 50%;
+            top: -200px;
+            right: -200px;
+            opacity: 0.5;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            max-width: 1300px;
+            margin: 0 auto;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image-wrapper {
+            position: relative;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.15);
+        }
+
+        .about-image img {
+            width: 100%;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .about-image-placeholder {
+            width: 100%;
+            height: 550px;
+            background: linear-gradient(135deg, var(--green-light), var(--yellow-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 100px;
+        }
+
+        .about-badge {
+            position: absolute;
+            bottom: -25px;
+            right: -25px;
+            background: var(--yellow-main);
+            padding: 25px 35px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 22px;
+            box-shadow: 0 15px 40px rgba(247, 217, 76, 0.4);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .about-content h2 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        .about-content h2 span {
+            color: var(--green-main);
+        }
+
+        .about-content p {
+            font-size: 17px;
+            line-height: 1.9;
+            color: var(--text-gray);
+            margin-bottom: 20px;
+        }
+
+        .about-stats {
+            display: flex;
+            gap: 50px;
+            margin-top: 45px;
+        }
+
+        .about-stat {
+            text-align: center;
+        }
+
+        .about-stat-number {
+            font-size: 52px;
+            font-weight: 800;
+            color: var(--green-main);
+            line-height: 1;
+        }
+
+        .about-stat-text {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin-top: 8px;
+        }
+
+        /* ============================================
+           SVETA BEFORE & AFTER
+           ============================================ */
+
+        .sveta-ba-section {
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+            background: var(--text-dark);
+        }
+
+        .sveta-ba-section::before {
+            content: 'ТРАНСФОРМАЦИЯ';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 140px;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.03);
+            white-space: nowrap;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .sveta-ba-header {
+            text-align: center;
+            padding: 100px 60px 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sveta-ba-header h2 {
+            font-size: 52px;
+            font-weight: 900;
+            color: var(--white);
+            margin-bottom: 15px;
+        }
+
+        .sveta-ba-header h2 span {
+            background: linear-gradient(135deg, var(--yellow-main), var(--green-main));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sveta-ba-header p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .sveta-ba-gallery {
+            display: flex;
+            gap: 0;
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px 80px;
+        }
+
+        .sveta-ba-card {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sveta-ba-card.do-card {
+            border-radius: 30px 0 0 30px;
+        }
+
+        .sveta-ba-card.after-card {
+            border-radius: 0 30px 30px 0;
+        }
+
+        .sveta-ba-slideshow {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+        }
+
+        .sveta-do-slide,
+        .sveta-after-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .sveta-do-slide.active,
+        .sveta-after-slide.active {
+            opacity: 1;
+        }
+
+        .sveta-do-slide img,
+        .sveta-after-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sveta-ba-card-label {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .sveta-ba-card.do-card .sveta-ba-card-label {
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--white);
+            backdrop-filter: blur(10px);
+        }
+
+        .sveta-ba-card.after-card .sveta-ba-card-label {
+            background: var(--green-main);
+            color: var(--white);
+            box-shadow: 0 8px 30px rgba(124, 179, 66, 0.5);
+        }
+
+        .sveta-ba-divider {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: var(--yellow-main);
+            z-index: 5;
+        }
+
+        .sveta-ba-divider-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 6;
+            width: 60px;
+            height: 60px;
+            background: var(--yellow-main);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--text-dark);
+            box-shadow: 0 8px 30px rgba(247, 217, 76, 0.5);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .sveta-ba-photos-wrapper {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px 20px;
+        }
+
+        .sveta-ba-counter {
+            text-align: center;
+            padding: 0 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sveta-ba-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .sveta-ba-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .sveta-ba-dot.active {
+            background: var(--yellow-main);
+            width: 35px;
+            border-radius: 10px;
+        }
+
+        .sveta-ba-bottom {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 50px 60px 100px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sveta-ba-info-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 35px 40px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            flex: 1;
+            max-width: 280px;
+        }
+
+        .sveta-ba-info-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .sveta-ba-info-num {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .sveta-ba-info-card:nth-child(1) .sveta-ba-info-num {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .sveta-ba-info-card:nth-child(2) .sveta-ba-info-num {
+            color: var(--green-main);
+        }
+
+        .sveta-ba-info-card:nth-child(3) .sveta-ba-info-num {
+            background: linear-gradient(135deg, var(--yellow-main), var(--green-main));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sveta-ba-info-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .sveta-ba-quote {
+            text-align: center;
+            padding: 0 60px 100px;
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .sveta-ba-quote p {
+            font-size: 20px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.7);
+            font-style: italic;
+        }
+
+        .sveta-ba-quote p strong {
+            color: var(--white);
+            font-style: normal;
+        }
+
+        @media (max-width: 968px) {
+            .sveta-ba-header { padding: 80px 30px 40px; }
+            .sveta-ba-header h2 { font-size: 36px; }
+            .sveta-ba-photos-wrapper { padding: 0 20px 20px; }
+            .sveta-ba-bottom { flex-direction: column; align-items: center; padding: 40px 30px 60px; gap: 20px; }
+            .sveta-ba-info-card { max-width: 100%; width: 100%; }
+            .sveta-ba-quote { padding: 0 30px 60px; }
+            .sveta-ba-section::before { font-size: 60px; }
+        }
+
+        @media (max-width: 480px) {
+            .sveta-ba-header h2 { font-size: 28px; }
+            .sveta-ba-header p { font-size: 15px; }
+            .sveta-ba-info-num { font-size: 36px; }
+            .sveta-ba-divider-icon { width: 45px; height: 45px; font-size: 18px; }
+            .sveta-ba-quote p { font-size: 16px; }
+        }
+
+        /* ============================================
+           BENEFITS
+           ============================================ */
+
+        .benefits-section {
+            padding: 140px 60px;
+            background: var(--white);
+            position: relative;
+        }
+
+        .section-title-center {
+            font-size: 52px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 80px;
+            line-height: 1.2;
+        }
+
+        .section-title-center span {
+            color: var(--green-main);
+            position: relative;
+        }
+
+        .section-title-center span::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: var(--yellow-main);
+            border-radius: 4px;
+            opacity: 0.5;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .benefit-card {
+            padding: 45px 35px;
+            border-radius: 30px;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--yellow-main);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .benefit-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .benefit-card.yellow { background: var(--yellow-main); }
+        .benefit-card.green { background: var(--green-main); color: var(--white); }
+        .benefit-card.white { background: var(--white); border: 2px solid #eee; }
+        .benefit-card.light-yellow { background: var(--yellow-light); }
+        .benefit-card.light-green { background: var(--green-light); }
+        .benefit-card.soft-yellow { background: var(--yellow-soft); }
+
+        .benefit-icon {
+            font-size: 50px;
+            margin-bottom: 25px;
+            display: block;
+        }
+
+        .benefit-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .benefit-text {
+            font-size: 15px;
+            line-height: 1.7;
+            opacity: 0.85;
+        }
+
+        /* ============================================
+           RESULTS SLIDER
+           ============================================ */
+        
+        .results-slider-section {
+            padding: 140px 60px;
+            background: var(--green-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .results-bg-text {
+            position: absolute;
+            font-size: 200px;
+            font-weight: 900;
+            color: var(--green-soft);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
+            z-index: 0;
+            opacity: 0.3;
+        }
+
+        .slider-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .slider-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-radius: 40px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12);
+        }
+
+        .slider-track {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .slider-slide {
+            min-width: 100%;
+            padding: 50px;
+            background: var(--white);
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .slider-images {
+            display: flex;
+            gap: 20px;
+        }
+
+        .slider-image {
+            flex: 1;
+            border-radius: 25px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            transition: transform 0.4s ease;
+        }
+
+        .slider-image:hover {
+            transform: scale(1.03);
+        }
+
+        .slider-image img {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+        }
+
+        .slider-image-placeholder {
+            width: 100%;
+            height: 380px;
+            background: linear-gradient(135deg, var(--yellow-light) 0%, var(--yellow-soft) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--text-gray);
+        }
+
+        .slider-image-placeholder .icon {
+            font-size: 60px;
+        }
+
+        .slider-label {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: var(--text-dark);
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .slider-label.after {
+            background: var(--green-main);
+        }
+
+        .slider-content h3 {
+            font-size: 30px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .slider-content .result-highlight {
+            font-size: 60px;
+            font-weight: 800;
+            color: var(--green-main);
+            margin-bottom: 15px;
+            line-height: 1;
+        }
+
+        .slider-content p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--text-gray);
+            margin-bottom: 25px;
+        }
+
+        .slider-content .program-tag {
+            display: inline-block;
+            background: var(--yellow-main);
+            padding: 12px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .slider-nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .slider-nav button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid var(--text-dark);
+            background: var(--white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+            font-size: 20px;
+        }
+
+        .slider-nav button:hover {
+            background: var(--yellow-main);
+            border-color: var(--yellow-main);
+            transform: scale(1.1);
+        }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .slider-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--green-soft);
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .slider-dot.active {
+            background: var(--green-main);
+            width: 45px;
+            border-radius: 10px;
+        }
+
+        /* ============================================
+           PROGRAMS
+           ============================================ */
+        
+        .programs-section {
+            padding: 140px 60px;
+            background: var(--white);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 70px;
+            max-width: 1300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-title {
+            font-size: 60px;
+            font-weight: 800;
+        }
+
+        .section-description {
+            max-width: 420px;
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--text-gray);
+        }
+
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .program-card {
+            padding: 50px;
+            border-radius: 35px;
+            position: relative;
+            overflow: hidden;
+            min-height: 480px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .program-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.15);
+        }
+
+        .program-card.yellow-bg { background: var(--yellow-light); }
+        .program-card.green-bg { background: var(--green-light); }
+        .program-card.soft-bg { background: var(--yellow-soft); }
+        .program-card.mint-bg { background: #E8F5E9; }
+
+        .program-badge {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: var(--green-main);
+            color: var(--white);
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .program-icon {
+            font-size: 55px;
+            margin-bottom: 25px;
+        }
+
+        .program-name {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--green-main);
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .program-duration {
+            font-size: 15px;
+            color: var(--text-gray);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .program-text {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--text-gray);
+            margin-bottom: 25px;
+        }
+
+        .program-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .program-features li {
+            padding: 10px 0;
+            font-size: 14px;
+            color: var(--text-gray);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .program-features li::before {
+            content: '✓';
+            width: 24px;
+            height: 24px;
+            background: var(--yellow-main);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dark);
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .program-footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .program-price .amount {
+            font-size: 38px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .program-price .currency {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-gray);
+        }
+
+        .program-price .old {
+            font-size: 16px;
+            color: #bbb;
+            text-decoration: line-through;
+            margin-left: 10px;
+        }
+
+        .program-btn {
+            padding: 16px 32px;
+            background: var(--green-main);
+            color: var(--white);
+            border: none;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .program-btn:hover {
+            background: #689F38;
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(124, 179, 66, 0.3);
+        }
+
+        /* ============================================
+           STATS
+           ============================================ */
+        
+        .stats-section {
+            padding: 100px 60px;
+            background: var(--yellow-main);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.2) 2px, transparent 2px);
+            background-size: 30px 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 50px;
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 70px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+
+        .stat-text {
+            font-size: 16px;
+            color: var(--text-dark);
+            opacity: 0.8;
+        }
+
+        /* ============================================
+           FLOATING BENEFITS - Simple with nice animations
+           ============================================ */
+        
+        .floating-benefits-section {
+            padding: 140px 60px;
+            background: var(--yellow-light);
+            overflow: hidden;
+        }
+
+        .floating-benefits-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .floating-benefit {
+            opacity: 0;
+            transform: translateY(80px) scale(0.9);
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .floating-benefit.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .floating-benefit:nth-child(1) { transition-delay: 0.0s; }
+        .floating-benefit:nth-child(2) { transition-delay: 0.1s; }
+        .floating-benefit:nth-child(3) { transition-delay: 0.2s; }
+        .floating-benefit:nth-child(4) { transition-delay: 0.3s; }
+        .floating-benefit:nth-child(5) { transition-delay: 0.4s; }
+        .floating-benefit:nth-child(6) { transition-delay: 0.5s; }
+        .floating-benefit:nth-child(7) { transition-delay: 0.6s; }
+        .floating-benefit:nth-child(8) { transition-delay: 0.7s; }
+
+        .floating-benefit.visible:nth-child(odd) {
+            animation: floatBenefit1 5s ease-in-out infinite 1s;
+        }
+
+        .floating-benefit.visible:nth-child(even) {
+            animation: floatBenefit2 6s ease-in-out infinite 1.5s;
+        }
+
+        @keyframes floatBenefit1 {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        @keyframes floatBenefit2 {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating-benefit-inner {
+            padding: 25px 35px;
+            border-radius: 25px;
+            font-size: 17px;
+            font-weight: 700;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            cursor: default;
+        }
+
+        .floating-benefit:hover .floating-benefit-inner {
+            transform: scale(1.08);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
+        }
+
+        .floating-benefit.big .floating-benefit-inner {
+            padding: 32px 45px;
+            font-size: 20px;
+        }
+
+        .floating-benefit-inner.white {
+            background: var(--white);
+            color: var(--text-dark);
+        }
+
+        .floating-benefit-inner.yellow {
+            background: var(--yellow-main);
+            color: var(--text-dark);
+        }
+
+        .floating-benefit-inner.green {
+            background: var(--green-main);
+            color: var(--white);
+        }
+
+        .floating-benefit-inner.light-green {
+            background: var(--green-soft);
+            color: var(--text-dark);
+        }
+
+        .floating-benefit-inner.orange {
+            background: #FF6B35;
+            color: var(--white);
+        }
+
+        .floating-benefit-inner.pink {
+            background: #FFB8D0;
+            color: var(--text-dark);
+        }
+
+        /* ============================================
+           FAQ SECTION - Like lapkiukraine
+           ============================================ */
+        
+        .faq-section {
+            padding: 140px 60px;
+            background: var(--yellow-light);
+            position: relative;
+        }
+
+        .faq-decoration {
+            position: absolute;
+            top: 80px;
+            right: 100px;
+            font-size: 60px;
+            opacity: 0.5;
+        }
+
+        .faq-container {
+            max-width: 750px;
+            margin: 60px auto 0;
+        }
+
+        .faq-item {
+            margin-bottom: 12px;
+            background: var(--white);
+            border: 2px solid var(--white);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--yellow-main);
+        }
+
+        .faq-item.open {
+            border-color: var(--green-main);
+        }
+
+        .faq-question {
+            padding: 22px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background: var(--white);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            gap: 20px;
+        }
+
+        .faq-question span:first-child {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-dark);
+            flex: 1;
+        }
+
+        .faq-item.open .faq-question span:first-child {
+            color: var(--green-main);
+        }
+
+        .faq-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid var(--text-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 300;
+            color: var(--text-dark);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            background: transparent;
+        }
+
+        .faq-item.open .faq-icon {
+            background: var(--green-main);
+            border-color: var(--green-main);
+            color: var(--white);
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 500px;
+        }
+
+        .faq-answer p {
+            padding: 0 28px 0;
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--text-gray);
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .faq-item.open .faq-answer p {
+            padding: 10px 28px 22px;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================================
+           TESTIMONIALS
+           ============================================ */
+
+        .section-divider {
+            height: 120px;
+            background: linear-gradient(180deg, var(--white) 0%, var(--yellow-light) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--yellow-main), var(--green-main), var(--yellow-main), transparent);
+            border-radius: 2px;
+        }
+
+        .section-divider-dots {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 15px;
+        }
+
+        .section-divider-dots span {
+            width: 10px;
+            height: 10px;
+            background: var(--yellow-main);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .section-divider-dots span:nth-child(2) {
+            animation-delay: 0.3s;
+            background: var(--green-main);
+        }
+
+        .section-divider-dots span:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .section-divider.faq-divider {
+            background: var(--yellow-light);
+            height: 80px;
+        }
+
+        .section-divider.faq-divider::before {
+            width: 300px;
+            background: linear-gradient(90deg, transparent, var(--green-main), var(--yellow-main), var(--green-main), transparent);
+        }
+        
+        .testimonials-section {
+            padding: 140px 60px;
+            background: linear-gradient(180deg, var(--yellow-light) 0%, var(--white) 50%, var(--green-light) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonials-section::before {
+            content: '★★★★★';
+            position: absolute;
+            top: 80px;
+            right: 80px;
+            font-size: 40px;
+            opacity: 0.1;
+            letter-spacing: 10px;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1300px;
+            margin: 70px auto 0;
+        }
+
+        .testimonial-card {
+            padding: 45px;
+            background: var(--white);
+            border-radius: 30px;
+            transition: all 0.4s ease;
+            position: relative;
+            border: 2px solid transparent;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 100px;
+            color: var(--yellow-main);
+            opacity: 0.3;
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+            border-color: var(--yellow-main);
+        }
+
+        .testimonial-card:nth-child(2) {
+            transform: translateY(-20px);
+        }
+
+        .testimonial-card:nth-child(2):hover {
+            transform: translateY(-35px);
+        }
+
+        .testimonial-stars {
+            color: var(--yellow-main);
+            font-size: 22px;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+        }
+
+        .testimonial-text {
+            font-size: 16px;
+            line-height: 1.9;
+            color: var(--text-gray);
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding-top: 20px;
+            border-top: 2px solid var(--yellow-light);
+        }
+
+        .testimonial-avatar {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green-main), var(--yellow-main));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 20px;
+            box-shadow: 0 5px 20px rgba(124, 179, 66, 0.3);
+        }
+
+        .testimonial-name {
+            font-weight: 700;
+            font-size: 17px;
+        }
+
+        .testimonial-result {
+            font-size: 13px;
+            color: var(--green-main);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .testimonial-result::before {
+            content: '↓';
+            font-weight: 800;
+        }
+
+        /* ============================================
+           ORDER FORM
+           ============================================ */
+        
+        .order-section {
+            padding: 140px 60px;
+            background: linear-gradient(135deg, var(--green-light) 0%, var(--yellow-light) 100%);
+            position: relative;
+        }
+
+        .order-container {
+            max-width: 580px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: 40px;
+            padding: 60px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .order-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--yellow-main), var(--green-main));
+        }
+
+        .order-title {
+            font-size: 36px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .order-subtitle {
+            text-align: center;
+            color: var(--text-gray);
+            margin-bottom: 40px;
+            font-size: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #eee;
+            border-radius: 15px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--yellow-main);
+            box-shadow: 0 0 0 4px rgba(247, 217, 76, 0.2);
+        }
+
+        .program-select-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .program-select-card {
+            padding: 20px 15px;
+            border: 2px solid #eee;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .program-select-card:hover {
+            border-color: var(--yellow-main);
+            background: var(--yellow-light);
+        }
+
+        .program-select-card.selected {
+            border-color: var(--green-main);
+            background: var(--green-light);
+        }
+
+        .program-select-card .icon {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .program-select-card .name {
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .program-select-card .price {
+            color: var(--green-main);
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .order-total {
+            background: var(--yellow-main);
+            padding: 20px 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .order-total-label {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .order-total-amount {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .order-btn {
+            width: 100%;
+            padding: 20px;
+            background: var(--green-main);
+            color: var(--white);
+            font-weight: 700;
+            font-size: 17px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .order-btn:hover {
+            background: #689F38;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(124, 179, 66, 0.4);
+        }
+
+        .order-secure {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        
+        footer {
+            padding: 60px;
+            background: var(--text-dark);
+            color: var(--white);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--yellow-main);
+        }
+
+        .footer-logo span {
+            color: var(--white);
+            font-weight: 500;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .footer-links a {
+            color: var(--white);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+            color: var(--yellow-main);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 15px;
+        }
+
+        .footer-social a {
+            width: 48px;
+            height: 48px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 20px;
+        }
+
+        .footer-social a:hover {
+            background: var(--yellow-main);
+            border-color: var(--yellow-main);
+            transform: translateY(-5px);
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        
+        @media (max-width: 1200px) {
+            .hero-title { font-size: 48px; }
+            .section-title, .section-title-center { font-size: 42px; }
+            .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+            .slider-slide { grid-template-columns: 1fr; }
+            .slider-images { margin-bottom: 30px; }
+        }
+
+        @media (max-width: 992px) {
+            header { padding: 15px 25px; }
+            nav, .header-phone { display: none; }
+            .mobile-menu-btn { display: flex; }
+            
+            .hero { grid-template-columns: 1fr; min-height: auto; }
+            .hero-content { padding: 130px 30px 60px; }
+            .hero-image { 
+                padding: 40px 20px;
+                justify-content: center;
+            }
+            .hero-photo-wrapper {
+                width: 400px;
+                height: 400px;
+            }
+            .decor-shape-1 { width: 150px; height: 150px; right: -20px; bottom: 10px; }
+            .decor-shape-2 { width: 90px; height: 90px; left: -10px; top: 60px; }
+            .decor-shape-3 { width: 60px; height: 60px; right: 30px; top: -5px; }
+            
+            .about-grid { grid-template-columns: 1fr; gap: 50px; }
+            .about-image { order: -1; }
+            .about-content h2 { font-size: 36px; }
+            .about-section { padding: 100px 30px; }
+            
+            .programs-grid { grid-template-columns: 1fr; }
+            .testimonials-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+            
+            .section-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+
+            .floating-benefits-section { padding: 100px 30px; }
+            .floating-benefit-inner { font-size: 15px; padding: 20px 28px; }
+            .floating-benefit.big .floating-benefit-inner { font-size: 17px; padding: 25px 35px; }
+            
+            .faq-section { padding: 100px 30px; }
+            .faq-question span:first-child { font-size: 16px; }
+            .faq-decoration { display: none; }
+        }
+
+        @media (max-width: 600px) {
+            .hero-title { font-size: 36px; }
+            .hero-subtitle { font-size: 17px; }
+            .hero-buttons { flex-direction: column; }
+            .hero-buttons a { width: 100%; text-align: center; justify-content: center; }
+            
+            .hero-photo-wrapper {
+                width: 300px;
+                height: 300px;
+            }
+            .decor-shape-1 { width: 100px; height: 100px; right: -15px; bottom: 5px; }
+            .decor-shape-2 { width: 60px; height: 60px; left: -5px; top: 40px; }
+            .decor-shape-3 { width: 40px; height: 40px; right: 20px; top: 0; }
+            
+            .section-title, .section-title-center { font-size: 32px; }
+            .benefits-grid { grid-template-columns: 1fr; }
+            
+            .marquee-text { font-size: 50px; }
+            .stat-number { font-size: 50px; }
+            
+            .slider-images { flex-direction: column; }
+            .slider-image-placeholder, .slider-image img { height: 280px; }
+            .slider-content .result-highlight { font-size: 42px; }
+            .slider-slide { padding: 35px 25px; }
+            
+            .programs-section, .benefits-section, .results-slider-section, 
+            .testimonials-section, .order-section { padding: 80px 20px; }
+            
+            .program-card { padding: 35px; min-height: auto; }
+            .order-container { padding: 40px 25px; border-radius: 30px; }
+            .program-select-cards { grid-template-columns: 1fr; }
+            
+            .footer-content { flex-direction: column; gap: 30px; text-align: center; }
+            .footer-links { flex-wrap: wrap; justify-content: center; gap: 20px; }
+
+            .floating-benefits-section { padding: 80px 20px; }
+            .floating-benefits-grid { gap: 12px; }
+            .floating-benefit-inner { font-size: 13px; padding: 16px 20px; }
+            .floating-benefit.big .floating-benefit-inner { font-size: 15px; padding: 20px 25px; }
+            
+            .faq-section { padding: 80px 20px; }
+            .faq-question { padding: 18px 20px; }
+            .faq-question span:first-child { font-size: 15px; }
+            .faq-icon { width: 32px; height: 32px; font-size: 20px; }
+            .faq-answer p { padding: 0 20px 18px; font-size: 14px; }
+        }
+        /* SALE BADGE */
+.sale-badge {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    background: #e74c3c;
+    color: white;
+    padding: 12px 20px;
+    font-weight: 800;
+    font-size: 14px;
+    border-radius: 15px 0 15px 0;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+    animation: pulse 2s ease-in-out infinite;
+    z-index: 10;
+}
+
+.old-price {
+    font-size: 16px;
+    color: #e74c3c;
+    text-decoration: line-through;
+    display: block;
+    margin-bottom: 2px;
+}
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <a href="#" class="logo">Света<span></span></a>
+        <nav>
+            <a href="#about">Обо мне</a>
+            <a href="#benefits">Преимущества</a>
+            <a href="#results">Результаты</a>
+            <a href="#programs">Программы</a>
+            <a href="#testimonials">Отзывы</a>
+            <a href="#order">Оплата</a>
+        </nav>
+        <div class="header-right">
+            <a href="tel:+380950000000" class="header-phone">+38 095 000 00 00</a>
+            <a href="#order" class="header-btn">Записаться</a>
+        </div>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#about" onclick="closeMobileMenu()">Обо мне</a>
+        <a href="#benefits" onclick="closeMobileMenu()">Преимущества</a>
+        <a href="#results" onclick="closeMobileMenu()">Результаты</a>
+        <a href="#programs" onclick="closeMobileMenu()">Программы</a>
+        <a href="#testimonials" onclick="closeMobileMenu()">Отзывы</a>
+        <a href="#order" onclick="closeMobileMenu()">Оплата</a>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <!-- Yellow wave decorations - плавно до фото -->
+            <svg class="hero-wave-left" viewBox="0 0 900 900" preserveAspectRatio="none">
+                <path d="M-100,120 Q150,50 350,180 Q550,310 800,220 Q950,160 1100,250" 
+                      stroke="#F7D94C" stroke-width="110" fill="none" stroke-linecap="round" opacity="0.65"/>
+                <path d="M-120,520 Q150,430 350,560 Q550,690 850,580 Q1000,520 1150,600" 
+                      stroke="#F7D94C" stroke-width="85" fill="none" stroke-linecap="round" opacity="0.35"/>
+                <path d="M-80,780 Q200,720 400,800 Q600,880 900,780" 
+                      stroke="#F7D94C" stroke-width="60" fill="none" stroke-linecap="round" opacity="0.25"/>
+            </svg>
+            <div class="hero-badge reveal">
+                🏆 Мастер спорта по похудению с большого веса
+            </div>
+            <h1 class="hero-title">
+                <span class="hero-title-line reveal stagger-1">Света —</span>
+                <span class="hero-title-line reveal stagger-2">твой путь к</span>
+                <span class="hero-title-line reveal stagger-3">
+                    <span class="hero-title-accent">
+                        <span class="hero-icon">🌿</span>
+                        идеальному
+                    </span>
+                </span>
+                <span class="hero-title-line reveal stagger-4">телу</span>
+            </h1>
+            <p class="hero-subtitle reveal stagger-4">
+                Похудела с большого веса сама — помогу и тебе!
+            </p>
+            <p class="hero-description reveal stagger-5">
+                Сушка, марафоны и индивидуальные программы питания. 
+                Никаких голодовок — только результат и поддержка 24/7.
+            </p>
+            <div class="hero-buttons reveal stagger-6">
+                <a href="#programs" class="btn-primary">Выбрать программу</a>
+                <a href="https://t.me/hellosveta" class="btn-telegram" target="_blank">
+                    📱 Больше о моем похудении в Telegram
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-image">
+            <div class="hero-photo-wrapper">
+                <div class="decor-shape decor-shape-1"></div>
+                <div class="decor-shape decor-shape-2"></div>
+                <div class="decor-shape decor-shape-3"></div>
+                <div class="decor-shape decor-shape-4"></div>
+                <img src="svetaphotoes/after/10.PNG" alt="Света -" class="hero-photo">
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <section class="marquee-section">
+        <div class="marquee-bg"></div>
+        <div class="marquee-wrapper">
+            <div class="marquee-text">
+                <span>Sveta</span>
+                <span class="marquee-dot"></span>
+                <span>Nutritionist</span>
+                <span class="marquee-dot"></span>
+                <span>Sveta</span>
+                <span class="marquee-dot"></span>
+                <span>Nutritionist</span>
+                <span class="marquee-dot"></span>
+            </div>
+            <div class="marquee-text">
+                <span>Sveta</span>
+                <span class="marquee-dot"></span>
+                <span>Nutritionist</span>
+                <span class="marquee-dot"></span>
+                <span>Sveta</span>
+                <span class="marquee-dot"></span>
+                <span>Nutritionist</span>
+                <span class="marquee-dot"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="about-section" id="about">
+        <div class="about-bg-shape"></div>
+        <div class="about-grid">
+            <div class="about-image reveal-left">
+                <div class="about-image-wrapper">
+                     <img src="svetaphotoes/after/1.JPG" alt="Света">
+                </div>
+                <div class="about-badge float">-35 кг 💪</div>
+            </div>
+            <div class="about-content">
+                <h2 class="reveal">Привет! Я <span>Света</span> — и я знаю, как тяжело худеть</h2>
+                <p class="reveal stagger-1">
+                    Потому что сама прошла этот путь. Сбросила 35 кг без операций, таблеток и голодовок. 
+                    Теперь помогаю другим достичь того же результата.
+                </p>
+                <p class="reveal stagger-2">
+                    Мой подход — это не диета на неделю, а изменение отношения к еде навсегда. 
+                    Я не буду тебя ругать за срывы, а помогу понять, почему они происходят.
+                </p>
+                <p class="reveal stagger-3">
+                    Больше о моей истории — в <a href="https://t.me/hellosveta" style="color: var(--green-main); font-weight: 700;">Telegram канале</a> 💚
+                </p>
+                <div class="about-stats reveal stagger-4">
+                    <div class="about-stat">
+                        <div class="about-stat-number">5+</div>
+                        <div class="about-stat-text">лет опыта</div>
+                    </div>
+                    <div class="about-stat">
+                        <div class="about-stat-number">500+</div>
+                        <div class="about-stat-text">клиентов</div>
+                    </div>
+                    <div class="about-stat">
+                        <div class="about-stat-number">-35</div>
+                        <div class="about-stat-text">кг лично</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sveta Before & After -->
+    <section class="sveta-ba-section">
+        <div class="sveta-ba-header reveal">
+            <h2>До & <span>После</span></h2>
+            <p>Реальные результаты моих девочек</p>
+        </div>
+
+        <div class="sveta-ba-photos-wrapper">
+            <div class="sveta-ba-gallery reveal-scale">
+                <div class="sveta-ba-card do-card">
+                    <span class="sveta-ba-card-label">ДО</span>
+                    <div class="sveta-ba-slideshow sveta-do">
+                        <div class="sveta-do-slide active">
+                            <img src="svetaphotoes/do/1.JPG" alt="До">
+                        </div>
+                        <div class="sveta-do-slide">
+                            <img src="svetaphotoes/do/2.JPG" alt="До">
+                        </div>
+                        <div class="sveta-do-slide">
+                            <img src="svetaphotoes/do/3.JPG" alt="До">
+                        </div>
+                        <div class="sveta-do-slide">
+                            <img src="svetaphotoes/do/4.JPG" alt="До">
+                        </div>
+                        <div class="sveta-do-slide">
+                            <img src="svetaphotoes/do/5.JPG" alt="До">
+                        </div>
+                        <div class="sveta-do-slide">
+                            <img src="svetaphotoes/do/6.JPG" alt="До">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sveta-ba-divider"></div>
+                <div class="sveta-ba-divider-icon">VS</div>
+
+                <div class="sveta-ba-card after-card">
+                    <span class="sveta-ba-card-label">ПОСЛЕ</span>
+                    <div class="sveta-ba-slideshow sveta-after">
+                        <div class="sveta-after-slide active">
+                            <img src="svetaphotoes/after/1.JPG" alt="После">
+                        </div>
+                        <div class="sveta-after-slide">
+                            <img src="svetaphotoes/after/2.jpg" alt="После">
+                        </div>
+                        <div class="sveta-after-slide">
+                            <img src="svetaphotoes/after/3.jpg" alt="После">
+                        </div>
+                        <div class="sveta-after-slide">
+                            <img src="svetaphotoes/after/4.jpg" alt="После">
+                        </div>
+                        <div class="sveta-after-slide">
+                            <img src="svetaphotoes/after/5.PNG" alt="После">
+                        </div>
+                        <div class="sveta-after-slide">
+                            <img src="svetaphotoes/after/6.PNG" alt="После">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sveta-ba-counter">
+                <div class="sveta-ba-dots" id="svetaBaDots">
+                    <div class="sveta-ba-dot active"></div>
+                    <div class="sveta-ba-dot"></div>
+                    <div class="sveta-ba-dot"></div>
+                    <div class="sveta-ba-dot"></div>
+                    <div class="sveta-ba-dot"></div>
+                    <div class="sveta-ba-dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sveta-ba-bottom reveal">
+            <div class="sveta-ba-info-card">
+                <div class="sveta-ba-info-num">89 кг</div>
+                <div class="sveta-ba-info-label">было</div>
+            </div>
+            <div class="sveta-ba-info-card">
+                <div class="sveta-ba-info-num">54 кг</div>
+                <div class="sveta-ba-info-label">стало</div>
+            </div>
+            <div class="sveta-ba-info-card">
+                <div class="sveta-ba-info-num">-35 кг</div>
+                <div class="sveta-ba-info-label">результат</div>
+            </div>
+        </div>
+
+        <div class="sveta-ba-quote reveal">
+            <p>Я знаю, каково это — смотреть в зеркало и не узнавать себя. Пробовать сотню диет и каждый раз срываться. <strong>Я прошла через всё это сама. Без операций. Без таблеток. Без голодовок.</strong></p>
+        </div>
+    </section>
+
+    <!-- Benefits -->
+    <section class="benefits-section" id="benefits">
+        <h2 class="section-title-center reveal">
+            Почему выбирают <span>Свету</span>
+        </h2>
+        <div class="benefits-grid">
+            <div class="benefit-card yellow reveal stagger-1">
+                <span class="benefit-icon">🎯</span>
+                <div class="benefit-title">Личный опыт</div>
+                <div class="benefit-text">Сама похудела на 35 кг — знаю все подводные камни изнутри</div>
+            </div>
+            <div class="benefit-card green reveal stagger-2">
+                <span class="benefit-icon">📱</span>
+                <div class="benefit-title">Поддержка 24/7</div>
+                <div class="benefit-text">Всегда на связи в личном чате. Отвечу на любой вопрос</div>
+            </div>
+            <div class="benefit-card light-yellow reveal stagger-3">
+                <span class="benefit-icon">🍽️</span>
+                <div class="benefit-title">Без голодовок</div>
+                <div class="benefit-text">Едим вкусно и разнообразно. Никаких жёстких ограничений</div>
+            </div>
+            <div class="benefit-card light-green reveal stagger-4">
+                <span class="benefit-icon">📊</span>
+                <div class="benefit-title">Индивидуальный план</div>
+                <div class="benefit-text">Расчёт КБЖУ под твои параметры и образ жизни</div>
+            </div>
+            <div class="benefit-card soft-yellow reveal stagger-5">
+                <span class="benefit-icon">🧠</span>
+                <div class="benefit-title">Работа с головой</div>
+                <div class="benefit-text">Разбираемся с причинами переедания, а не только с симптомами</div>
+            </div>
+            <div class="benefit-card white reveal stagger-6">
+                <span class="benefit-icon">💪</span>
+                <div class="benefit-title">Результат</div>
+                <div class="benefit-text">98% моих клиентов достигают своей цели</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Slider -->
+    <section class="results-slider-section" id="results">
+        <div class="results-bg-text">РЕЗУЛЬТАТЫ</div>
+        <h2 class="section-title-center reveal" style="color: var(--text-dark);">
+            Результаты <span>участниц</span>
+        </h2>
+        <p style="text-align: center; color: var(--text-gray); font-size: 18px; max-width: 600px; margin: -20px auto 50px; line-height: 1.6;" class="reveal">
+            Реальные истории трансформаций моих девочек. Каждая прошла свой путь — и вот результат!
+        </p>
+
+        <div class="slider-container reveal-scale">
+            <div class="slider-wrapper">
+                <div class="slider-track" id="sliderTrack">
+                    <!-- Slide 1 -->
+                    <div class="slider-slide">
+                        <div class="slider-images">
+                            <div class="slider-image">
+                                <img src="svetaphotoes/do/1.JPG" alt="До">
+                                <span class="slider-label">ДО</span>
+                            </div>
+                            <div class="slider-image">
+                                <img src="svetaphotoes/after/1.JPG" alt="После">
+                                <span class="slider-label after">ПОСЛЕ</span>
+                            </div>
+                        </div>
+                        <div class="slider-content">
+                            <h3>Алина, 29 лет</h3>
+                            <div class="result-highlight">-14 кг</div>
+                            <p>Начала с 78 кг, мечтала о 64. За 2 месяца полностью изменила тело и привычки. Больше никаких срывов!</p>
+                            <span class="program-tag">Марафон 30 дней</span>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2 -->
+                    <div class="slider-slide">
+                        <div class="slider-images">
+                            <div class="slider-image">
+                                <img src="svetaphotoes/do/2.JPG" alt="До">
+                                <span class="slider-label">ДО</span>
+                            </div>
+                            <div class="slider-image">
+                                <img src="svetaphotoes/after/2.jpg" alt="После">
+                                <span class="slider-label after">ПОСЛЕ</span>
+                            </div>
+                        </div>
+                        <div class="slider-content">
+                            <h3>Марина, 34 года</h3>
+                            <div class="result-highlight">-11 кг</div>
+                            <p>После родов набрала лишнее и не могла сбросить 3 года. За 6 недель увидела результат, которого ждала так долго!</p>
+                            <span class="program-tag">Личное ведение</span>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3 -->
+                    <div class="slider-slide">
+                        <div class="slider-images">
+                            <div class="slider-image">
+                                <img src="svetaphotoes/do/3.JPG" alt="До">
+                                <span class="slider-label">ДО</span>
+                            </div>
+                            <div class="slider-image">
+                                <img src="svetaphotoes/after/3.jpg" alt="После">
+                                <span class="slider-label after">ПОСЛЕ</span>
+                            </div>
+                        </div>
+                        <div class="slider-content">
+                            <h3>Оля, 27 лет</h3>
+                            <div class="result-highlight">-9 кг</div>
+                            <p>Была 72 кг при росте 165. Сейчас 63 — наконец нравлюсь себе в зеркале. Ела вкусно и ни разу не голодала!</p>
+                            <span class="program-tag">Сушка 21 день</span>
+                        </div>
+                    </div>
+
+                    <!-- Slide 4 -->
+                    <div class="slider-slide">
+                        <div class="slider-images">
+                            <div class="slider-image">
+                                <img src="svetaphotoes/do/4.JPG" alt="До">
+                                <span class="slider-label">ДО</span>
+                            </div>
+                            <div class="slider-image">
+                                <img src="svetaphotoes/after/4.jpg" alt="После">
+                                <span class="slider-label after">ПОСЛЕ</span>
+                            </div>
+                        </div>
+                        <div class="slider-content">
+                            <h3>Катя, 31 год</h3>
+                            <div class="result-highlight">-16 кг</div>
+                            <p>Думала, что после 30 похудеть невозможно. Оказалось — просто нужен правильный подход! Минус 16 кг за 2.5 месяца.</p>
+                            <span class="program-tag">VIP Ведение</span>
+                        </div>
+                    </div>
+
+                    <!-- Slide 5 -->
+                    <div class="slider-slide">
+                        <div class="slider-images">
+                            <div class="slider-image">
+                                <img src="svetaphotoes/do/5.JPG" alt="До">
+                                <span class="slider-label">ДО</span>
+                            </div>
+                            <div class="slider-image">
+                                <img src="svetaphotoes/after/5.PNG" alt="После">
+                                <span class="slider-label after">ПОСЛЕ</span>
+                            </div>
+                        </div>
+                        <div class="slider-content">
+                            <h3>Настя, 25 лет</h3>
+                            <div class="result-highlight">-8 кг</div>
+                            <p>Хотела подтянуть тело к лету. Начала в апреле — уже в июне ходила на пляж с уверенностью!</p>
+                            <span class="program-tag">Марафон 30 дней</span>
+                        </div>
+                    </div>
+
+                    <!-- Slide 6 -->
+                    <div class="slider-slide">
+                        <div class="slider-images">
+                            <div class="slider-image">
+                                <img src="svetaphotoes/do/6.JPG" alt="До">
+                                <span class="slider-label">ДО</span>
+                            </div>
+                            <div class="slider-image">
+                                <img src="svetaphotoes/after/6.PNG" alt="После">
+                                <span class="slider-label after">ПОСЛЕ</span>
+                            </div>
+                        </div>
+                        <div class="slider-content">
+                            <h3>Юля, 33 года</h3>
+                            <div class="result-highlight">-13 кг</div>
+                            <p>Перепробовала всё: диеты, таблетки, голодовки. Наконец поняла, как питаться правильно и без стресса!</p>
+                            <span class="program-tag">Личное ведение</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slider-nav">
+                <button onclick="prevSlide()">←</button>
+                <button onclick="nextSlide()">→</button>
+            </div>
+
+            <div class="slider-dots" id="sliderDots">
+                <div class="slider-dot active" onclick="goToSlide(0)"></div>
+                <div class="slider-dot" onclick="goToSlide(1)"></div>
+                <div class="slider-dot" onclick="goToSlide(2)"></div>
+                <div class="slider-dot" onclick="goToSlide(3)"></div>
+                <div class="slider-dot" onclick="goToSlide(4)"></div>
+                <div class="slider-dot" onclick="goToSlide(5)"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Programs -->
+    <section class="programs-section" id="programs">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title reveal-left">Программы</h2>
+                <p class="section-description reveal-left stagger-1">
+                    Выбери формат, который подходит тебе. От интенсивной сушки до полного сопровождения.
+                </p>
+            </div>
+        </div>
+
+        <div class="programs-grid">
+            <div class="program-card green-bg reveal stagger-1">
+                <span class="program-badge">🔥 Хит</span>
+                <div class="program-icon">🏋️</div>
+                <h3 class="program-name">Сушка</h3>
+                <p class="program-duration">21 день интенсива</p>
+                <p class="program-text">
+                    Для тех, кто готов к быстрому результату. Строгий план питания для сжигания жира.
+                </p>
+                <ul class="program-features">
+                    <li>План питания на каждый день</li>
+                    <li>Список продуктов + рецепты</li>
+                    <li>Чат поддержки 24/7</li>
+                    <li>Рекомендации по тренировкам</li>
+                </ul>
+                <div class="program-footer">
+                    <div class="program-price">
+                        <span class="amount">2 500</span>
+                        <span class="currency">₽</span>
+                        <span class="old">3 500</span>
+                    </div>
+                    <button class="program-btn" onclick="selectProgram('sushka', 2500)">Выбрать</button>
+                </div>
+            </div>
+
+            <div class="program-card soft-bg reveal stagger-2">
+    <span class="program-badge">⭐ Популярный</span>
+    <div class="sale-badge">SALE</div>
+    <div class="program-icon">🎯</div>
+    <h3 class="program-name">Марафон</h3>
+    <p class="program-duration">30 дней трансформации</p>
+    <p class="program-text">
+        Классический марафон с мягким дефицитом. Идеально для новичков.
+    </p>
+    <ul class="program-features">
+        <li>Персональный расчёт КБЖУ</li>
+        <li>Меню на 30 дней</li>
+        <li>Чат с участниками</li>
+        <li>Еженедельные вебинары</li>
+        <li>Гайд по срывам</li>
+    </ul>
+    <div class="program-footer">
+        <div class="program-price">
+            <span class="old-price">2 500 ₽</span>
+            <span class="amount">1 500</span>
+            <span class="currency">₽</span>
+        </div>
+        <button class="program-btn" onclick="selectProgram('marafon', 1500)">Выбрать</button>
+    </div>
+</div>
+
+            <div class="program-card mint-bg reveal stagger-3">
+                <div class="program-icon">💬</div>
+                <h3 class="program-name">Консультация</h3>
+                <p class="program-duration">60 минут онлайн</p>
+                <p class="program-text">
+                    Разовая встреча для анализа питания и персональных рекомендаций.
+                </p>
+                <ul class="program-features">
+                    <li>Анализ текущего рациона</li>
+                    <li>Рекомендации по питанию</li>
+                    <li>Ответы на вопросы</li>
+                    <li>Запись консультации</li>
+                </ul>
+                <div class="program-footer">
+                    <div class="program-price">
+                        <span class="amount">800</span>
+                        <span class="currency">₽</span>
+                    </div>
+                    <button class="program-btn" onclick="selectProgram('consult', 800)">Записаться</button>
+                </div>
+            </div>
+
+            <div class="program-card yellow-bg reveal stagger-4">
+                <span class="program-badge">👑 VIP</span>
+                <div class="program-icon">🌟</div>
+                <h3 class="program-name">Ведение 2 мес</h3>
+                <p class="program-duration">60 дней сопровождения</p>
+                <p class="program-text">
+                    Максимальный формат. Полный контроль и индивидуальная работа.
+                </p>
+                <ul class="program-features">
+                    <li>Всё из «Марафона»</li>
+                    <li>Личный чат со мной 24/7</li>
+                    <li>Корректировка плана еженедельно</li>
+                    <li>8 персональных созвонов</li>
+                    <li>Выход из диеты + удержание</li>
+                </ul>
+                <div class="program-footer">
+                    <div class="program-price">
+                        <span class="amount">5 500</span>
+                        <span class="currency">₽</span>
+                        <span class="old">7 000</span>
+                    </div>
+                    <button class="program-btn" onclick="selectProgram('vip', 5500)">Выбрать</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats-section">
+        <div class="stats-pattern"></div>
+        <div class="stats-grid">
+            <div class="stat-item reveal">
+                <div class="stat-number">500+</div>
+                <p class="stat-text">Довольных клиентов</p>
+            </div>
+            <div class="stat-item reveal stagger-1">
+                <div class="stat-number">5</div>
+                <p class="stat-text">Лет опыта</p>
+            </div>
+            <div class="stat-item reveal stagger-2">
+                <div class="stat-number">-12кг</div>
+                <p class="stat-text">Средний результат</p>
+            </div>
+            <div class="stat-item reveal stagger-3">
+                <div class="stat-number">98%</div>
+                <p class="stat-text">Достигают цели</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Divider -->
+    <div class="section-divider">
+        <div class="section-divider-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- Testimonials -->
+    <section class="testimonials-section" id="testimonials">
+        <h2 class="section-title-center reveal">Что говорят <span>клиенты</span></h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card reveal stagger-1">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">
+                    "Прошла марафон и сбросила 8 кг за месяц! Света объясняет просто, без заумных терминов. Ем вкусно и худею!"
+                </p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">А</div>
+                    <div>
+                        <div class="testimonial-name">Анна</div>
+                        <div class="testimonial-result">8 кг за 30 дней</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card reveal stagger-2">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">
+                    "Сушка была непростой, но результат того стоит! Наконец увидела пресс 😂 Света поддерживала каждый день."
+                </p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">М</div>
+                    <div>
+                        <div class="testimonial-name">Марина</div>
+                        <div class="testimonial-result">6 кг за 21 день</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card reveal stagger-3">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">
+                    "Взяла VIP и не пожалела ни разу. За 2 месяца полностью изменила отношение к еде. Больше никаких срывов!"
+                </p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">О</div>
+                    <div>
+                        <div class="testimonial-name">Ольга</div>
+                        <div class="testimonial-result">14 кг за 60 дней</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating Benefits -->
+    <section class="floating-benefits-section">
+        <h2 class="section-title-center reveal">
+            Выбрав <span>Свету</span> ты получишь
+        </h2>
+        <div class="floating-benefits-grid">
+            <div class="floating-benefit big">
+                <div class="floating-benefit-inner white">
+                    Персональный план питания
+                </div>
+            </div>
+            <div class="floating-benefit">
+                <div class="floating-benefit-inner orange">
+                    Поддержка 24/7 в чате
+                </div>
+            </div>
+            <div class="floating-benefit">
+                <div class="floating-benefit-inner pink">
+                    Результат от -5 до -15 кг
+                </div>
+            </div>
+            <div class="floating-benefit big">
+                <div class="floating-benefit-inner green">
+                    Рецепты вкусных блюд
+                </div>
+            </div>
+            <div class="floating-benefit">
+                <div class="floating-benefit-inner white">
+                    Еженедельные созвоны
+                </div>
+            </div>
+            <div class="floating-benefit">
+                <div class="floating-benefit-inner yellow">
+                    Работа с психологией еды
+                </div>
+            </div>
+            <div class="floating-benefit big">
+                <div class="floating-benefit-inner pink">
+                    Гайд по срывам и мотивации
+                </div>
+            </div>
+            <div class="floating-benefit">
+                <div class="floating-benefit-inner green">
+                    Удержание результата навсегда
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Divider -->
+    <div class="section-divider faq-divider">
+        <div class="section-divider-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+        <div class="faq-decoration">🌿</div>
+        <h2 class="section-title-center reveal">FAQ</h2>
+        <div class="faq-container">
+            <div class="faq-item reveal">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Как записаться на программу?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Выбери программу на сайте, заполни форму и оплати. После оплаты я свяжусь с тобой в Telegram в течение 24 часов для старта!</p>
+                </div>
+            </div>
+            <div class="faq-item reveal">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Нужно ли заниматься спортом?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Нет, спорт не обязателен! Мои программы основаны на питании. Но если хочешь — дам рекомендации по тренировкам дома или в зале.</p>
+                </div>
+            </div>
+            <div class="faq-item reveal">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Что если я сорвусь?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Срывы — это нормально! Я не буду тебя ругать. Разберёмся вместе, почему это произошло. В программе есть специальный гайд по срывам.</p>
+                </div>
+            </div>
+            <div class="faq-item reveal">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Подойдёт ли мне, если я вегетарианец?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Да! Я составляю индивидуальный план под твои предпочтения. Вегетарианцам, веганам, людям с аллергиями — всем найдём подходящий рацион.</p>
+                </div>
+            </div>
+            <div class="faq-item reveal">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Сколько килограмм можно сбросить?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Зависит от стартового веса и программы. В среднем: Сушка — 5-8 кг, Марафон — 8-12 кг, VIP — до 18 кг за 2 месяца.</p>
+                </div>
+            </div>
+            <div class="faq-item reveal">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Можно ли оплатить частями?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Да, для программы VIP Ведение доступна оплата в 2 этапа. Напиши мне в Telegram для деталей.</p>
+                </div>
+            </div>
+            <div class="faq-item reveal">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Что входит в поддержку 24/7?</span>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Личный чат со мной в Telegram. Можешь писать в любое время — вопросы по питанию, фото еды на проверку, поддержка в сложные моменты.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Order Form -->
+    <section class="order-section" id="order">
+        <div class="order-container reveal-scale">
+            <h2 class="order-title">Оформить заказ</h2>
+            <p class="order-subtitle">Выбери программу и начни путь к идеальному телу</p>
+
+            <form id="orderForm">
+                <div class="form-group">
+                    <label class="form-label">Программа</label>
+                    <div class="program-select-cards">
+                        <div class="program-select-card" data-program="sushka" data-price="2500" onclick="selectProgramCard(this)">
+                            <div class="icon">🏋️</div>
+                            <div class="name">Сушка</div>
+                            <div class="price">2 500 ₽</div>
+                        </div>
+                       <div class="program-select-card" data-program="marafon" data-price="1500" onclick="selectProgramCard(this)">
+                            <div class="icon">🎯</div>
+                            <div class="name">Марафон</div>
+                            <div class="price">1 500 ₽ <s style="color:#e74c3c;font-size:12px;">1800</s></div>
+                        </div>
+                        <div class="program-select-card" data-program="consult" data-price="800" onclick="selectProgramCard(this)">
+                            <div class="icon">💬</div>
+                            <div class="name">Консультация</div>
+                            <div class="price">800 ₽</div>
+                        </div>
+                        <div class="program-select-card" data-program="vip" data-price="5500" onclick="selectProgramCard(this)">
+                            <div class="icon">🌟</div>
+                            <div class="name">VIP Ведение</div>
+                            <div class="price">5 500 ₽</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Имя *</label>
+                    <input type="text" id="customerName" class="form-input" placeholder="Как тебя зовут?" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Телефон *</label>
+                    <input type="tel" id="customerPhone" class="form-input" placeholder="+7 (___) ___-__-__" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email *</label>
+                    <input type="email" id="customerEmail" class="form-input" placeholder="email@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Telegram / Instagram</label>
+                    <input type="text" id="customerTelegram" class="form-input" placeholder="@username">
+                </div>
+
+                <div class="order-total">
+                    <span class="order-total-label">К оплате:</span>
+                    <span class="order-total-amount" id="totalAmount">0 ₽</span>
+                </div>
+
+                <button type="submit" class="order-btn">Оплатить и начать 🚀</button>
+
+                <div class="order-secure">🔒 Безопасная оплата через ЮKassa</div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">Света<span></span></div>
+            <div class="footer-links">
+                <a href="#about">Обо мне</a>
+                <a href="#programs">Программы</a>
+                <a href="#results">Результаты</a>
+                <a href="#order">Оплата</a>
+            </div>
+            <div class="footer-social">
+                <a href="https://instagram.com" target="_blank">📸</a>
+                <a href="https://t.me/hellosveta" target="_blank">📱</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ============================================
+        // SCROLL REVEAL ANIMATIONS
+        // ============================================
+        
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-rotate');
+            
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', reveal);
+        window.addEventListener('load', reveal);
+
+        // ============================================
+        // HEADER
+        // ============================================
+        
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // ============================================
+        // MOBILE MENU
+        // ============================================
+        
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenuBtn.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        });
+
+        function closeMobileMenu() {
+            mobileMenuBtn.classList.remove('active');
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // ============================================
+        // SMOOTH SCROLL
+        // ============================================
+        
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    closeMobileMenu();
+                }
+            });
+        });
+
+        // ============================================
+        // SLIDER
+        // ============================================
+        
+        let currentSlide = 0;
+        const totalSlides = 6;
+        const sliderTrack = document.getElementById('sliderTrack');
+        const dots = document.querySelectorAll('.slider-dot');
+
+        function updateSlider() {
+            sliderTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSlider();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSlider();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlider();
+        }
+
+        // Auto-slide
+        setInterval(nextSlide, 4000);
+
+        // ============================================
+        // SVETA BEFORE & AFTER SLIDESHOW
+        // ============================================
+
+        const svetaDoSlides = document.querySelectorAll('.sveta-do-slide');
+        const svetaAfterSlides = document.querySelectorAll('.sveta-after-slide');
+        const svetaDots = document.querySelectorAll('.sveta-ba-dot');
+        let svetaCurrent = 0;
+        const svetaTotal = svetaDoSlides.length;
+
+        function goToSvetaPair(index) {
+            svetaDoSlides[svetaCurrent].classList.remove('active');
+            svetaAfterSlides[svetaCurrent].classList.remove('active');
+            svetaDots[svetaCurrent].classList.remove('active');
+            svetaCurrent = index;
+            svetaDoSlides[svetaCurrent].classList.add('active');
+            svetaAfterSlides[svetaCurrent].classList.add('active');
+            svetaDots[svetaCurrent].classList.add('active');
+        }
+
+        function nextSvetaPair() {
+            goToSvetaPair((svetaCurrent + 1) % svetaTotal);
+        }
+
+        svetaDots.forEach((dot, i) => {
+            dot.addEventListener('click', () => goToSvetaPair(i));
+        });
+
+        setInterval(nextSvetaPair, 4000);
+
+        // ============================================
+        // FLOATING BENEFITS - Simple scroll animation
+        // ============================================
+        
+        function handleFloatingBenefits() {
+            const benefits = document.querySelectorAll('.floating-benefit');
+            benefits.forEach(benefit => {
+                const rect = benefit.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 100) {
+                    benefit.classList.add('visible');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', handleFloatingBenefits);
+        window.addEventListener('load', handleFloatingBenefits);
+
+        // ============================================
+        // FAQ TOGGLE
+        // ============================================
+        
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const isOpen = faqItem.classList.contains('open');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('open');
+            });
+            
+            // Open clicked one if it wasn't open
+            if (!isOpen) {
+                faqItem.classList.add('open');
+            }
+        }
+
+        // ============================================
+        // PROGRAM SELECTION
+        // ============================================
+        
+        let selectedPrice = 0;
+        let selectedProgram = null;
+
+        function selectProgramCard(card) {
+            document.querySelectorAll('.program-select-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            selectedPrice = parseInt(card.dataset.price);
+            selectedProgram = card.dataset.program;
+            document.getElementById('totalAmount').textContent = selectedPrice.toLocaleString() + ' ₽';
+        }
+
+        function selectProgram(program, price) {
+            document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
+                const card = document.querySelector(`[data-program="${program}"]`);
+                if (card) selectProgramCard(card);
+            }, 600);
+        }
+
+        // ============================================
+        // FORM SUBMIT - Відправка в Telegram
+        // ============================================
+        
+        // URL бекенду (зміни на свій після деплою!)
+        const API_URL = 'https://sveta-server-production.up.railway.app/api';
+        
+        document.getElementById('orderForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Валідація
+            if (selectedPrice === 0 || !selectedProgram) {
+                showNotification('Выбери программу', 'error');
+                return;
+            }
+            
+            // Отримуємо дані форми
+            const formData = {
+                program: selectedProgram,
+                name: document.getElementById('customerName').value.trim(),
+                email: document.getElementById('customerEmail').value.trim(),
+                phone: document.getElementById('customerPhone').value.trim(),
+                telegram: document.getElementById('customerTelegram').value.trim()
+            };
+            
+            // Валідація полів
+            if (!formData.name || !formData.email || !formData.phone) {
+                showNotification('Заполни все обязательные поля', 'error');
+                return;
+            }
+            
+            // Показуємо лоадер
+            const submitBtn = document.querySelector('.order-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Отправляем...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Відправляємо заявку
+                const response = await fetch(`${API_URL}/payment/create`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Показуємо успіх
+                    showNotification('Заявка отправлена! Света свяжется с тобой 💚', 'success');
+                    
+                    // Показуємо модалку успіху
+                    showSuccessModal(result.data);
+                    
+                    // Очищаємо форму
+                    document.getElementById('orderForm').reset();
+                    document.querySelectorAll('.program-select-card').forEach(c => c.classList.remove('selected'));
+                    selectedPrice = 0;
+                    selectedProgram = null;
+                    document.getElementById('totalAmount').textContent = '0 ₽';
+                    
+                } else {
+                    throw new Error(result.error || 'Ошибка отправки');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification(error.message || 'Ошибка. Попробуй позже.', 'error');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+        
+        // Модалка успіху
+        function showSuccessModal(data) {
+            const modal = document.createElement('div');
+            modal.className = 'success-modal';
+            modal.innerHTML = `
+                <div class="success-modal-content">
+                    <div class="success-modal-icon">✅</div>
+                    <h2>Заявка отправлена!</h2>
+                    <p><strong>${data.program}</strong></p>
+                    <p>Сумма: <strong>${data.price.toLocaleString()} ₽</strong></p>
+                    <p style="margin-top: 20px; color: #636E72;">
+                        Света получила твою заявку и свяжется<br>с тобой в ближайшее время для оплаты
+                    </p>
+                    <p style="margin-top: 15px; font-size: 13px; color: #999;">
+                        Номер заказа: ${data.orderId}
+                    </p>
+                    <button onclick="this.parentElement.parentElement.remove()" class="success-modal-btn">
+                        Отлично! 💚
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        
+        // Notification helper
+        function showNotification(message, type = 'info') {
+            const existing = document.querySelector('.notification');
+            if (existing) existing.remove();
+            
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <span>${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
+                <span>${message}</span>
+            `;
+            
+            Object.assign(notification.style, {
+                position: 'fixed',
+                top: '20px',
+                right: '20px',
+                padding: '16px 24px',
+                borderRadius: '12px',
+                background: type === 'success' ? '#7CB342' : type === 'error' ? '#e74c3c' : '#3498db',
+                color: 'white',
+                fontWeight: '600',
+                fontSize: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+                zIndex: '10000',
+                animation: 'slideIn 0.3s ease'
+            });
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+        }
+        
+        // Додаємо стилі для модалки та анімацій
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+            .success-modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10001;
+                animation: fadeIn 0.3s ease;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            .success-modal-content {
+                background: white;
+                padding: 50px;
+                border-radius: 30px;
+                text-align: center;
+                max-width: 400px;
+                box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+            }
+            .success-modal-icon {
+                font-size: 70px;
+                margin-bottom: 20px;
+            }
+            .success-modal-content h2 {
+                font-size: 28px;
+                margin-bottom: 15px;
+                color: #1A1A1A;
+            }
+            .success-modal-content p {
+                font-size: 16px;
+                color: #1A1A1A;
+                margin-bottom: 5px;
+            }
+            .success-modal-btn {
+                margin-top: 25px;
+                padding: 16px 40px;
+                background: #7CB342;
+                color: white;
+                border: none;
+                border-radius: 30px;
+                font-size: 16px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .success-modal-btn:hover {
+                background: #689F38;
+                transform: scale(1.05);
+            }
+        `;
+        document.head.appendChild(styleSheet);
+
+        // ============================================
+        // PARALLAX EFFECT
+        // ============================================
+        
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.parallax');
+            
+            parallaxElements.forEach(el => {
+                const speed = el.dataset.speed || 0.5;
+                el.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

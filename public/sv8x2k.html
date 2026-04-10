@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SV Panel</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --green: #7CB342; --green-light: #F1F8E9; --yellow: #F7D94C; --yellow-light: #FFFDE7;
+            --dark: #1A1A1A; --gray: #636E72; --light-gray: #f5f5f5; --white: #fff; --red: #e74c3c;
+        }
+        body { font-family: 'Montserrat', sans-serif; background: var(--light-gray); color: var(--dark); min-height: 100vh; position: relative; overflow-x: hidden; }
+
+        /* FLOATING DECOR */
+        .decor { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; }
+        .decor-1 { width: 350px; height: 350px; border: 2px solid var(--green); opacity: 0.12; top: -100px; right: -80px; animation: floatA 16s ease-in-out infinite; }
+        .decor-2 { width: 200px; height: 200px; background: var(--yellow); opacity: 0.08; bottom: 5%; left: -50px; animation: floatB 20s ease-in-out infinite; }
+        .decor-3 { width: 180px; height: 180px; border: 2px dashed var(--green); opacity: 0.1; bottom: 15%; right: -40px; animation: spin 40s linear infinite; }
+        .decor-4 { width: 60px; height: 60px; background: var(--green); opacity: 0.12; top: 25%; right: 8%; animation: floatC 12s ease-in-out infinite; }
+        .decor-5 { width: 100px; height: 100px; border: 3px solid var(--yellow); opacity: 0.1; top: 50%; left: 3%; animation: floatA 18s ease-in-out infinite reverse; }
+        .decor-6 { width: 40px; height: 40px; background: var(--red); opacity: 0.08; top: 15%; left: 12%; animation: pulse 4s ease-in-out infinite; }
+        .decor-7 { width: 25px; height: 25px; background: var(--yellow); opacity: 0.15; top: 70%; right: 15%; animation: pulse 5s ease-in-out infinite 1s; }
+        .decor-8 { width: 15px; height: 15px; background: var(--green); opacity: 0.2; top: 40%; left: 25%; animation: pulse 3s ease-in-out infinite 2s; }
+
+        .decor-ring { position: fixed; border-radius: 50%; border: 1.5px solid; pointer-events: none; z-index: 0; opacity: 0; animation: ringPop 8s ease-in-out infinite; }
+        .decor-ring-1 { width: 120px; height: 120px; border-color: var(--green); top: 35%; right: 5%; animation-delay: 0s; }
+        .decor-ring-2 { width: 80px; height: 80px; border-color: var(--yellow); top: 65%; left: 8%; animation-delay: 3s; }
+        .decor-ring-3 { width: 60px; height: 60px; border-color: var(--green); top: 10%; left: 30%; animation-delay: 5s; }
+
+        .decor-dots { position: fixed; pointer-events: none; z-index: 0; opacity: 0.06; }
+        .decor-dots-1 { width: 200px; height: 200px; top: 20%; right: 2%; background-image: radial-gradient(circle, var(--dark) 1.5px, transparent 1.5px); background-size: 20px 20px; }
+        .decor-dots-2 { width: 150px; height: 150px; bottom: 5%; left: 10%; background-image: radial-gradient(circle, var(--dark) 1.5px, transparent 1.5px); background-size: 20px 20px; }
+
+        @keyframes floatA {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(40px, -30px) scale(1.06); }
+            66% { transform: translate(-30px, 20px) scale(0.94); }
+        }
+        @keyframes floatB {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-35px, 40px) scale(1.1); }
+            66% { transform: translate(25px, -15px) scale(0.95); }
+        }
+        @keyframes floatC {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(20px, -35px); }
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.08; }
+            50% { transform: scale(1.4); opacity: 0.18; }
+        }
+        @keyframes ringPop {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            20%, 80% { opacity: 0.12; transform: scale(1); }
+        }
+
+        /* LOGIN */
+        .login-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; background: linear-gradient(135deg, var(--green-light), var(--yellow-light)); position: relative; z-index: 1; }
+        .login-card { background: var(--white); border-radius: 24px; padding: 50px 40px; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
+        .login-card h1 { font-size: 24px; font-weight: 800; text-align: center; margin-bottom: 8px; }
+        .login-card p { text-align: center; color: var(--gray); font-size: 14px; margin-bottom: 30px; }
+        .field { margin-bottom: 20px; }
+        .field label { display: block; font-weight: 600; font-size: 13px; margin-bottom: 8px; }
+        .field-hint { font-size: 11px; color: var(--gray); font-weight: 400; margin-left: 4px; }
+        .field input, .field select { width: 100%; padding: 14px 18px; border: 2px solid #eee; border-radius: 12px; font-size: 15px; font-family: inherit; transition: border-color 0.3s; }
+        .field input:focus, .field select:focus { outline: none; border-color: var(--green); }
+        .pin-inputs { display: flex; gap: 8px; justify-content: center; }
+        .pin-inputs input { width: 48px; height: 56px; text-align: center; font-size: 22px; font-weight: 700; padding: 0; }
+        .btn { width: 100%; padding: 16px; background: var(--green); color: var(--white); font-weight: 700; font-size: 16px; border: none; border-radius: 14px; cursor: pointer; transition: all 0.3s; font-family: inherit; }
+        .btn:hover { background: #689F38; transform: translateY(-2px); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-small { padding: 12px 24px; font-size: 13px; width: auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(124,179,66,0.25); }
+        .btn-danger { background: var(--red); }
+        .btn-danger:hover { background: #c0392b; }
+        .login-error { color: var(--red); font-size: 13px; text-align: center; margin-bottom: 15px; font-weight: 600; display: none; }
+
+        /* DASHBOARD */
+        .dashboard { display: none; position: relative; z-index: 1; }
+        .dash-header { background: var(--white); padding: 20px 28px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 0 #eee; position: sticky; top: 0; z-index: 100; }
+        .dash-header h2 { font-size: 20px; font-weight: 800; color: var(--dark); }
+        .dash-header h2 span { color: var(--green); }
+        .dash-logout { background: var(--light-gray); border: none; color: var(--gray); font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; padding: 10px 20px; border-radius: 10px; transition: all 0.2s; }
+        .dash-logout:hover { background: #fff5f5; color: var(--red); }
+        .tabs { display: flex; gap: 4px; padding: 16px 28px; background: var(--white); border-bottom: 1px solid #f0f0f0; }
+        .tab { padding: 10px 24px; font-weight: 700; font-size: 13px; cursor: pointer; color: var(--gray); border: none; border-radius: 10px; background: none; font-family: inherit; transition: all 0.2s; }
+        .tab:hover { background: var(--light-gray); }
+        .tab.active { color: var(--white); background: var(--green); }
+        .tab-content { display: none; padding: 28px; max-width: 640px; margin: 0 auto; }
+        .tab-content.active { display: block; }
+
+        /* CARDS */
+        .program-card {
+            background: var(--white); border-radius: 16px; padding: 28px; margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f0f0f0;
+            border-left: 4px solid var(--green); transition: box-shadow 0.3s;
+        }
+        .program-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+        .promo-card {
+            background: var(--white); border-radius: 16px; padding: 24px; margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f0f0f0;
+            border-left: 4px solid var(--yellow); transition: box-shadow 0.3s;
+        }
+        .promo-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+        .add-section {
+            background: var(--white); border-radius: 16px; padding: 28px; margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f0f0f0;
+            border-top: 3px solid var(--green); margin-top: 30px;
+        }
+
+        .program-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .program-card-name { font-weight: 700; font-size: 17px; }
+        .program-card-price { font-size: 24px; font-weight: 800; color: var(--green); }
+        .program-card-id { font-size: 11px; color: #aaa; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid #f5f5f5; }
+        .program-card-sale { display: inline-block; background: var(--red); color: white; font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 20px; margin-left: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .program-edit-row { display: flex; gap: 12px; align-items: end; }
+        .program-edit-row .field { flex: 1; margin-bottom: 0; }
+        .program-edit-row .field input { padding: 12px 14px; font-size: 14px; background: var(--light-gray); border: 2px solid transparent; }
+        .program-edit-row .field input:focus { background: var(--white); border-color: var(--green); }
+        .sale-row { display: flex; gap: 12px; align-items: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f0f0f0; }
+        .sale-row label { font-size: 13px; font-weight: 600; white-space: nowrap; }
+        .sale-row input[type="text"] { padding: 10px 14px; font-size: 13px; background: var(--light-gray); border: 2px solid transparent; }
+        .sale-row input[type="text"]:focus { background: var(--white); border-color: var(--red); }
+        .sale-toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .sale-toggle input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--red); cursor: pointer; }
+
+        .promo-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .promo-card-code { font-weight: 800; font-size: 18px; letter-spacing: 1.5px; color: var(--dark); }
+        .promo-card-discount { font-weight: 800; color: var(--green); font-size: 16px; background: var(--green-light); padding: 4px 12px; border-radius: 8px; }
+        .promo-card-programs { font-size: 12px; color: #aaa; margin-bottom: 14px; }
+        .delete-btn { background: none; border: 1.5px solid #eee; color: var(--gray); padding: 8px 18px; border-radius: 10px; font-weight: 600; font-size: 12px; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+        .delete-btn:hover { border-color: var(--red); color: var(--red); background: #fff5f5; }
+
+        .add-section h3 { font-size: 17px; font-weight: 800; margin-bottom: 24px; color: var(--dark); }
+        .add-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .add-row .field-full { grid-column: 1 / -1; }
+        .add-row .field input, .add-row .field select { background: var(--light-gray); border: 2px solid transparent; }
+        .add-row .field input:focus, .add-row .field select:focus { background: var(--white); border-color: var(--green); }
+
+        .status-msg { padding: 14px 20px; border-radius: 12px; font-size: 13px; font-weight: 600; margin-bottom: 16px; display: none; }
+        .status-msg.success { display: block; background: var(--green-light); color: #558B2F; }
+        .status-msg.error { display: block; background: #fff5f5; color: var(--red); }
+        .section-hint { font-size: 13px; color: var(--gray); margin-bottom: 24px; line-height: 1.7; padding: 14px 18px; background: var(--white); border-radius: 12px; border: 1px solid #f0f0f0; border-left: 3px solid var(--yellow); }
+        .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.8); display: flex; align-items: center; justify-content: center; z-index: 999; }
+        .loading-overlay.hidden { display: none; }
+
+        /* CONFIRM MODAL */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; transition: opacity 0.2s; }
+        .modal-overlay.show { opacity: 1; }
+        .modal-box { background: var(--white); border-radius: 20px; padding: 35px 30px; max-width: 380px; width: 90%; text-align: center; transform: scale(0.9); transition: transform 0.2s; }
+        .modal-overlay.show .modal-box { transform: scale(1); }
+        .modal-icon { font-size: 40px; margin-bottom: 16px; }
+        .modal-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+        .modal-text { font-size: 14px; color: var(--gray); margin-bottom: 24px; line-height: 1.5; }
+        .modal-buttons { display: flex; gap: 10px; }
+        .modal-buttons button { flex: 1; padding: 14px; border: none; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+        .modal-btn-cancel { background: var(--light-gray); color: var(--dark); }
+        .modal-btn-cancel:hover { background: #e0e0e0; }
+        .modal-btn-confirm { background: var(--red); color: white; }
+        .modal-btn-confirm:hover { background: #c0392b; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #eee; border-top-color: var(--green); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--gray); font-size: 14px; }
+
+        /* CRM */
+        .crm-toolbar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+        .crm-search { flex: 1; min-width: 200px; padding: 12px 18px; border: 2px solid #eee; border-radius: 12px; font-size: 14px; font-family: inherit; transition: border-color 0.3s; }
+        .crm-search:focus { outline: none; border-color: var(--green); }
+        .crm-filter { padding: 12px 18px; border: 2px solid #eee; border-radius: 12px; font-size: 14px; font-family: inherit; background: var(--white); cursor: pointer; transition: border-color 0.3s; }
+        .crm-filter:focus { outline: none; border-color: var(--green); }
+        .crm-stats { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+        .crm-stat { flex: 1; min-width: 120px; background: var(--white); border-radius: 14px; padding: 18px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f0f0f0; }
+        .crm-stat-num { font-size: 28px; font-weight: 800; color: var(--green); }
+        .crm-stat-label { font-size: 11px; color: var(--gray); font-weight: 600; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .crm-stat.paid .crm-stat-num { color: var(--green); }
+        .crm-stat.pending .crm-stat-num { color: #F59E0B; }
+        .crm-stat.total .crm-stat-num { color: var(--dark); }
+        .crm-table-wrap { overflow-x: auto; background: var(--white); border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f0f0f0; }
+        .crm-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 700px; }
+        .crm-table th { background: var(--light-gray); padding: 14px 16px; text-align: left; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray); border-bottom: 2px solid #eee; white-space: nowrap; cursor: pointer; user-select: none; }
+        .crm-table th:hover { color: var(--dark); }
+        .crm-table td { padding: 14px 16px; border-bottom: 1px solid #f5f5f5; vertical-align: top; }
+        .crm-table tr:last-child td { border-bottom: none; }
+        .crm-table tr:hover td { background: #fafffe; }
+        .crm-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+        .crm-badge.paid { background: var(--green-light); color: #558B2F; }
+        .crm-badge.pending { background: #FEF3C7; color: #92400E; }
+        .crm-client-name { font-weight: 700; color: var(--dark); }
+        .crm-client-contact { font-size: 12px; color: var(--gray); margin-top: 2px; }
+        .crm-program-name { font-weight: 600; }
+        .crm-price { font-weight: 700; color: var(--green); }
+        .crm-price-orig { text-decoration: line-through; color: #ccc; font-size: 11px; margin-left: 4px; font-weight: 400; }
+        .crm-date { font-size: 12px; color: var(--gray); }
+        .crm-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+        .crm-btn { background: none; border: 1.5px solid #eee; color: var(--gray); padding: 6px 12px; border-radius: 8px; font-weight: 600; font-size: 11px; cursor: pointer; font-family: inherit; transition: all 0.2s; white-space: nowrap; }
+        .crm-btn:hover { border-color: var(--green); color: var(--green); background: var(--green-light); }
+        .crm-btn.danger:hover { border-color: var(--red); color: var(--red); background: #fff5f5; }
+        .crm-btn.paid-btn { border-color: var(--green); color: var(--green); background: var(--green-light); }
+        .crm-note { margin-top: 6px; font-size: 11px; color: #F59E0B; font-style: italic; }
+        .crm-note-input { width: 100%; padding: 8px 12px; border: 2px solid #eee; border-radius: 8px; font-size: 12px; font-family: inherit; margin-top: 6px; resize: none; }
+        .crm-note-input:focus { outline: none; border-color: var(--green); }
+        .crm-empty { text-align: center; padding: 60px 20px; color: var(--gray); }
+        .crm-empty-icon { font-size: 48px; margin-bottom: 16px; }
+        .crm-empty-text { font-size: 15px; font-weight: 600; }
+        .crm-pagination { display: flex; justify-content: center; gap: 6px; margin-top: 20px; }
+        .crm-page-btn { padding: 8px 14px; border: 1.5px solid #eee; border-radius: 8px; background: var(--white); font-weight: 600; font-size: 13px; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+        .crm-page-btn:hover, .crm-page-btn.active { border-color: var(--green); color: var(--green); background: var(--green-light); }
+
+        @media (max-width: 500px) {
+            .login-card { padding: 35px 25px; }
+            .pin-inputs input { width: 42px; height: 50px; font-size: 20px; }
+            .tabs { padding: 12px 16px 0; }
+            .tab { padding: 10px 16px; font-size: 13px; }
+            .tab-content { padding: 16px; }
+            .program-edit-row { flex-direction: column; }
+            .sale-row { flex-direction: column; align-items: stretch; }
+            .add-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="decor decor-1"></div>
+    <div class="decor decor-2"></div>
+    <div class="decor decor-3"></div>
+    <div class="decor decor-4"></div>
+    <div class="decor decor-5"></div>
+    <div class="decor decor-6"></div>
+    <div class="decor decor-7"></div>
+    <div class="decor decor-8"></div>
+    <div class="decor-ring decor-ring-1"></div>
+    <div class="decor-ring decor-ring-2"></div>
+    <div class="decor-ring decor-ring-3"></div>
+    <div class="decor-dots decor-dots-1"></div>
+    <div class="decor-dots decor-dots-2"></div>
+
+    <div class="login-page" id="loginPage">
+        <div class="login-card">
+            <h1>Панель управления</h1>
+            <p>Войдите чтобы управлять сайтом</p>
+            <div class="login-error" id="loginError"></div>
+            <div class="field">
+                <label>Email</label>
+                <input type="email" id="loginEmail" placeholder="Ваш email" autocomplete="email">
+            </div>
+            <div class="field">
+                <label>Пароль</label>
+                <input type="password" id="loginPassword" placeholder="Ваш пароль" autocomplete="current-password">
+            </div>
+            <div class="field">
+                <label>PIN-код <span class="field-hint">(6 цифр)</span></label>
+                <div class="pin-inputs" id="pinInputs">
+                    <input type="text" maxlength="1" inputmode="numeric" data-pin="0">
+                    <input type="text" maxlength="1" inputmode="numeric" data-pin="1">
+                    <input type="text" maxlength="1" inputmode="numeric" data-pin="2">
+                    <input type="text" maxlength="1" inputmode="numeric" data-pin="3">
+                    <input type="text" maxlength="1" inputmode="numeric" data-pin="4">
+                    <input type="text" maxlength="1" inputmode="numeric" data-pin="5">
+                </div>
+            </div>
+            <button class="btn" id="loginBtn" onclick="doLogin()">Войти</button>
+        </div>
+    </div>
+
+    <div class="dashboard" id="dashboard">
+        <div class="dash-header">
+            <h2><span>SV</span> Panel</h2>
+            <button class="dash-logout" onclick="doLogout()">Выйти</button>
+        </div>
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('clients', this)">Клиенты</button>
+            <button class="tab" onclick="switchTab('programs', this)">Программы</button>
+            <button class="tab" onclick="switchTab('promos', this)">Промокоды</button>
+        </div>
+
+        <div class="tab-content active" id="tab-clients" style="max-width: 1100px;">
+            <div class="crm-stats" id="crmStats"></div>
+            <div class="crm-toolbar">
+                <input type="text" class="crm-search" id="crmSearch" placeholder="Поиск по имени, телефону, email..." oninput="renderClients()">
+                <select class="crm-filter" id="crmFilterProgram" onchange="renderClients()">
+                    <option value="">Все программы</option>
+                </select>
+                <select class="crm-filter" id="crmFilterStatus" onchange="renderClients()">
+                    <option value="">Все статусы</option>
+                    <option value="paid">Оплачено</option>
+                    <option value="pending">Ожидает</option>
+                </select>
+            </div>
+            <div id="crmTableWrap"></div>
+            <div class="crm-pagination" id="crmPagination"></div>
+        </div>
+
+        <div class="tab-content" id="tab-programs">
+            <div class="section-hint">
+                Здесь можно изменить программы, цены и включить значок "СКИДКА". Также можно добавить новую программу.
+            </div>
+            <div id="statusPrograms" class="status-msg"></div>
+            <div id="programsList"></div>
+
+            <div class="add-section">
+                <h3>Добавить новую программу</h3>
+                <div class="add-row">
+                    <div class="field">
+                        <label>ID программы <span class="field-hint">(латиницей, без пробелов)</span></label>
+                        <input type="text" id="newProgId" placeholder="detox7">
+                    </div>
+                    <div class="field">
+                        <label>Название</label>
+                        <input type="text" id="newProgName" placeholder="Детокс 7 дней">
+                    </div>
+                    <div class="field">
+                        <label>Цена (руб.)</label>
+                        <input type="number" id="newProgPrice" placeholder="1500" min="0">
+                    </div>
+                    <div class="field">
+                        <label>Иконка <span class="field-hint">(эмодзи)</span></label>
+                        <input type="text" id="newProgIcon" placeholder="🔥" maxlength="4">
+                    </div>
+                    <div class="field-full">
+                        <button class="btn" onclick="addProgram()">Добавить программу</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="tab-promos">
+            <div class="section-hint">
+                Промокоды дают скидку клиентам при заказе. Можно задать фиксированную скидку (например -500 руб) или процент (например -10%).
+            </div>
+            <div id="statusPromos" class="status-msg"></div>
+            <div id="promosList"></div>
+            <div class="add-section">
+                <h3>Добавить промокод</h3>
+                <div class="add-row">
+                    <div class="field">
+                        <label>Кодовое слово</label>
+                        <input type="text" id="newPromoCode" placeholder="ВЕСНА" style="text-transform: uppercase;">
+                    </div>
+                    <div class="field">
+                        <label>Тип скидки</label>
+                        <select id="newPromoType">
+                            <option value="fixed">Фиксированная (руб.)</option>
+                            <option value="percent">Процент (%)</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Размер скидки <span class="field-hint" id="promoValueHint">(в рублях)</span></label>
+                        <input type="number" id="newPromoValue" placeholder="500" min="1">
+                    </div>
+                    <div class="field">
+                        <label>Для программы <span class="field-hint">(пусто = для всех)</span></label>
+                        <select id="newPromoProgram"><option value="">Все программы</option></select>
+                    </div>
+                    <div class="field-full">
+                        <button class="btn" onclick="addPromo()">Добавить промокод</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="loading-overlay hidden" id="loadingOverlay"><div class="spinner"></div></div>
+
+        <div class="modal-overlay" id="confirmModal" style="display:none;">
+            <div class="modal-box">
+                <div class="modal-icon" id="modalIcon">🗑️</div>
+                <div class="modal-title" id="modalTitle">Удалить?</div>
+                <div class="modal-text" id="modalText">Это действие нельзя отменить</div>
+                <div class="modal-buttons">
+                    <button class="modal-btn-cancel" onclick="closeModal()">Отмена</button>
+                    <button class="modal-btn-confirm" id="modalConfirmBtn">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api/admin';
+        let authToken = localStorage.getItem('admin_token') || '';
+        let currentPrograms = {};
+        let currentPromos = {};
+        let currentOrders = [];
+        let crmPage = 1;
+        const CRM_PER_PAGE = 20;
+
+        // PIN
+        document.querySelectorAll('.pin-inputs input').forEach((input, i, inputs) => {
+            input.addEventListener('input', e => { e.target.value = e.target.value.replace(/\D/g, ''); if (e.target.value && i < inputs.length - 1) inputs[i+1].focus(); });
+            input.addEventListener('keydown', e => { if (e.key === 'Backspace' && !e.target.value && i > 0) inputs[i-1].focus(); });
+            input.addEventListener('paste', e => { e.preventDefault(); const p = (e.clipboardData.getData('text')||'').replace(/\D/g,'').slice(0,6); p.split('').forEach((c,j) => { if(inputs[j]) inputs[j].value=c; }); });
+        });
+        function getPin() { return Array.from(document.querySelectorAll('.pin-inputs input')).map(i=>i.value).join(''); }
+
+        document.getElementById('newPromoType').addEventListener('change', e => {
+            document.getElementById('promoValueHint').textContent = e.target.value === 'fixed' ? '(в рублях)' : '(процент, например 10)';
+        });
+
+        // AUTH
+        async function doLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const pin = getPin();
+            const err = document.getElementById('loginError');
+            if (!email || !password || pin.length !== 6) { err.textContent = 'Заполните все поля'; err.style.display = 'block'; return; }
+            const btn = document.getElementById('loginBtn');
+            btn.disabled = true; btn.textContent = 'Входим...';
+            try {
+                const res = await fetch(`${API_BASE}/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password, pin }) });
+                const data = await res.json();
+                if (data.success) { authToken = data.token; localStorage.setItem('admin_token', authToken); showDashboard(); }
+                else { err.textContent = data.error || 'Неверные данные'; err.style.display = 'block'; }
+            } catch (e) { err.textContent = 'Ошибка соединения'; err.style.display = 'block'; }
+            btn.disabled = false; btn.textContent = 'Войти';
+        }
+        function doLogout() { authToken = ''; localStorage.removeItem('admin_token'); document.getElementById('dashboard').style.display = 'none'; document.getElementById('loginPage').style.display = 'flex'; }
+        document.querySelectorAll('#loginEmail, #loginPassword').forEach(el => el.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); }));
+
+        // DASHBOARD
+        async function showDashboard() { document.getElementById('loginPage').style.display = 'none'; document.getElementById('dashboard').style.display = 'block'; await loadData(); }
+        function showLoading(s) { document.getElementById('loadingOverlay').classList.toggle('hidden', !s); }
+
+        async function apiCall(endpoint, method = 'GET', body = null) {
+            try {
+                const opts = { method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` } };
+                if (body) opts.body = JSON.stringify(body);
+                const res = await fetch(`${API_BASE}/${endpoint}`, opts);
+                if (res.status === 401) { doLogout(); return null; }
+                const text = await res.text();
+                try { return JSON.parse(text); } catch { return { success: false, error: 'Server error' }; }
+            } catch (e) {
+                return { success: false, error: 'Connection error' };
+            }
+        }
+
+        async function loadData() {
+            showLoading(true);
+            const data = await apiCall('data');
+            showLoading(false);
+            if (!data || !data.success) return;
+            currentPrograms = data.programs || {};
+            currentPromos = data.promos || {};
+            currentOrders = data.orders || [];
+            renderPrograms(); renderPromos(); populateProgramSelect(); populateCrmFilters(); renderCrmStats(); renderClients();
+        }
+
+        // PROGRAMS
+        function renderPrograms() {
+            const c = document.getElementById('programsList');
+            const entries = Object.entries(currentPrograms);
+            if (!entries.length) { c.innerHTML = '<div class="empty-state">Программ пока нет. Добавьте первую!</div>'; return; }
+            c.innerHTML = entries.map(([id, p]) => {
+                const hasSale = p.sale && p.saleText;
+                return `
+                <div class="program-card">
+                    <div class="program-card-header">
+                        <div class="program-card-name">${esc(p.name)}${hasSale ? `<span class="program-card-sale">${esc(p.saleText)}</span>` : ''}</div>
+                        <div class="program-card-price">${p.price.toLocaleString('ru-RU')} &#8381;</div>
+                    </div>
+                    <div class="program-card-id">ID: ${esc(id)}${p.icon ? ' | ' + p.icon : ''}</div>
+                    <div class="program-edit-row">
+                        <div class="field"><label>Название</label><input type="text" id="pn-${id}" value="${esc(p.name)}"></div>
+                        <div class="field"><label>Цена (руб.)</label><input type="number" id="pp-${id}" value="${p.price}" min="0"></div>
+                        <button class="btn btn-small" onclick="saveProgram('${id}')">Сохранить</button>
+                    </div>
+                    <div class="sale-row">
+                        <label class="sale-toggle"><input type="checkbox" id="ps-${id}" ${hasSale ? 'checked' : ''} onchange="toggleSale('${id}')"> Значок СКИДКА</label>
+                        <div class="field" style="flex:1;margin-bottom:0"><input type="text" id="pt-${id}" value="${esc(p.saleText || 'СКИДКА')}" placeholder="Текст значка" style="padding:10px 14px;font-size:13px;"></div>
+                        <button class="delete-btn" onclick="deleteProgram('${id}')">Удалить</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function toggleSale(id) {
+            const checked = document.getElementById(`ps-${id}`).checked;
+            if (checked) {
+                currentPrograms[id].sale = true;
+                currentPrograms[id].saleText = document.getElementById(`pt-${id}`).value || 'СКИДКА';
+            } else {
+                currentPrograms[id].sale = false;
+                currentPrograms[id].saleText = '';
+            }
+        }
+
+        async function saveProgram(id) {
+            const name = document.getElementById(`pn-${id}`).value.trim();
+            const price = parseInt(document.getElementById(`pp-${id}`).value);
+            const sale = document.getElementById(`ps-${id}`).checked;
+            const saleText = document.getElementById(`pt-${id}`).value.trim();
+            if (!name || isNaN(price) || price < 0) { showStatus('programs', 'Заполните название и цену', 'error'); return; }
+            showLoading(true);
+            const data = await apiCall('data', 'PUT', { action: 'updateProgram', id, name, price, sale, saleText: sale ? saleText : '', icon: currentPrograms[id]?.icon || '' });
+            showLoading(false);
+            if (data?.success) { showStatus('programs', 'Сохранено!', 'success'); currentPrograms[id] = { name, price, sale, saleText: sale ? saleText : '', icon: currentPrograms[id]?.icon || '' }; renderPrograms(); }
+            else showStatus('programs', data?.error || 'Ошибка', 'error');
+        }
+
+        async function addProgram() {
+            const id = document.getElementById('newProgId').value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+            const name = document.getElementById('newProgName').value.trim();
+            const price = parseInt(document.getElementById('newProgPrice').value);
+            const icon = document.getElementById('newProgIcon').value.trim();
+            if (!id || !name || isNaN(price) || price < 0) { showStatus('programs', 'Заполните ID, название и цену', 'error'); return; }
+            if (currentPrograms[id]) { showStatus('programs', 'Программа с таким ID уже есть', 'error'); return; }
+            showLoading(true);
+            const data = await apiCall('data', 'PUT', { action: 'addProgram', id, name, price, icon, sale: false, saleText: '' });
+            showLoading(false);
+            if (data?.success) {
+                showStatus('programs', 'Программа добавлена!', 'success');
+                currentPrograms[id] = { name, price, icon, sale: false, saleText: '' };
+                document.getElementById('newProgId').value = '';
+                document.getElementById('newProgName').value = '';
+                document.getElementById('newProgPrice').value = '';
+                document.getElementById('newProgIcon').value = '';
+                renderPrograms(); populateProgramSelect();
+            } else showStatus('programs', data?.error || 'Ошибка', 'error');
+        }
+
+        async function deleteProgram(id) {
+            const confirmed = await showConfirm('Удалить программу?', `"${currentPrograms[id]?.name}" будет удалена. Это нельзя отменить.`);
+            if (!confirmed) return;
+            showLoading(true);
+            const data = await apiCall('data', 'PUT', { action: 'deleteProgram', id });
+            showLoading(false);
+            if (data?.success) { showStatus('programs', 'Удалено', 'success'); delete currentPrograms[id]; renderPrograms(); populateProgramSelect(); }
+            else showStatus('programs', data?.error || 'Ошибка', 'error');
+        }
+
+        // PROMOS
+        function renderPromos() {
+            const c = document.getElementById('promosList');
+            const entries = Object.entries(currentPromos);
+            if (!entries.length) { c.innerHTML = '<div class="empty-state">Промокодов пока нет. Добавьте первый!</div>'; return; }
+            c.innerHTML = entries.map(([code, p]) => {
+                const disc = p.type === 'fixed' ? `-${p.value} руб.` : `-${p.value}%`;
+                const progs = p.programs?.length ? `Только для: ${p.programs.map(x => currentPrograms[x]?.name || x).join(', ')}` : 'Для всех программ';
+                return `<div class="promo-card"><div class="promo-card-header"><div class="promo-card-code">${esc(code)}</div><div class="promo-card-discount">${disc}</div></div><div class="promo-card-programs">${progs}</div><button class="delete-btn" onclick="deletePromo('${esc(code)}')">Удалить</button></div>`;
+            }).join('');
+        }
+
+        async function addPromo() {
+            const code = document.getElementById('newPromoCode').value.trim().toUpperCase();
+            const type = document.getElementById('newPromoType').value;
+            const value = parseInt(document.getElementById('newPromoValue').value);
+            const program = document.getElementById('newPromoProgram').value;
+            if (!code || isNaN(value) || value <= 0) { showStatus('promos', 'Заполните кодовое слово и размер скидки', 'error'); return; }
+            if (type === 'percent' && value > 99) { showStatus('promos', 'Процент не может быть больше 99', 'error'); return; }
+            showLoading(true);
+            const data = await apiCall('data', 'PUT', { action: 'addPromo', code, type, value, programs: program ? [program] : [] });
+            showLoading(false);
+            if (data?.success) { showStatus('promos', 'Промокод добавлен!', 'success'); document.getElementById('newPromoCode').value = ''; document.getElementById('newPromoValue').value = ''; currentPromos[code] = { type, value, programs: program ? [program] : [] }; renderPromos(); }
+            else showStatus('promos', data?.error || 'Ошибка', 'error');
+        }
+
+        async function deletePromo(code) {
+            const confirmed = await showConfirm('Удалить промокод?', `Промокод "${code}" будет удален. Это нельзя отменить.`);
+            if (!confirmed) return;
+            showLoading(true);
+            const data = await apiCall('data', 'PUT', { action: 'deletePromo', code });
+            showLoading(false);
+            if (data?.success) { showStatus('promos', 'Удалено', 'success'); delete currentPromos[code]; renderPromos(); }
+            else showStatus('promos', data?.error || 'Ошибка', 'error');
+        }
+
+        // HELPERS
+        function switchTab(name, el) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById(`tab-${name}`).classList.add('active');
+            el.classList.add('active');
+        }
+        function showStatus(tab, msg, type) {
+            const el = document.getElementById(`status${tab.charAt(0).toUpperCase()+tab.slice(1)}`);
+            el.textContent = msg; el.className = `status-msg ${type}`;
+            setTimeout(() => { el.className = 'status-msg'; }, 4000);
+        }
+        function populateProgramSelect() {
+            const s = document.getElementById('newPromoProgram');
+            s.innerHTML = '<option value="">Все программы</option>';
+            Object.entries(currentPrograms).forEach(([id, p]) => { s.innerHTML += `<option value="${id}">${esc(p.name)}</option>`; });
+        }
+        function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+        // CONFIRM MODAL
+        let modalResolve = null;
+        function showConfirm(title, text) {
+            return new Promise(resolve => {
+                modalResolve = resolve;
+                document.getElementById('modalTitle').textContent = title;
+                document.getElementById('modalText').textContent = text;
+                const modal = document.getElementById('confirmModal');
+                modal.style.display = 'flex';
+                requestAnimationFrame(() => modal.classList.add('show'));
+                document.getElementById('modalConfirmBtn').onclick = () => { closeModal(); resolve(true); };
+            });
+        }
+        function closeModal() {
+            const modal = document.getElementById('confirmModal');
+            modal.classList.remove('show');
+            setTimeout(() => { modal.style.display = 'none'; }, 200);
+            if (modalResolve) { modalResolve(false); modalResolve = null; }
+        }
+        document.getElementById('confirmModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+        // CRM FUNCTIONS
+        function populateCrmFilters() {
+            const s = document.getElementById('crmFilterProgram');
+            s.innerHTML = '<option value="">Все программы</option>';
+            const programIds = new Set(currentOrders.map(o => o.program));
+            programIds.forEach(id => {
+                const name = currentPrograms[id]?.name || id;
+                s.innerHTML += `<option value="${id}">${esc(name)}</option>`;
+            });
+        }
+
+        function renderCrmStats() {
+            const total = currentOrders.length;
+            const paid = currentOrders.filter(o => o.status === 'paid').length;
+            const pending = currentOrders.filter(o => o.status === 'pending').length;
+            const revenue = currentOrders.filter(o => o.status === 'paid').reduce((sum, o) => sum + (o.finalPrice || 0), 0);
+            document.getElementById('crmStats').innerHTML = `
+                <div class="crm-stat total"><div class="crm-stat-num">${total}</div><div class="crm-stat-label">Всего заказов</div></div>
+                <div class="crm-stat paid"><div class="crm-stat-num">${paid}</div><div class="crm-stat-label">Оплачено</div></div>
+                <div class="crm-stat pending"><div class="crm-stat-num">${pending}</div><div class="crm-stat-label">Ожидает</div></div>
+                <div class="crm-stat paid"><div class="crm-stat-num">${revenue.toLocaleString('ru-RU')} &#8381;</div><div class="crm-stat-label">Выручка</div></div>
+            `;
+        }
+
+        function getFilteredOrders() {
+            const search = document.getElementById('crmSearch').value.toLowerCase().trim();
+            const filterProgram = document.getElementById('crmFilterProgram').value;
+            const filterStatus = document.getElementById('crmFilterStatus').value;
+            return currentOrders.filter(o => {
+                if (filterProgram && o.program !== filterProgram) return false;
+                if (filterStatus && o.status !== filterStatus) return false;
+                if (search) {
+                    const haystack = `${o.name} ${o.phone} ${o.email} ${o.telegram} ${o.orderId} ${o.note || ''}`.toLowerCase();
+                    if (!haystack.includes(search)) return false;
+                }
+                return true;
+            });
+        }
+
+        function renderClients() {
+            const filtered = getFilteredOrders();
+            const totalPages = Math.max(1, Math.ceil(filtered.length / CRM_PER_PAGE));
+            if (crmPage > totalPages) crmPage = totalPages;
+            const start = (crmPage - 1) * CRM_PER_PAGE;
+            const pageOrders = filtered.slice(start, start + CRM_PER_PAGE);
+            const wrap = document.getElementById('crmTableWrap');
+
+            if (!filtered.length) {
+                wrap.innerHTML = `<div class="crm-empty"><div class="crm-empty-icon">📋</div><div class="crm-empty-text">${currentOrders.length ? 'Ничего не найдено' : 'Заказов пока нет'}</div></div>`;
+                document.getElementById('crmPagination').innerHTML = '';
+                return;
+            }
+
+            wrap.innerHTML = `<div class="crm-table-wrap"><table class="crm-table">
+                <thead><tr>
+                    <th>Клиент</th>
+                    <th>Программа</th>
+                    <th>Сумма</th>
+                    <th>Статус</th>
+                    <th>Дата</th>
+                    <th>Действия</th>
+                </tr></thead>
+                <tbody>${pageOrders.map(o => {
+                    const date = new Date(o.createdAt);
+                    const dateStr = date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit' });
+                    const timeStr = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                    const progName = o.programName || currentPrograms[o.program]?.name || o.program;
+                    const hasDiscount = o.discount > 0;
+                    const noteHtml = o.note ? `<div class="crm-note">📝 ${esc(o.note)}</div>` : '';
+                    return `<tr>
+                        <td>
+                            <div class="crm-client-name">${esc(o.name)}</div>
+                            <div class="crm-client-contact">📱 ${esc(o.phone)}</div>
+                            <div class="crm-client-contact">✉️ ${esc(o.email)}</div>
+                            ${o.telegram ? `<div class="crm-client-contact">💬 ${esc(o.telegram)}</div>` : ''}
+                            ${noteHtml}
+                        </td>
+                        <td><div class="crm-program-name">${esc(progName)}</div>${o.promoCode ? `<div class="crm-client-contact">🏷️ ${esc(o.promoCode)}</div>` : ''}</td>
+                        <td><div class="crm-price">${o.finalPrice?.toLocaleString('ru-RU')} &#8381;</div>${hasDiscount ? `<span class="crm-price-orig">${o.originalPrice?.toLocaleString('ru-RU')} &#8381;</span>` : ''}</td>
+                        <td><span class="crm-badge ${o.status}">${o.status === 'paid' ? 'Оплачено' : 'Ожидает'}</span></td>
+                        <td><div class="crm-date">${dateStr}</div><div class="crm-date">${timeStr}</div></td>
+                        <td><div class="crm-actions">
+                            ${o.status === 'pending' ? `<button class="crm-btn paid-btn" onclick="markPaid('${o.orderId}')">✓ Оплачено</button>` : ''}
+                            <button class="crm-btn" onclick="addOrderNote('${o.orderId}')">📝</button>
+                            <button class="crm-btn danger" onclick="deleteOrder('${o.orderId}')">✕</button>
+                        </div></td>
+                    </tr>`;
+                }).join('')}</tbody>
+            </table></div>`;
+
+            // Pagination
+            const pag = document.getElementById('crmPagination');
+            if (totalPages <= 1) { pag.innerHTML = ''; return; }
+            let pagHtml = '';
+            for (let i = 1; i <= totalPages; i++) {
+                pagHtml += `<button class="crm-page-btn ${i === crmPage ? 'active' : ''}" onclick="crmPage=${i};renderClients()">${i}</button>`;
+            }
+            pag.innerHTML = pagHtml;
+        }
+
+        async function markPaid(orderId) {
+            showLoading(true);
+            const data = await apiCall('data', 'PUT', { action: 'updateOrderStatus', orderId, status: 'paid' });
+            showLoading(false);
+            if (data?.success) {
+                const order = currentOrders.find(o => o.orderId === orderId);
+                if (order) { order.status = 'paid'; order.paidAt = new Date().toISOString(); }
+                renderCrmStats(); renderClients();
+            }
+        }
+
+        async function deleteOrder(orderId) {
+            const confirmed = await showConfirm('Удалить заказ?', `Заказ ${orderId} будет удален. Это нельзя отменить.`);
+            if (!confirmed) return;
+            showLoading(true);
+            const data = await apiCall('data', 'PUT', { action: 'deleteOrder', orderId });
+            showLoading(false);
+            if (data?.success) {
+                currentOrders = currentOrders.filter(o => o.orderId !== orderId);
+                renderCrmStats(); renderClients(); populateCrmFilters();
+            }
+        }
+
+        async function addOrderNote(orderId) {
+            const order = currentOrders.find(o => o.orderId === orderId);
+            const note = prompt('Заметка:', order?.note || '');
+            if (note === null) return;
+            showLoading(true);
+            const data = await apiCall('data', 'PUT', { action: 'addNote', orderId, note });
+            showLoading(false);
+            if (data?.success) {
+                if (order) order.note = note;
+                renderClients();
+            }
+        }
+
+        if (authToken) showDashboard();
+    </script>
+</body>
+</html>

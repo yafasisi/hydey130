@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "WebFetch(domain:hydey130-theta.vercel.app)"
+    ],
+    "additionalDirectories": [
+      "/Users/stefaniafrolova/Documents/projects/svetapush"
+    ]
+  }
+}
