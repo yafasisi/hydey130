@@ -1175,11 +1175,9 @@
                 aboutPhoto: 'svetaphotoes/after/1.JPG'
             };
             for (let i = 1; i <= 6; i++) defaultPhotos['do' + i] = `svetaphotoes/do/${i}.JPG`;
-            const afterExts2 = afterExts;
-            for (let i = 1; i <= 10; i++) defaultPhotos['after' + i] = `svetaphotoes/after/${i}.${afterExts2[i]}`;
-            defaultPhotosMap = { ...defaultPhotos };
             const afterExts = {1:'JPG',2:'jpg',3:'jpg',4:'jpg',5:'PNG',6:'PNG',7:'PNG',8:'PNG',9:'PNG',10:'PNG'};
             for (let i = 1; i <= 10; i++) defaultPhotos['after' + i] = `svetaphotoes/after/${i}.${afterExts[i]}`;
+            defaultPhotosMap = { ...defaultPhotos };
 
             // Render Do/After grids
             ['do','after'].forEach(prefix => {
