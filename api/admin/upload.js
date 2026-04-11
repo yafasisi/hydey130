@@ -11,7 +11,7 @@ module.exports = async function handler(req, res) {
 
         const filename = req.query.filename || 'photo.jpg';
 
-        const blob = await put(filename, req.body, {
+        const blob = await put(filename, req, {
             access: 'public',
             addRandomSuffix: true,
         });
