@@ -3,9 +3,10 @@
   "version": "2.0.0",
   "private": true,
   "dependencies": {
+    "@upstash/redis": "^1.34.0",
+    "@vercel/blob": "^2.3.3",
     "axios": "^1.6.2",
     "nodemailer": "^6.9.8",
-    "uuid": "^9.0.0",
-    "@upstash/redis": "^1.34.0"
+    "uuid": "^9.0.0"
   }
 }

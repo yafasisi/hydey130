@@ -242,6 +242,18 @@
         .analytics-full { grid-column: 1 / -1; }
         @media (max-width: 700px) { .analytics-grid { grid-template-columns: 1fr; } .analytics-kpi { grid-template-columns: 1fr 1fr; } }
 
+        /* PHOTO UPLOAD */
+        .photo-upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .photo-upload-item { position: relative; }
+        .photo-upload-item label { display: block; font-weight: 600; font-size: 13px; margin-bottom: 8px; }
+        .photo-upload-preview { width: 100%; height: 160px; border-radius: 14px; border: 2px dashed #ddd; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; transition: all 0.2s; background: var(--light-gray); position: relative; }
+        .photo-upload-preview:hover { border-color: var(--green); background: var(--green-light); }
+        .photo-upload-preview img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
+        .photo-upload-preview .upload-placeholder { text-align: center; color: var(--gray); font-size: 12px; font-weight: 600; }
+        .photo-upload-preview .upload-placeholder span { display: block; font-size: 28px; margin-bottom: 6px; }
+        .photo-upload-input { display: none; }
+        .photo-upload-status { font-size: 11px; color: var(--green); font-weight: 600; margin-top: 6px; text-align: center; }
+
         /* CLIENT TAGS */
         .crm-tag { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 10px; font-weight: 700; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.3px; margin-top: 4px; }
         .crm-tag.tag-new { background: #DBEAFE; color: #1E40AF; }
@@ -502,6 +514,36 @@
                 <div class="field"><label>Заголовок</label><textarea id="cnt-aboutTitle" rows="2" style="width:100%;padding:14px 18px;border:2px solid #eee;border-radius:12px;font-size:14px;font-family:inherit;resize:vertical;" placeholder="Привет! Я Света — и я знаю, как тяжело худеть"></textarea></div>
                 <div class="field"><label>Текст 1</label><textarea id="cnt-aboutText1" rows="3" style="width:100%;padding:14px 18px;border:2px solid #eee;border-radius:12px;font-size:14px;font-family:inherit;resize:vertical;" placeholder="Потому что сама прошла этот путь..."></textarea></div>
                 <div class="field"><label>Текст 2</label><textarea id="cnt-aboutText2" rows="3" style="width:100%;padding:14px 18px;border:2px solid #eee;border-radius:12px;font-size:14px;font-family:inherit;resize:vertical;" placeholder="Мой подход — это не диета на неделю..."></textarea></div>
+            </div>
+
+            <div class="add-section">
+                <h3>📷 Фото на сайте</h3>
+                <div class="photo-upload-grid">
+                    <div class="photo-upload-item">
+                        <label>Главное фото (Hero)</label>
+                        <div class="photo-upload-preview" onclick="document.getElementById('upload-heroPhoto').click()">
+                            <div class="upload-placeholder" id="preview-heroPhoto"><span>📷</span>Нажми чтобы загрузить</div>
+                        </div>
+                        <input type="file" class="photo-upload-input" id="upload-heroPhoto" accept="image/*" onchange="uploadPhoto(this, 'heroPhoto')">
+                        <div class="photo-upload-status" id="status-heroPhoto"></div>
+                    </div>
+                    <div class="photo-upload-item">
+                        <label>Фото «Обо мне»</label>
+                        <div class="photo-upload-preview" onclick="document.getElementById('upload-aboutPhoto').click()">
+                            <div class="upload-placeholder" id="preview-aboutPhoto"><span>📷</span>Нажми чтобы загрузить</div>
+                        </div>
+                        <input type="file" class="photo-upload-input" id="upload-aboutPhoto" accept="image/*" onchange="uploadPhoto(this, 'aboutPhoto')">
+                        <div class="photo-upload-status" id="status-aboutPhoto"></div>
+                    </div>
+                    <div class="photo-upload-item">
+                        <label>Фото «До/После»</label>
+                        <div class="photo-upload-preview" onclick="document.getElementById('upload-baPhoto').click()">
+                            <div class="upload-placeholder" id="preview-baPhoto"><span>📷</span>Нажми чтобы загрузить</div>
+                        </div>
+                        <input type="file" class="photo-upload-input" id="upload-baPhoto" accept="image/*" onchange="uploadPhoto(this, 'baPhoto')">
+                        <div class="photo-upload-status" id="status-baPhoto"></div>
+                    </div>
+                </div>
             </div>
 
             <button class="btn" onclick="saveContentData()" style="margin-top:20px">Сохранить контент</button>
@@ -1068,10 +1110,50 @@
 
         // CONTENT MANAGEMENT
         const CONTENT_FIELDS = ['phone','telegram','heroSubtitle','heroDescription','aboutTitle','aboutText1','aboutText2','statYears','statClients','statKg'];
+        const PHOTO_FIELDS = ['heroPhoto','aboutPhoto','baPhoto'];
+        let photoUrls = {};
+
+        async function uploadPhoto(input, field) {
+            const file = input.files[0];
+            if (!file) return;
+            const statusEl = document.getElementById('status-' + field);
+            const previewEl = document.getElementById('preview-' + field);
+            statusEl.textContent = 'Загрузка...';
+            statusEl.style.color = 'var(--gray)';
+            try {
+                const res = await fetch(`${API_BASE}/upload?filename=${encodeURIComponent(file.name)}`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${authToken}` },
+                    body: file
+                });
+                const text = await res.text();
+                let data;
+                try { data = JSON.parse(text); } catch { data = { success: false }; }
+                if (data.success && data.url) {
+                    photoUrls[field] = data.url;
+                    previewEl.innerHTML = `<img src="${data.url}">`;
+                    statusEl.textContent = '✓ Загружено';
+                    statusEl.style.color = 'var(--green)';
+                } else {
+                    statusEl.textContent = '✗ Ошибка: ' + (data.error || 'Попробуй еще');
+                    statusEl.style.color = 'var(--red)';
+                }
+            } catch (e) {
+                statusEl.textContent = '✗ Ошибка соединения';
+                statusEl.style.color = 'var(--red)';
+            }
+        }
         function loadContentFields(content) {
             CONTENT_FIELDS.forEach(f => {
                 const el = document.getElementById('cnt-' + f);
                 if (el && content[f]) { el.value = content[f]; if (el.tagName === 'TEXTAREA') el.textContent = content[f]; }
+            });
+            PHOTO_FIELDS.forEach(f => {
+                if (content[f]) {
+                    photoUrls[f] = content[f];
+                    const previewEl = document.getElementById('preview-' + f);
+                    if (previewEl) previewEl.innerHTML = `<img src="${content[f]}">`;
+                }
             });
         }
         async function saveContentData() {
@@ -1080,6 +1162,7 @@
                 const el = document.getElementById('cnt-' + f);
                 if (el) content[f] = el.value.trim();
             });
+            PHOTO_FIELDS.forEach(f => { if (photoUrls[f]) content[f] = photoUrls[f]; });
             showLoading(true);
             const data = await apiCall('data', 'PUT', { action: 'saveContent', content });
             showLoading(false);

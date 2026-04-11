@@ -3945,6 +3945,9 @@
                     if (statNums[0] && c.statYears) statNums[0].textContent = c.statYears;
                     if (statNums[1] && c.statClients) statNums[1].textContent = c.statClients;
                     if (statNums[2] && c.statKg) statNums[2].textContent = c.statKg;
+                    // Photos
+                    if (c.heroPhoto) { const heroImg = document.querySelector('.hero-photo'); if (heroImg) heroImg.src = c.heroPhoto; }
+                    if (c.aboutPhoto) { const aboutImg = document.querySelector('.about-image-wrapper img'); if (aboutImg) aboutImg.src = c.aboutPhoto; }
                 }
             } catch (e) {
                 console.error('Failed to load content:', e);
