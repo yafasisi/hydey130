@@ -243,10 +243,11 @@
         @media (max-width: 700px) { .analytics-grid { grid-template-columns: 1fr; } .analytics-kpi { grid-template-columns: 1fr 1fr; } }
 
         /* PHOTO UPLOAD */
-        .photo-upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .photo-upload-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .photo-upload-grid.grid-3 { grid-template-columns: repeat(3, 1fr); }
         .photo-upload-item { position: relative; }
         .photo-upload-item label { display: block; font-weight: 600; font-size: 13px; margin-bottom: 8px; }
-        .photo-upload-preview { width: 100%; height: 160px; border-radius: 14px; border: 2px dashed #ddd; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; transition: all 0.2s; background: var(--light-gray); position: relative; }
+        .photo-upload-preview { width: 100%; height: 240px; border-radius: 14px; border: 2px dashed #ddd; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; transition: all 0.2s; background: var(--light-gray); position: relative; }
         .photo-upload-preview:hover { border-color: var(--green); background: var(--green-light); }
         .photo-upload-preview img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
         .photo-upload-preview .upload-placeholder { text-align: center; color: var(--gray); font-size: 12px; font-weight: 600; }
@@ -517,7 +518,7 @@
             </div>
 
             <div class="add-section">
-                <h3>📷 Фото на сайте</h3>
+                <h3>📷 Главные фото</h3>
                 <div class="photo-upload-grid">
                     <div class="photo-upload-item">
                         <label>Главное фото (Hero)</label>
@@ -535,15 +536,17 @@
                         <input type="file" class="photo-upload-input" id="upload-aboutPhoto" accept="image/*" onchange="uploadPhoto(this, 'aboutPhoto')">
                         <div class="photo-upload-status" id="status-aboutPhoto"></div>
                     </div>
-                    <div class="photo-upload-item">
-                        <label>Фото «До/После»</label>
-                        <div class="photo-upload-preview" onclick="document.getElementById('upload-baPhoto').click()">
-                            <div class="upload-placeholder" id="preview-baPhoto"><span>📷</span>Нажми чтобы загрузить</div>
-                        </div>
-                        <input type="file" class="photo-upload-input" id="upload-baPhoto" accept="image/*" onchange="uploadPhoto(this, 'baPhoto')">
-                        <div class="photo-upload-status" id="status-baPhoto"></div>
-                    </div>
                 </div>
+            </div>
+
+            <div class="add-section">
+                <h3>📷 Фото ДО (клиенты)</h3>
+                <div class="photo-upload-grid grid-3" id="photosDoGrid"></div>
+            </div>
+
+            <div class="add-section">
+                <h3>📷 Фото ПОСЛЕ (результаты)</h3>
+                <div class="photo-upload-grid grid-3" id="photosAfterGrid"></div>
             </div>
 
             <button class="btn" onclick="saveContentData()" style="margin-top:20px">Сохранить контент</button>
@@ -1110,7 +1113,7 @@
 
         // CONTENT MANAGEMENT
         const CONTENT_FIELDS = ['phone','telegram','heroSubtitle','heroDescription','aboutTitle','aboutText1','aboutText2','statYears','statClients','statKg'];
-        const PHOTO_FIELDS = ['heroPhoto','aboutPhoto','baPhoto'];
+        const PHOTO_FIELDS = ['heroPhoto','aboutPhoto','do1','do2','do3','do4','do5','do6','after1','after2','after3','after4','after5','after6','after7','after8','after9','after10'];
         let photoUrls = {};
 
         async function uploadPhoto(input, field) {
@@ -1150,10 +1153,35 @@
             });
             const defaultPhotos = {
                 heroPhoto: 'svetaphotoes/after/10.PNG',
-                aboutPhoto: 'svetaphotoes/after/1.JPG',
-                baPhoto: 'svetaphotoes/do/1.JPG'
+                aboutPhoto: 'svetaphotoes/after/1.JPG'
             };
-            PHOTO_FIELDS.forEach(f => {
+            for (let i = 1; i <= 6; i++) defaultPhotos['do' + i] = `svetaphotoes/do/${i}.JPG`;
+            const afterExts = {1:'JPG',2:'jpg',3:'jpg',4:'jpg',5:'PNG',6:'PNG',7:'PNG',8:'PNG',9:'PNG',10:'PNG'};
+            for (let i = 1; i <= 10; i++) defaultPhotos['after' + i] = `svetaphotoes/after/${i}.${afterExts[i]}`;
+
+            // Render Do/After grids
+            ['do','after'].forEach(prefix => {
+                const count = prefix === 'do' ? 6 : 10;
+                const grid = document.getElementById(`photos${prefix === 'do' ? 'Do' : 'After'}Grid`);
+                if (!grid) return;
+                let html = '';
+                for (let i = 1; i <= count; i++) {
+                    const key = prefix + i;
+                    const url = content[key] || defaultPhotos[key];
+                    html += `<div class="photo-upload-item">
+                        <label>${prefix === 'do' ? 'До' : 'После'} ${i}</label>
+                        <div class="photo-upload-preview" onclick="document.getElementById('upload-${key}').click()">
+                            <div id="preview-${key}">${url ? `<img src="${url}">` : '<div class="upload-placeholder"><span>📷</span>Загрузить</div>'}</div>
+                        </div>
+                        <input type="file" class="photo-upload-input" id="upload-${key}" accept="image/*" onchange="uploadPhoto(this, '${key}')">
+                        <div class="photo-upload-status" id="status-${key}"></div>
+                    </div>`;
+                }
+                grid.innerHTML = html;
+            });
+
+            // Main photos
+            ['heroPhoto','aboutPhoto'].forEach(f => {
                 const url = content[f] || defaultPhotos[f];
                 if (url) {
                     if (content[f]) photoUrls[f] = content[f];
@@ -1161,6 +1189,8 @@
                     if (previewEl) previewEl.innerHTML = `<img src="${url}">`;
                 }
             });
+            // Set photo URLs from content
+            PHOTO_FIELDS.forEach(f => { if (content[f]) photoUrls[f] = content[f]; });
         }
         async function saveContentData() {
             const content = {};
