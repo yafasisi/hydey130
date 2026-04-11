@@ -254,6 +254,9 @@
         .photo-upload-preview .upload-placeholder span { display: block; font-size: 28px; margin-bottom: 6px; }
         .photo-upload-input { display: none; }
         .photo-upload-status { font-size: 11px; color: var(--green); font-weight: 600; margin-top: 6px; text-align: center; }
+        .photo-reset-btn { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 8px; padding: 6px 10px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.2s; z-index: 5; opacity: 0; }
+        .photo-upload-preview:hover .photo-reset-btn { opacity: 1; }
+        .photo-reset-btn:hover { background: var(--red); }
 
         /* CLIENT TAGS */
         .crm-tag { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 10px; font-weight: 700; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.3px; margin-top: 4px; }
@@ -526,6 +529,7 @@
                     <div class="photo-upload-item">
                         <label>Главное фото (Hero)</label>
                         <div class="photo-upload-preview" onclick="document.getElementById('upload-heroPhoto').click()">
+                            <button class="photo-reset-btn" onclick="event.stopPropagation();resetPhoto('heroPhoto')">↩ Сбросить</button>
                             <div class="upload-placeholder" id="preview-heroPhoto"><span>📷</span>Нажми чтобы загрузить</div>
                         </div>
                         <input type="file" class="photo-upload-input" id="upload-heroPhoto" accept="image/*" onchange="uploadPhoto(this, 'heroPhoto')">
@@ -534,6 +538,7 @@
                     <div class="photo-upload-item">
                         <label>Фото «Обо мне»</label>
                         <div class="photo-upload-preview" onclick="document.getElementById('upload-aboutPhoto').click()">
+                            <button class="photo-reset-btn" onclick="event.stopPropagation();resetPhoto('aboutPhoto')">↩ Сбросить</button>
                             <div class="upload-placeholder" id="preview-aboutPhoto"><span>📷</span>Нажми чтобы загрузить</div>
                         </div>
                         <input type="file" class="photo-upload-input" id="upload-aboutPhoto" accept="image/*" onchange="uploadPhoto(this, 'aboutPhoto')">
@@ -1119,6 +1124,17 @@
         const PHOTO_FIELDS = ['heroPhoto','aboutPhoto','do1','do2','do3','do4','do5','do6','after1','after2','after3','after4','after5','after6','after7','after8','after9','after10'];
         let photoUrls = {};
 
+        let defaultPhotosMap = {};
+        function resetPhoto(field) {
+            const url = defaultPhotosMap[field];
+            if (!url) return;
+            delete photoUrls[field];
+            const previewEl = document.getElementById('preview-' + field);
+            if (previewEl) previewEl.innerHTML = `<img src="${url}">`;
+            const statusEl = document.getElementById('status-' + field);
+            if (statusEl) { statusEl.textContent = '↩ Сброшено (сохрани)'; statusEl.style.color = 'var(--gray)'; }
+        }
+
         async function uploadPhoto(input, field) {
             const file = input.files[0];
             if (!file) return;
@@ -1159,6 +1175,9 @@
                 aboutPhoto: 'svetaphotoes/after/1.JPG'
             };
             for (let i = 1; i <= 6; i++) defaultPhotos['do' + i] = `svetaphotoes/do/${i}.JPG`;
+            const afterExts2 = afterExts;
+            for (let i = 1; i <= 10; i++) defaultPhotos['after' + i] = `svetaphotoes/after/${i}.${afterExts2[i]}`;
+            defaultPhotosMap = { ...defaultPhotos };
             const afterExts = {1:'JPG',2:'jpg',3:'jpg',4:'jpg',5:'PNG',6:'PNG',7:'PNG',8:'PNG',9:'PNG',10:'PNG'};
             for (let i = 1; i <= 10; i++) defaultPhotos['after' + i] = `svetaphotoes/after/${i}.${afterExts[i]}`;
 
@@ -1174,6 +1193,7 @@
                     html += `<div class="photo-upload-item">
                         <label>${prefix === 'do' ? 'До' : 'После'} ${i}</label>
                         <div class="photo-upload-preview" onclick="document.getElementById('upload-${key}').click()">
+                            <button class="photo-reset-btn" onclick="event.stopPropagation();resetPhoto('${key}')">↩ Сбросить</button>
                             <div id="preview-${key}">${url ? `<img src="${url}">` : '<div class="upload-placeholder"><span>📷</span>Загрузить</div>'}</div>
                         </div>
                         <input type="file" class="photo-upload-input" id="upload-${key}" accept="image/*" onchange="uploadPhoto(this, '${key}')">
