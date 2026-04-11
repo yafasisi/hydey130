@@ -1148,11 +1148,17 @@
                 const el = document.getElementById('cnt-' + f);
                 if (el && content[f]) { el.value = content[f]; if (el.tagName === 'TEXTAREA') el.textContent = content[f]; }
             });
+            const defaultPhotos = {
+                heroPhoto: 'svetaphotoes/after/10.PNG',
+                aboutPhoto: 'svetaphotoes/after/1.JPG',
+                baPhoto: 'svetaphotoes/do/1.JPG'
+            };
             PHOTO_FIELDS.forEach(f => {
-                if (content[f]) {
-                    photoUrls[f] = content[f];
+                const url = content[f] || defaultPhotos[f];
+                if (url) {
+                    if (content[f]) photoUrls[f] = content[f];
                     const previewEl = document.getElementById('preview-' + f);
-                    if (previewEl) previewEl.innerHTML = `<img src="${content[f]}">`;
+                    if (previewEl) previewEl.innerHTML = `<img src="${url}">`;
                 }
             });
         }
