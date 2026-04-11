@@ -153,7 +153,7 @@ module.exports = async function handler(req, res) {
 
         if (action === 'updateOrder') {
             const { orderId, field, value } = req.body;
-            const allowed = ['name','phone','email','telegram','note','status'];
+            const allowed = ['name','phone','email','telegram','note','status','tag'];
             if (!orderId || !field || !allowed.includes(field)) return res.status(400).json({ success: false, error: 'Invalid field' });
             const orders = await getOrders();
             const order = orders.find(o => o.orderId === orderId);

@@ -229,7 +229,7 @@
         .analytics-card { background: var(--white); border-radius: 20px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); border: 1px solid #f0f0f0; }
         .analytics-card h3 { font-size: 14px; font-weight: 700; color: var(--gray); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
         .analytics-card canvas { width: 100% !important; max-height: 280px; }
-        .analytics-kpi { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+        .analytics-kpi { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 24px; }
         .kpi-card { background: var(--white); border-radius: 20px; padding: 24px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.05); border: 1px solid #f0f0f0; position: relative; overflow: hidden; }
         .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: 20px 20px 0 0; }
         .kpi-card.green::before { background: var(--green); }
@@ -241,6 +241,18 @@
         .kpi-label { font-size: 12px; font-weight: 600; color: var(--gray); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
         .analytics-full { grid-column: 1 / -1; }
         @media (max-width: 700px) { .analytics-grid { grid-template-columns: 1fr; } .analytics-kpi { grid-template-columns: 1fr 1fr; } }
+
+        /* CLIENT TAGS */
+        .crm-tag { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 10px; font-weight: 700; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.3px; margin-top: 4px; }
+        .crm-tag.tag-new { background: #DBEAFE; color: #1E40AF; }
+        .crm-tag.tag-active { background: var(--green-light); color: #558B2F; }
+        .crm-tag.tag-completed { background: #F3F4F6; color: #6B7280; }
+        .crm-tag.tag-vip { background: #FEF3C7; color: #92400E; }
+        .crm-tag-menu { position: absolute; background: var(--white); border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); padding: 6px; z-index: 500; display: none; }
+        .crm-tag-menu.show { display: block; }
+        .crm-tag-option { padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; transition: background 0.15s; white-space: nowrap; }
+        .crm-tag-option:hover { background: var(--light-gray); }
+        .crm-client-history { font-size: 10px; color: #8B5CF6; font-weight: 700; margin-top: 4px; }
 
         /* VIEW TOGGLE */
         .crm-view-toggle { display: flex; gap: 4px; background: var(--light-gray); border-radius: 10px; padding: 3px; }
@@ -354,6 +366,14 @@
                 <div class="analytics-card analytics-full">
                     <h3>Заказы по дням</h3>
                     <canvas id="chartTimeline"></canvas>
+                </div>
+                <div class="analytics-card">
+                    <h3>Выручка по месяцам</h3>
+                    <canvas id="chartMonthly"></canvas>
+                </div>
+                <div class="analytics-card">
+                    <h3>Эффективность промокодов</h3>
+                    <canvas id="chartPromos"></canvas>
                 </div>
             </div>
         </div>
@@ -702,6 +722,50 @@
 
         // CRM FUNCTIONS
         let crmActiveProgram = ''; // '' = all programs
+        const TAG_MAP = {
+            'new': { label: 'Новый', cls: 'tag-new' },
+            'active': { label: 'Активный', cls: 'tag-active' },
+            'completed': { label: 'Завершил', cls: 'tag-completed' },
+            'vip': { label: 'VIP', cls: 'tag-vip' }
+        };
+
+        function getTagHtml(order) {
+            const tag = order.tag || 'new';
+            const t = TAG_MAP[tag] || TAG_MAP['new'];
+            return `<span class="crm-tag ${t.cls}" onclick="showTagMenu(event, '${order.orderId}')">${t.label}</span>`;
+        }
+
+        function getClientHistory(order) {
+            const same = currentOrders.filter(o => o.email === order.email || o.phone === order.phone);
+            if (same.length <= 1) return '';
+            return `<div class="crm-client-history">🔄 ${same.length} заказов</div>`;
+        }
+
+        let openTagMenu = null;
+        function showTagMenu(e, orderId) {
+            e.stopPropagation();
+            closeTagMenu();
+            const menu = document.createElement('div');
+            menu.className = 'crm-tag-menu show';
+            menu.style.left = e.pageX + 'px';
+            menu.style.top = e.pageY + 'px';
+            menu.innerHTML = Object.entries(TAG_MAP).map(([key, t]) =>
+                `<div class="crm-tag-option" onclick="setTag('${orderId}','${key}')">${t.label}</div>`
+            ).join('');
+            document.body.appendChild(menu);
+            openTagMenu = menu;
+        }
+        function closeTagMenu() { if (openTagMenu) { openTagMenu.remove(); openTagMenu = null; } }
+        document.addEventListener('click', closeTagMenu);
+
+        async function setTag(orderId, tag) {
+            closeTagMenu();
+            const order = currentOrders.find(o => o.orderId === orderId);
+            if (!order) return;
+            order.tag = tag;
+            await apiCall('data', 'PUT', { action: 'updateOrder', orderId, field: 'tag', value: tag });
+            renderClients();
+        }
         let crmView = 'cards'; // 'cards' or 'excel'
         const PROG_COLORS = ['#7CB342','#F59E0B','#3B82F6','#EF4444','#8B5CF6','#EC4899','#14B8A6','#F97316'];
 
@@ -803,6 +867,8 @@
                             <div class="crm-client-contact">📱 ${esc(o.phone)}</div>
                             <div class="crm-client-contact">✉️ ${esc(o.email)}</div>
                             ${o.telegram ? `<div class="crm-client-contact">💬 ${esc(o.telegram)}</div>` : ''}
+                            ${getTagHtml(o)}
+                            ${getClientHistory(o)}
                             ${noteHtml}
                         </td>
                         ${showProgCol ? `<td><span class="crm-prog-badge" style="background:${progColor}15;color:${progColor}">${esc(progName)}</span>${o.promoCode ? `<div class="crm-client-contact">🏷️ ${esc(o.promoCode)}</div>` : ''}</td>` : ''}
@@ -870,6 +936,7 @@
                     <th>Промокод</th>
                     <th>Статус</th>
                     <th>Дата</th>
+                    <th>Тег</th>
                     <th>Заметка</th>
                     <th>Действия</th>
                 </tr></thead>
@@ -881,8 +948,9 @@
                     const statusHtml = o.status === 'paid'
                         ? '<span class="excel-status-paid">Оплачено</span>'
                         : '<span class="excel-status-pending">Ожидает</span>';
+                    const historyCount = currentOrders.filter(x => x.email === o.email || x.phone === o.phone).length;
                     return `<tr>
-                        <td class="excel-num">${i + 1}</td>
+                        <td class="excel-num">${i + 1}${historyCount > 1 ? `<div style="color:#8B5CF6;font-size:9px">🔄${historyCount}</div>` : ''}</td>
                         <td class="excel-name" contenteditable="true" data-order="${o.orderId}" data-field="name" onblur="saveCell(this)">${esc(o.name)}</td>
                         <td contenteditable="true" data-order="${o.orderId}" data-field="phone" onblur="saveCell(this)">${esc(o.phone)}</td>
                         <td class="excel-muted" contenteditable="true" data-order="${o.orderId}" data-field="email" onblur="saveCell(this)">${esc(o.email)}</td>
@@ -892,6 +960,7 @@
                         <td class="excel-muted">${esc(o.promoCode || '—')}</td>
                         <td>${statusHtml}</td>
                         <td class="excel-muted">${dateStr}</td>
+                        <td>${getTagHtml(o)}</td>
                         <td class="excel-muted" contenteditable="true" data-order="${o.orderId}" data-field="note" onblur="saveCell(this)">${esc(o.note || '')}</td>
                         <td class="excel-actions">
                             ${o.status === 'pending' ? `<button onclick="markPaid('${o.orderId}')" title="Оплачено">✓</button>` : ''}
@@ -977,6 +1046,7 @@
                 <div class="kpi-card green"><div class="kpi-icon">💰</div><div class="kpi-value">${revenue.toLocaleString('ru-RU')} &#8381;</div><div class="kpi-label">Выручка</div></div>
                 <div class="kpi-card blue"><div class="kpi-icon">👥</div><div class="kpi-value">${total}</div><div class="kpi-label">Всего клиентов</div></div>
                 <div class="kpi-card green"><div class="kpi-icon">✅</div><div class="kpi-value">${paidCount}</div><div class="kpi-label">Оплачено</div></div>
+                <div class="kpi-card red"><div class="kpi-icon">🧾</div><div class="kpi-value">${paidCount > 0 ? Math.round(revenue / paidCount).toLocaleString('ru-RU') : 0} &#8381;</div><div class="kpi-label">Средний чек</div></div>
                 <div class="kpi-card yellow"><div class="kpi-icon">📊</div><div class="kpi-value">${convRate}%</div><div class="kpi-label">Конверсия</div></div>
             `;
 
@@ -1036,6 +1106,40 @@
                     }
                 }
             });
+            // Monthly revenue (bar, last 6 months)
+            const months = [];
+            const monthRevenue = [];
+            const monthNames = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
+            for (let i = 5; i >= 0; i--) {
+                const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+                months.push(monthNames[d.getMonth()] + ' ' + d.getFullYear());
+                monthRevenue.push(paid.filter(o => o.createdAt && o.createdAt.slice(0,7) === key).reduce((s, o) => s + (o.finalPrice||0), 0));
+            }
+            chartInstances.monthly = new Chart(document.getElementById('chartMonthly'), {
+                type: 'bar',
+                data: { labels: months, datasets: [{ label: 'Выручка', data: monthRevenue, backgroundColor: '#7CB34244', borderColor: '#7CB342', borderWidth: 2, borderRadius: 8 }] },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+            });
+
+            // Promo effectiveness
+            const promoUsage = {};
+            orders.forEach(o => { if (o.promoCode) { if (!promoUsage[o.promoCode]) promoUsage[o.promoCode] = { count: 0, revenue: 0 }; promoUsage[o.promoCode].count++; if (o.status === 'paid') promoUsage[o.promoCode].revenue += o.finalPrice || 0; } });
+            const promoLabels = Object.keys(promoUsage);
+            const promoCounts = promoLabels.map(k => promoUsage[k].count);
+            const promoRevValues = promoLabels.map(k => promoUsage[k].revenue);
+            if (promoLabels.length) {
+                chartInstances.promos = new Chart(document.getElementById('chartPromos'), {
+                    type: 'bar',
+                    data: { labels: promoLabels, datasets: [
+                        { label: 'Использований', data: promoCounts, backgroundColor: '#3B82F633', borderColor: '#3B82F6', borderWidth: 2, borderRadius: 8 },
+                        { label: 'Выручка', data: promoRevValues, backgroundColor: '#F59E0B33', borderColor: '#F59E0B', borderWidth: 2, borderRadius: 8 }
+                    ] },
+                    options: { responsive: true, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true } } }
+                });
+            } else {
+                document.getElementById('chartPromos').parentElement.innerHTML = '<h3 style="color:var(--gray);text-transform:uppercase;font-size:14px;letter-spacing:0.5px;margin-bottom:16px">Эффективность промокодов</h3><div class="crm-empty" style="padding:30px"><div class="crm-empty-text">Промокоды пока не использовались</div></div>';
+            }
         }
 
         if (authToken) showDashboard();
