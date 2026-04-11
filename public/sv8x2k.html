@@ -6,6 +6,7 @@
     <title>SV Panel</title>
     <meta name="robots" content="noindex, nofollow">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
@@ -223,6 +224,24 @@
         .crm-toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--dark); color: white; padding: 14px 28px; border-radius: 12px; font-weight: 700; font-size: 14px; z-index: 2000; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
         .crm-toast.show { opacity: 1; }
 
+        /* ANALYTICS */
+        .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+        .analytics-card { background: var(--white); border-radius: 20px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); border: 1px solid #f0f0f0; }
+        .analytics-card h3 { font-size: 14px; font-weight: 700; color: var(--gray); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .analytics-card canvas { width: 100% !important; max-height: 280px; }
+        .analytics-kpi { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+        .kpi-card { background: var(--white); border-radius: 20px; padding: 24px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.05); border: 1px solid #f0f0f0; position: relative; overflow: hidden; }
+        .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: 20px 20px 0 0; }
+        .kpi-card.green::before { background: var(--green); }
+        .kpi-card.yellow::before { background: var(--yellow); }
+        .kpi-card.blue::before { background: #3B82F6; }
+        .kpi-card.red::before { background: var(--red); }
+        .kpi-icon { font-size: 28px; margin-bottom: 8px; }
+        .kpi-value { font-size: 32px; font-weight: 800; color: var(--dark); }
+        .kpi-label { font-size: 12px; font-weight: 600; color: var(--gray); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .analytics-full { grid-column: 1 / -1; }
+        @media (max-width: 700px) { .analytics-grid { grid-template-columns: 1fr; } .analytics-kpi { grid-template-columns: 1fr 1fr; } }
+
         /* VIEW TOGGLE */
         .crm-view-toggle { display: flex; gap: 4px; background: var(--light-gray); border-radius: 10px; padding: 3px; }
         .crm-view-btn { padding: 8px 14px; border: none; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; font-family: inherit; background: none; color: var(--gray); transition: all 0.2s; }
@@ -315,12 +334,31 @@
             <button class="dash-logout" onclick="doLogout()">Выйти</button>
         </div>
         <div class="tabs">
-            <button class="tab active" onclick="switchTab('clients', this)">Клиенты</button>
+            <button class="tab active" onclick="switchTab('analytics', this)">Зводка</button>
+            <button class="tab" onclick="switchTab('clients', this)">Клиенты</button>
             <button class="tab" onclick="switchTab('programs', this)">Программы</button>
             <button class="tab" onclick="switchTab('promos', this)">Промокоды</button>
         </div>
 
-        <div class="tab-content active" id="tab-clients" style="max-width: 95%; width: 100%;">
+        <div class="tab-content active" id="tab-analytics" style="max-width: 95%; width: 100%;">
+            <div class="analytics-kpi" id="analyticsKpi"></div>
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>Клиенты по программам</h3>
+                    <canvas id="chartPrograms"></canvas>
+                </div>
+                <div class="analytics-card">
+                    <h3>Выручка по программам</h3>
+                    <canvas id="chartRevenue"></canvas>
+                </div>
+                <div class="analytics-card analytics-full">
+                    <h3>Заказы по дням</h3>
+                    <canvas id="chartTimeline"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="tab-clients" style="max-width: 95%; width: 100%;">
             <div class="crm-stats" id="crmStats"></div>
             <div class="crm-subtabs" id="crmSubtabs"></div>
             <div class="crm-toolbar">
@@ -490,7 +528,7 @@
             currentPrograms = data.programs || {};
             currentPromos = data.promos || {};
             currentOrders = data.orders || [];
-            renderPrograms(); renderPromos(); populateProgramSelect(); populateCrmFilters(); renderCrmStats(); renderClients();
+            renderPrograms(); renderPromos(); populateProgramSelect(); populateCrmFilters(); renderCrmStats(); renderClients(); renderAnalytics();
         }
 
         // PROGRAMS
@@ -921,6 +959,83 @@
                 if (order) order.note = note;
                 renderClients();
             }
+        }
+
+        // ANALYTICS
+        let chartInstances = {};
+        function renderAnalytics() {
+            const orders = currentOrders;
+            const total = orders.length;
+            const paid = orders.filter(o => o.status === 'paid');
+            const paidCount = paid.length;
+            const revenue = paid.reduce((s, o) => s + (o.finalPrice || 0), 0);
+            const pending = total - paidCount;
+            const convRate = total > 0 ? Math.round((paidCount / total) * 100) : 0;
+
+            // KPI cards
+            document.getElementById('analyticsKpi').innerHTML = `
+                <div class="kpi-card green"><div class="kpi-icon">💰</div><div class="kpi-value">${revenue.toLocaleString('ru-RU')} &#8381;</div><div class="kpi-label">Выручка</div></div>
+                <div class="kpi-card blue"><div class="kpi-icon">👥</div><div class="kpi-value">${total}</div><div class="kpi-label">Всего клиентов</div></div>
+                <div class="kpi-card green"><div class="kpi-icon">✅</div><div class="kpi-value">${paidCount}</div><div class="kpi-label">Оплачено</div></div>
+                <div class="kpi-card yellow"><div class="kpi-icon">📊</div><div class="kpi-value">${convRate}%</div><div class="kpi-label">Конверсия</div></div>
+            `;
+
+            // Destroy old charts
+            Object.values(chartInstances).forEach(c => c.destroy());
+            chartInstances = {};
+
+            const progEntries = Object.entries(currentPrograms);
+            const progLabels = progEntries.map(([,p]) => p.name);
+            const progColors = progEntries.map(([id]) => getProgColor(id));
+
+            // Clients per program (bar)
+            const progCounts = progEntries.map(([id]) => orders.filter(o => o.program === id).length);
+            chartInstances.programs = new Chart(document.getElementById('chartPrograms'), {
+                type: 'bar',
+                data: { labels: progLabels, datasets: [{ data: progCounts, backgroundColor: progColors.map(c => c + '33'), borderColor: progColors, borderWidth: 2, borderRadius: 8 }] },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+            });
+
+            // Revenue per program (doughnut)
+            const progRevenue = progEntries.map(([id]) => paid.filter(o => o.program === id).reduce((s, o) => s + (o.finalPrice || 0), 0));
+            chartInstances.revenue = new Chart(document.getElementById('chartRevenue'), {
+                type: 'doughnut',
+                data: { labels: progLabels, datasets: [{ data: progRevenue, backgroundColor: progColors, borderWidth: 3, borderColor: '#fff' }] },
+                options: { responsive: true, cutout: '60%', plugins: { legend: { position: 'bottom', labels: { padding: 16, font: { weight: '600', size: 12 } } } } }
+            });
+
+            // Timeline (orders per day, last 30 days)
+            const now = new Date();
+            const days = [];
+            const dayCounts = [];
+            const dayRevenue = [];
+            for (let i = 29; i >= 0; i--) {
+                const d = new Date(now); d.setDate(d.getDate() - i);
+                const key = d.toISOString().slice(0, 10);
+                days.push(d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' }));
+                const dayOrders = orders.filter(o => o.createdAt && o.createdAt.slice(0, 10) === key);
+                dayCounts.push(dayOrders.length);
+                dayRevenue.push(dayOrders.filter(o => o.status === 'paid').reduce((s, o) => s + (o.finalPrice || 0), 0));
+            }
+            chartInstances.timeline = new Chart(document.getElementById('chartTimeline'), {
+                type: 'bar',
+                data: {
+                    labels: days,
+                    datasets: [
+                        { label: 'Заказы', data: dayCounts, backgroundColor: '#7CB34233', borderColor: '#7CB342', borderWidth: 2, borderRadius: 6, yAxisID: 'y' },
+                        { label: 'Выручка', data: dayRevenue, type: 'line', borderColor: '#F59E0B', backgroundColor: '#F59E0B22', tension: 0.3, fill: true, pointRadius: 3, yAxisID: 'y1' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    interaction: { intersect: false, mode: 'index' },
+                    plugins: { legend: { position: 'top', labels: { font: { weight: '600' } } } },
+                    scales: {
+                        y: { beginAtZero: true, position: 'left', ticks: { stepSize: 1 }, title: { display: true, text: 'Заказы' } },
+                        y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Выручка (₽)' } }
+                    }
+                }
+            });
         }
 
         if (authToken) showDashboard();
