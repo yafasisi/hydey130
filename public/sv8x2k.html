@@ -468,74 +468,40 @@
             </div>
         </div>
 
-        <div class="tab-content" id="tab-content">
+        <div class="tab-content" id="tab-content" style="max-width: 95%; width: 100%;">
             <div class="section-hint">
-                Здесь можно изменить тексты и контакты на сайте. После сохранения изменения появятся на сайте автоматически.
+                Здесь можно изменить тексты, контакты и фото на сайте. После сохранения изменения появятся автоматически.
             </div>
             <div id="statusContent" class="status-msg"></div>
 
-            <div class="add-section" style="margin-top:0">
-                <h3>📞 Контакты</h3>
-                <div class="add-row">
-                    <div class="field">
-                        <label>Телефон</label>
-                        <input type="text" id="cnt-phone" placeholder="+7 999 000 00 00">
-                    </div>
-                    <div class="field">
-                        <label>Telegram (без @)</label>
-                        <input type="text" id="cnt-telegram" placeholder="hydey130">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="add-section" style="margin-top:0">
+                    <h3>📞 Контакты</h3>
+                    <div class="field"><label>Телефон</label><input type="text" id="cnt-phone" placeholder="+7 999 000 00 00"></div>
+                    <div class="field"><label>Telegram (без @)</label><input type="text" id="cnt-telegram" placeholder="hydey130"></div>
+                </div>
+
+                <div class="add-section" style="margin-top:0">
+                    <h3>📊 Статистика</h3>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+                        <div class="field"><label>Лет опыта</label><input type="text" id="cnt-statYears" placeholder="5+"></div>
+                        <div class="field"><label>Клиентов</label><input type="text" id="cnt-statClients" placeholder="500+"></div>
+                        <div class="field"><label>Кг лично</label><input type="text" id="cnt-statKg" placeholder="-35"></div>
                     </div>
                 </div>
             </div>
 
             <div class="add-section">
                 <h3>🏠 Главная секция (Hero)</h3>
-                <div class="add-row">
-                    <div class="field field-full">
-                        <label>Подзаголовок</label>
-                        <input type="text" id="cnt-heroSubtitle" placeholder="Похудела с большого веса сама...">
-                    </div>
-                    <div class="field field-full">
-                        <label>Описание</label>
-                        <input type="text" id="cnt-heroDescription" placeholder="Сушка, марафоны и...">
-                    </div>
-                </div>
+                <div class="field"><label>Подзаголовок</label><textarea id="cnt-heroSubtitle" rows="2" style="width:100%;padding:14px 18px;border:2px solid #eee;border-radius:12px;font-size:14px;font-family:inherit;resize:vertical;" placeholder="Похудела с большого веса сама — помогу и тебе!"></textarea></div>
+                <div class="field"><label>Описание</label><textarea id="cnt-heroDescription" rows="3" style="width:100%;padding:14px 18px;border:2px solid #eee;border-radius:12px;font-size:14px;font-family:inherit;resize:vertical;" placeholder="Сушка, марафоны и индивидуальные программы питания..."></textarea></div>
             </div>
 
             <div class="add-section">
                 <h3>👩 Обо мне</h3>
-                <div class="add-row">
-                    <div class="field field-full">
-                        <label>Заголовок</label>
-                        <input type="text" id="cnt-aboutTitle" placeholder="Привет! Я Света...">
-                    </div>
-                    <div class="field field-full">
-                        <label>Текст 1</label>
-                        <input type="text" id="cnt-aboutText1" placeholder="Потому что сама прошла...">
-                    </div>
-                    <div class="field field-full">
-                        <label>Текст 2</label>
-                        <input type="text" id="cnt-aboutText2" placeholder="Мой подход — это не диета...">
-                    </div>
-                </div>
-            </div>
-
-            <div class="add-section">
-                <h3>📊 Статистика</h3>
-                <div class="add-row">
-                    <div class="field">
-                        <label>Лет опыта</label>
-                        <input type="text" id="cnt-statYears" placeholder="5+">
-                    </div>
-                    <div class="field">
-                        <label>Клиентов</label>
-                        <input type="text" id="cnt-statClients" placeholder="500+">
-                    </div>
-                    <div class="field">
-                        <label>Кг лично</label>
-                        <input type="text" id="cnt-statKg" placeholder="-35">
-                    </div>
-                </div>
+                <div class="field"><label>Заголовок</label><textarea id="cnt-aboutTitle" rows="2" style="width:100%;padding:14px 18px;border:2px solid #eee;border-radius:12px;font-size:14px;font-family:inherit;resize:vertical;" placeholder="Привет! Я Света — и я знаю, как тяжело худеть"></textarea></div>
+                <div class="field"><label>Текст 1</label><textarea id="cnt-aboutText1" rows="3" style="width:100%;padding:14px 18px;border:2px solid #eee;border-radius:12px;font-size:14px;font-family:inherit;resize:vertical;" placeholder="Потому что сама прошла этот путь..."></textarea></div>
+                <div class="field"><label>Текст 2</label><textarea id="cnt-aboutText2" rows="3" style="width:100%;padding:14px 18px;border:2px solid #eee;border-radius:12px;font-size:14px;font-family:inherit;resize:vertical;" placeholder="Мой подход — это не диета на неделю..."></textarea></div>
             </div>
 
             <button class="btn" onclick="saveContentData()" style="margin-top:20px">Сохранить контент</button>
@@ -1105,7 +1071,7 @@
         function loadContentFields(content) {
             CONTENT_FIELDS.forEach(f => {
                 const el = document.getElementById('cnt-' + f);
-                if (el && content[f]) el.value = content[f];
+                if (el && content[f]) { el.value = content[f]; if (el.tagName === 'TEXTAREA') el.textContent = content[f]; }
             });
         }
         async function saveContentData() {
