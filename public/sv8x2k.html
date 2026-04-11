@@ -350,6 +350,7 @@
             <button class="tab" onclick="switchTab('clients', this)">Клиенты</button>
             <button class="tab" onclick="switchTab('programs', this)">Программы</button>
             <button class="tab" onclick="switchTab('promos', this)">Промокоды</button>
+            <button class="tab" onclick="switchTab('content', this)">Контент</button>
         </div>
 
         <div class="tab-content active" id="tab-analytics" style="max-width: 95%; width: 100%;">
@@ -467,6 +468,79 @@
             </div>
         </div>
 
+        <div class="tab-content" id="tab-content">
+            <div class="section-hint">
+                Здесь можно изменить тексты и контакты на сайте. После сохранения изменения появятся на сайте автоматически.
+            </div>
+            <div id="statusContent" class="status-msg"></div>
+
+            <div class="add-section" style="margin-top:0">
+                <h3>📞 Контакты</h3>
+                <div class="add-row">
+                    <div class="field">
+                        <label>Телефон</label>
+                        <input type="text" id="cnt-phone" placeholder="+7 999 000 00 00">
+                    </div>
+                    <div class="field">
+                        <label>Telegram (без @)</label>
+                        <input type="text" id="cnt-telegram" placeholder="hydey130">
+                    </div>
+                </div>
+            </div>
+
+            <div class="add-section">
+                <h3>🏠 Главная секция (Hero)</h3>
+                <div class="add-row">
+                    <div class="field field-full">
+                        <label>Подзаголовок</label>
+                        <input type="text" id="cnt-heroSubtitle" placeholder="Похудела с большого веса сама...">
+                    </div>
+                    <div class="field field-full">
+                        <label>Описание</label>
+                        <input type="text" id="cnt-heroDescription" placeholder="Сушка, марафоны и...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="add-section">
+                <h3>👩 Обо мне</h3>
+                <div class="add-row">
+                    <div class="field field-full">
+                        <label>Заголовок</label>
+                        <input type="text" id="cnt-aboutTitle" placeholder="Привет! Я Света...">
+                    </div>
+                    <div class="field field-full">
+                        <label>Текст 1</label>
+                        <input type="text" id="cnt-aboutText1" placeholder="Потому что сама прошла...">
+                    </div>
+                    <div class="field field-full">
+                        <label>Текст 2</label>
+                        <input type="text" id="cnt-aboutText2" placeholder="Мой подход — это не диета...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="add-section">
+                <h3>📊 Статистика</h3>
+                <div class="add-row">
+                    <div class="field">
+                        <label>Лет опыта</label>
+                        <input type="text" id="cnt-statYears" placeholder="5+">
+                    </div>
+                    <div class="field">
+                        <label>Клиентов</label>
+                        <input type="text" id="cnt-statClients" placeholder="500+">
+                    </div>
+                    <div class="field">
+                        <label>Кг лично</label>
+                        <input type="text" id="cnt-statKg" placeholder="-35">
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn" onclick="saveContentData()" style="margin-top:20px">Сохранить контент</button>
+        </div>
+
         <div class="loading-overlay hidden" id="loadingOverlay"><div class="spinner"></div></div>
 
         <div class="modal-overlay" id="confirmModal" style="display:none;">
@@ -548,6 +622,7 @@
             currentPrograms = data.programs || {};
             currentPromos = data.promos || {};
             currentOrders = data.orders || [];
+            if (data.content) loadContentFields(data.content);
             renderPrograms(); renderPromos(); populateProgramSelect(); populateCrmFilters(); renderCrmStats(); renderClients(); renderAnalytics();
         }
 
@@ -686,11 +761,6 @@
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.getElementById(`tab-${name}`).classList.add('active');
             el.classList.add('active');
-        }
-        function showStatus(tab, msg, type) {
-            const el = document.getElementById(`status${tab.charAt(0).toUpperCase()+tab.slice(1)}`);
-            el.textContent = msg; el.className = `status-msg ${type}`;
-            setTimeout(() => { el.className = 'status-msg'; }, 4000);
         }
         function populateProgramSelect() {
             const s = document.getElementById('newPromoProgram');
@@ -1028,6 +1098,33 @@
                 if (order) order.note = note;
                 renderClients();
             }
+        }
+
+        // CONTENT MANAGEMENT
+        const CONTENT_FIELDS = ['phone','telegram','heroSubtitle','heroDescription','aboutTitle','aboutText1','aboutText2','statYears','statClients','statKg'];
+        function loadContentFields(content) {
+            CONTENT_FIELDS.forEach(f => {
+                const el = document.getElementById('cnt-' + f);
+                if (el && content[f]) el.value = content[f];
+            });
+        }
+        async function saveContentData() {
+            const content = {};
+            CONTENT_FIELDS.forEach(f => {
+                const el = document.getElementById('cnt-' + f);
+                if (el) content[f] = el.value.trim();
+            });
+            showLoading(true);
+            const data = await apiCall('data', 'PUT', { action: 'saveContent', content });
+            showLoading(false);
+            if (data?.success) showStatus('content', 'Контент сохранен! Изменения появятся на сайте.', 'success');
+            else showStatus('content', data?.error || 'Ошибка', 'error');
+        }
+        function showStatus(tab, msg, type) {
+            const el = document.getElementById(`status${tab.charAt(0).toUpperCase()+tab.slice(1)}`);
+            if (!el) return;
+            el.textContent = msg; el.className = `status-msg ${type}`;
+            setTimeout(() => { el.className = 'status-msg'; }, 4000);
         }
 
         // ANALYTICS

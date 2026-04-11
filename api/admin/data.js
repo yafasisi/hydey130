@@ -36,6 +36,33 @@ async function getOrders() {
     return (await redis.get('site:orders')) || [];
 }
 
+const defaultContent = {
+    phone: '+79299594913',
+    telegram: 'hydey130',
+    heroSubtitle: 'Похудела с большого веса сама — помогу и тебе!',
+    heroDescription: 'Сушка, марафоны и индивидуальные программы питания. Никаких голодовок — только результат и поддержка 24/7.',
+    aboutTitle: 'Привет! Я Света — и я знаю, как тяжело худеть',
+    aboutText1: 'Потому что сама прошла этот путь. Сбросила 35 кг без операций, таблеток и голодовок. Теперь помогаю другим достичь того же результата.',
+    aboutText2: 'Мой подход — это не диета на неделю, а изменение отношения к еде навсегда. Я не буду тебя ругать за срывы, а помогу понять, почему они происходят.',
+    statYears: '5+',
+    statClients: '500+',
+    statKg: '-35'
+};
+
+async function getContent() {
+    const redis = getRedis();
+    if (!redis) return defaultContent;
+    const stored = await redis.get('site:content');
+    return stored ? { ...defaultContent, ...stored } : defaultContent;
+}
+
+async function saveContent(content) {
+    const redis = getRedis();
+    if (!redis) return false;
+    await redis.set('site:content', content);
+    return true;
+}
+
 async function saveOrders(orders) {
     const redis = getRedis();
     if (!redis) return false;
@@ -59,8 +86,8 @@ module.exports = async function handler(req, res) {
 
     // GET — return current data
     if (req.method === 'GET') {
-        const [data, orders] = await Promise.all([getData(), getOrders()]);
-        return res.status(200).json({ success: true, ...data, orders });
+        const [data, orders, content] = await Promise.all([getData(), getOrders(), getContent()]);
+        return res.status(200).json({ success: true, ...data, orders, content });
     }
 
     // PUT — update data
@@ -173,6 +200,14 @@ module.exports = async function handler(req, res) {
             if (!order) return res.status(404).json({ success: false, error: 'Order not found' });
             order.note = note || '';
             const saved = await saveOrders(orders);
+            if (!saved) return res.status(500).json({ success: false, error: 'Redis not configured' });
+            return res.status(200).json({ success: true });
+        }
+
+        if (action === 'saveContent') {
+            const { content } = req.body;
+            if (!content) return res.status(400).json({ success: false, error: 'Content required' });
+            const saved = await saveContent(content);
             if (!saved) return res.status(500).json({ success: false, error: 'Redis not configured' });
             return res.status(200).json({ success: true });
         }

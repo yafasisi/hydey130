@@ -3905,7 +3905,52 @@
                 console.error('Failed to load prices:', e);
             }
         })();
-        
+
+        // Load dynamic content from admin panel
+        (async function loadContent() {
+            try {
+                const resp = await fetch(`${API_URL}/content`);
+                const data = await resp.json();
+                if (data.success && data.content) {
+                    const c = data.content;
+                    // Hero
+                    const subtitle = document.querySelector('.hero-subtitle');
+                    if (subtitle && c.heroSubtitle) subtitle.textContent = c.heroSubtitle;
+                    const desc = document.querySelector('.hero-description');
+                    if (desc && c.heroDescription) desc.textContent = c.heroDescription;
+                    // Phone
+                    if (c.phone) {
+                        document.querySelectorAll('a[href^="tel:"]').forEach(el => {
+                            el.href = 'tel:' + c.phone.replace(/\s/g, '');
+                            el.textContent = c.phone;
+                        });
+                    }
+                    // Telegram
+                    if (c.telegram) {
+                        document.querySelectorAll('a[href*="t.me/"]').forEach(el => {
+                            el.href = 'https://t.me/' + c.telegram;
+                        });
+                    }
+                    // About
+                    const aboutSection = document.getElementById('about');
+                    if (aboutSection) {
+                        const aboutH2 = aboutSection.querySelector('h2');
+                        if (aboutH2 && c.aboutTitle) aboutH2.innerHTML = c.aboutTitle.replace(/Света/g, '<span>Света</span>');
+                        const aboutPs = aboutSection.querySelectorAll('.about-content > p');
+                        if (aboutPs[0] && c.aboutText1) aboutPs[0].textContent = c.aboutText1;
+                        if (aboutPs[1] && c.aboutText2) aboutPs[1].textContent = c.aboutText2;
+                    }
+                    // Stats
+                    const statNums = document.querySelectorAll('.about-stat-number');
+                    if (statNums[0] && c.statYears) statNums[0].textContent = c.statYears;
+                    if (statNums[1] && c.statClients) statNums[1].textContent = c.statClients;
+                    if (statNums[2] && c.statKg) statNums[2].textContent = c.statKg;
+                }
+            } catch (e) {
+                console.error('Failed to load content:', e);
+            }
+        })();
+
         document.getElementById('orderForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
