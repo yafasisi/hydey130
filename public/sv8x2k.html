@@ -356,7 +356,10 @@
     <div class="dashboard" id="dashboard">
         <div class="dash-header">
             <h2><span>SV</span> Panel</h2>
-            <button class="dash-logout" onclick="doLogout()">Выйти</button>
+            <div style="display:flex;gap:10px;align-items:center;">
+                <a href="/" class="dash-logout" style="text-decoration:none;" target="_blank">Перейти на сайт ↗</a>
+                <button class="dash-logout" onclick="doLogout()">Выйти</button>
+            </div>
         </div>
         <div class="tabs">
             <button class="tab active" onclick="switchTab('analytics', this)">Зводка</button>
